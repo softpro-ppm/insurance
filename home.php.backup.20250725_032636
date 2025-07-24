@@ -2,11 +2,8 @@
     include 'include/session.php';
     include 'include/config.php'; 
 ?>
-<!doctype htm                                <?php  
-                                    // Total Renewal = Policies expiring this month (July 2025)
-                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'");
-                                    $renewaltotal = mysqli_num_rows($renewalsql);
-                                ?> lang="en">
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -35,8 +32,8 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
-                    <div class="row" >
-                        <div class="col-xl-12" >
+                    <div class="row text-end" >
+                        <div class="col-xl-12 " >
                             <a href="add.php" style="float: right;margin-bottom: 15px;" class="btn btn-outline-primary" ><i class="fa fa-plus" ></i>Add Policy</a>
                         </div>
                     </div>
@@ -51,16 +48,16 @@
                                 ?>
                                 <div class="col-md-3">
                                     <div class="card mini-stats-wid">
-                                        <div class="card-body">
+                                        <div class="card-body" style="background-color: #17a2b8 !important;">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="policies.php?latest=latest">     
-                                                        <p class="text-muted fw-medium">Policies</p>
-                                                        <h4 class="mb-0"><?=$totalpolicy?></h4>
+                                                        <p class="text-muted fw-medium" style="color: white !important;">Policies</p>
+                                                        <h4 class="mb-0" style="color:white"><?=$totalpolicy?></h4>
                                                     </a>    
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
-                                                    <div class="mini-stat-icon avatar-sm rounded-circle bg-primary"> <span class="avatar-title">
+                                                    <div class="mini-stat-icon avatar-sm rounded-circle bg-primary" style="color:white"> <span class="avatar-title">
                                                                 <i class="bx bx-copy-alt font-size-24"></i>
                                                             </span>
                                                     </div>
@@ -78,11 +75,11 @@
                                 ?>
                                 <div class="col-md-3">
                                     <div class="card mini-stats-wid">
-                                        <div class="card-body">
+                                        <div class="card-body" style="background-color: #28a745!important;">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <p class="text-muted fw-medium">Premium</p>
-                                                    <h4 class="mb-0">&#8377;<?=$totalpremium;?></h4>
+                                                    <p class="text-muted fw-medium" style="color: white !important;">Premium</p>
+                                                    <h4 class="mb-0" style="color: white !important;">&#8377;<?=$totalpremium;?></h4>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center ">
                                                     <div class="avatar-sm rounded-circle bg-primary mini-stat-icon"> <span class="avatar-title rounded-circle bg-primary">
@@ -96,20 +93,22 @@
                                 </div>
                                 <?php  
                                      $renewalsql = mysqli_query($con, "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ");
+                                     
+                                    //  $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date)='".date('m')."' and year(policy_end_date)='".date('Y')."' ");
                                     
-                                   // $renewalsql = mysqli_query($con, "SELECT * FROM history WHERE MONTH(policy_end_date) >= '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."'");
+                                  //  $renewalsql = mysqli_query($con, "SELECT * FROM history WHERE MONTH(policy_end_date) >= '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."'");
 
                                     
                                     $renewaltotal = mysqli_num_rows($renewalsql);
                                 ?>
                                 <div class="col-md-3">
                                     <div class="card mini-stats-wid">
-                                        <div class="card-body">
+                                        <div class="card-body" style="background-color: #ffc107!important;">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="manage-renewal.php?renewal=renewal">
-                                                        <p class="text-muted fw-medium">Total Renewal</p>
-                                                        <h4 class="mb-0"><?=$renewaltotal;?></h4>
+                                                        <p class="text-muted fw-medium" style="color: white !important;">Total Renewal</p>
+                                                        <h4 class="mb-0" style="color: white !important;"><?=$renewaltotal;?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
@@ -123,19 +122,17 @@
                                     </div>
                                 </div>
                                 <?php  
-                                    // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
-                                    // These are policies with end_date <= today's date in July 2025
-                                    $pendingrenewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'");
+                                    $pendingrenewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ");
                                     $pendingrenewaltotal = mysqli_num_rows($pendingrenewalsql);
                                 ?>
                                 <div class="col-md-3">
                                     <div class="card mini-stats-wid">
-                                        <div class="card-body">
+                                        <div class="card-body" style="background-color: #dc3545!important;">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="manage-renewal.php?pending=pending">
-                                                        <p class="text-muted fw-medium">Pending Renewal</p>
-                                                        <h4 class="mb-0"><?=$pendingrenewaltotal?></h4>
+                                                        <p class="text-muted fw-medium" style="color: white !important;">Pending Renewal</p>
+                                                        <h4 class="mb-0" style="color: white !important;"><?=$pendingrenewaltotal?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
@@ -450,6 +447,7 @@
     
     <!-- ChartJS -->
     <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
+    
     
     <script>
   $(function () {
