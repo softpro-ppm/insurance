@@ -548,7 +548,6 @@
     <script src="assets/js/pages/dashboard.init.js"></script>
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="assets/js/pages/datatables.init.js"></script>
     <script src="assets/js/app.js"></script>
     
     
@@ -946,6 +945,11 @@
     <!-- Custom script for renewal table serial numbering -->
     <script type="text/javascript">
         $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+            }
+            
             // Initialize DataTable for renewal table with custom configuration
             var renewalTable = $('#datatable').DataTable({
                 "order": [[5, "asc"]], // Sort by Policy End Date (column index 5) ascending
