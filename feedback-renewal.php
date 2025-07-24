@@ -317,7 +317,6 @@
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="assets/js/pages/datatables.init.js"></script>
     <script src="assets/js/app.js"></script>
 	<script type="text/javascript">
         $('.js-datepicker').datepicker({
@@ -387,6 +386,28 @@
             });
         });
         
+    </script>
+    
+    <!-- DataTable Initialization -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+            }
+            
+            // Initialize DataTable
+            $('#datatable').DataTable({
+                "order": [],
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            });
+        });
     </script>
 </body>
 </html>

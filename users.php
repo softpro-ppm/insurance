@@ -140,6 +140,9 @@
     <script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
     <script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script src="assets/libs/%40chenfengyuan/datepicker/datepicker.min.js"></script>
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="assets/js/pages/form-advanced.init.js"></script>
     <script src="assets/js/app.js"></script>
     <script type="text/javascript">
@@ -168,6 +171,28 @@
             }else{
                 return false;
             }
+        });
+    </script>
+    
+    <!-- DataTable Initialization -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                $('#datatable-buttons').DataTable().destroy();
+            }
+            
+            // Initialize DataTable
+            $('#datatable-buttons').DataTable({
+                "order": [],
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            });
         });
     </script>
 </body>
