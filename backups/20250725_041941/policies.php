@@ -71,17 +71,17 @@
 											</thead>
 											<tbody>
 												<?php  
+													$sn=1;
+													
 													if(isset($_GET['latest'])){
-													   // Show current month policies, recent first
-													    $sql = "select * from policy where month(policy_issue_date) ='".date('m')."' and year(policy_issue_date)='".date('Y')."' ORDER BY id DESC";
+													   // $sql = "SELECT * FROM policy ORDER BY id DESC LIMIT 5";
+													    $sql = "select * from policy where month(policy_issue_date) ='".date('m')."' and year(policy_issue_date)='".date('Y')."'  ";
 													}else{
-													    // Show all policies, recent first
 													    $sql = "SELECT * FROM policy ORDER BY id DESC ";
 													}
 							                        
 							                        $rs = mysqli_query($con, $sql);
 							                        if(mysqli_num_rows($rs) > 0){
-							                        $sn=1; // Initialize serial number
 							                        while ($r=mysqli_fetch_array($rs)) {
 
 						                            if($r['fc_expiry_date'] == ''){
@@ -166,31 +166,6 @@
 	<script src="assets/js/pages/datatables.init.js"></script>
 	<script src="assets/js/app.js"></script>
 	<script src="assets/js/table2excel.js" type="text/javascript"></script>
-	
-	<!-- Custom script for serial numbering -->
-	<script type="text/javascript">
-        $(document).ready(function() {
-            // Initialize DataTable with custom configuration
-            var table = $('#datatable').DataTable({
-                "order": [], // No initial sorting to maintain our ORDER BY DESC from SQL
-                "columnDefs": [
-                    {
-                        "targets": 0, // First column (S.NO.)
-                        "searchable": false,
-                        "orderable": false
-                    }
-                ],
-                "drawCallback": function(settings) {
-                    // Recalculate serial numbers on every redraw (search, sort, pagination)
-                    var api = this.api();
-                    var startIndex = api.page.info().start;
-                    api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
-                        cell.innerHTML = startIndex + i + 1;
-                    });
-                }
-            });
-        });
-    </script>
     <script type="text/javascript">
         function Export() {
             $("#datatable").table2excel({

@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Follow UP | Softpro</title>
+	<title>Manage Renewal | Softpro</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="assets/logo.PNG">
 	<link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="page-title-box d-sm-flex align-items-center justify-content-between">
-								<h4 class="mb-sm-0 font-size-18">Manage Follow UP</h4>
+								<h4 class="mb-sm-0 font-size-18">Manage Renewal</h4>
 								<div class="page-title-right">
 									<ol class="breadcrumb m-0">
 										<li class="breadcrumb-item">
@@ -97,15 +97,18 @@
 											<thead>
 												<tr>
 													<th>S.NO.</th>
-													<th>Comment</th>
 													<th>VEHICLE&nbsp;NUMBER</th>
 													<th>NAME</th>
 													<th>PHONE</th>
 													<th>VEHICLE&nbsp;TYPE</th>
 													<th>POLICY&nbsp;TYPE</th>
-													<th>RECENT&nbsp;COMMENT</th>
+													<th>INSURANCE&nbsp;COMPANY</th>
+													<th>PREMIUM</th>
+													<th>POLICY&nbsp;START&nbsp;DATE</th>
 													<th>POLICY&nbsp;END&nbsp;DATE</th>
-													
+													<th>
+														<span style="visibility: hidden;" >A</span>ACTIONS<span style="visibility: hidden;" >A</span>
+													</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -113,9 +116,11 @@
 													$sn=1;
 													
 													if(isset($_GET['pending'])){
-													     $sql = "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ";
+													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'";
 													}elseif(isset($_GET['renewal'])){
-													     $sql = "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ";
+													     // Total Renewal = All policies expiring this month (July 2025)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'";
 													    
 													}elseif(isset($_POST['submit'])){
 														if($_POST['type'] == '1'){
@@ -143,124 +148,23 @@
 						                            }else{
 						                                $permit_expiry_date = date('d-m-Y',strtotime($r['permit_expiry_date']));
 						                            }
-						                            
-						                            
-						                            
-						                            $policyId = $r['id'];
-                                                    $commentQueryl = "SELECT * FROM customer_feedback WHERE policy_id = '$policyId' ORDER BY created_at DESC LIMIT 1";
-                                                    $commentsResultl = mysqli_query($con, $commentQueryl);
-                                                    
-                                                    if (mysqli_num_rows($commentsResultl) > 0) {
-                                                        while ($commentl = mysqli_fetch_array($commentsResultl)) {
-                                                            $latest=htmlspecialchars($commentl['comment']);
-                                                        }
-                                                    } else {
-                                                        $latest= "No comments yet.";
-                                                    }
-                                                            
 												?>
 												<tr>
 													<td><?=$sn;?></td>
-													<td class="text-center">
-													    
-													    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal_<?=$r['id']?>"><i class="fa fa-comment" ></i></button>
-                
-														<!--<a href="comment.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fa fa-comment" ></i></a>-->
-														<!--<a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>-->
-														<!--<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>-->
-														
-												    </td>
 													<td><a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$r['id'];?>"><?=$r['vehicle_number'];?></a></td>
 													<td><?=$r['name'];?></td>
 													<td><?=$r['phone'];?></td>
 													<td><?=$r['vehicle_type'];?></td>
 													<td><?=$r['policy_type'];?></td>
-													<td><?=$latest;?></td>
+													<td><?=$r['insurance_company'];?></td>
+													<td><?=$r['premium'];?></td>
+													<td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 													<td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
-													
-                                              <!-- Button trigger modal -->
-                                               
-                                                
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal_<?=$r['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                      <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Comments</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                         
-                                                         <!-- Comment Form -->
-                                                        <h5>Leave a Comment</h5>
-                                                        <form action="feedback-renewal.php?id=<?= $r['id']; ?>" method="POST">
-                                                            <div class="form-group">
-                                                                <input type="hidden" name="policy_id" value="<?= $_GET['id']; ?>">
-                                                                <textarea name="comment" class="form-control" rows="4" placeholder="Write your comment here..." required></textarea>
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                                                        </form>
-                                                        
-                                                        <!-- Display Comments -->
-                                                        <h5 class="mt-4">Comments</h5>
-                                                        <div class="comment-section">
-                                                            <?php
-                                                            
-                                                            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment'])) {
-                                                                
-                                                               
-                                                                    $policy_id = mysqli_real_escape_string($con, $_POST['policy_id']);
-                                                                    $comment = mysqli_real_escape_string($con, $_POST['comment']);
-                                                                    $createdAt = date("Y-m-d H:i:s");
-                                                                
-                                                                    $insertComment = "INSERT INTO customer_feedback (policy_id, comment, created_at) VALUES ('$policy_id', '$comment', '$createdAt')";
-                                                                    if (mysqli_query($con, $insertComment)) {
-                                                                        echo "<script>alert('Comment added successfully.');</script>";
-                                                                    } else {
-                                                                        echo "<script>alert('Error adding comment.');</script>";
-                                                                    }
-                                                                
-                                                                    //header("Location: manage-renewal.php");
-                                                                    //exit();
-                                                                }
-                                
-                                
-                                                            $policyId = $r['id'];
-                                                            $commentQuery = "SELECT * FROM customer_feedback WHERE policy_id = '$policyId' ORDER BY created_at DESC";
-                                                            $commentsResult = mysqli_query($con, $commentQuery);
-                                                        
-                                                            if (mysqli_num_rows($commentsResult) > 0) {
-                                                                while ($comment = mysqli_fetch_array($commentsResult)) {
-                                                                  //  echo '<div class="card p-2">';
-                                                                        echo "<div class='comment-box mt-3'>";
-                                                                        echo "<p><strong>Comment:</strong> " . htmlspecialchars($comment['comment']) . "</p>";
-                                                                        echo "<p><small><em>Posted on: " . date("d-m-Y H:i a", strtotime($comment['created_at'])) . "</em></small></p>";
-                                                                        echo "</div>";
-                                                                        echo "</hr>";
-                                                                  //  echo "</div>";
-                                                                }
-                                                            } else {
-                                                                echo "<p>No comments yet. Be the first to comment!</p>";
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                         
-                                                      </div>
-                                                      <!--<div class="modal-footer">-->
-                                                      <!--  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-                                                      <!--  <button type="button" class="btn btn-primary">Save changes</button>-->
-                                                      <!--</div>-->
-                                                    </div>
-                                                  </div>
-                                                </div>
-
-                                              
-													
+													<td>
+														<a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
+														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
+													</td>
 												</tr>
-												
-											
-												
-												
 												<?php $sn++; } }else{ ?> 
 					                        <tr>
          										<td colspan="10" >No Policy found</td>

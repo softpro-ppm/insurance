@@ -117,10 +117,10 @@
 													
 													if(isset($_GET['pending'])){
 													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
-													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'";
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."' ORDER BY policy_end_date DESC";
 													}elseif(isset($_GET['renewal'])){
 													     // Total Renewal = All policies expiring this month (July 2025)
-													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'";
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' ORDER BY policy_end_date DESC";
 													    
 													}elseif(isset($_POST['submit'])){
 														if($_POST['type'] == '1'){
@@ -131,7 +131,7 @@
 															$sql = "SELECT * FROM policy where permit_expiry_date >='".date("Y-m-d", strtotime($_POST['fromdate']))."' and permit_expiry_date <='".date("Y-m-d", strtotime($_POST['todate']))."' ORDER BY id DESC ";
 														}
 													}else{
-							                        	$sql = "SELECT * FROM policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ORDER BY id DESC ";
+							                        	$sql = "SELECT * FROM policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ORDER BY policy_end_date DESC ";
 							                    	}
 							                        $rs = mysqli_query($con, $sql);
 							                        if(mysqli_num_rows($rs) > 0){
@@ -232,6 +232,31 @@
                 $('#viewpolicydata').html(data);
             });
         }
+    </script>
+    
+    <!-- Custom script for serial numbering -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Initialize DataTable with custom configuration
+            var table = $('#datatable').DataTable({
+                "order": [], // No initial sorting to maintain our ORDER BY from SQL
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                "drawCallback": function(settings) {
+                    // Recalculate serial numbers on every redraw (search, sort, pagination)
+                    var api = this.api();
+                    var startIndex = api.page.info().start;
+                    api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                        cell.innerHTML = startIndex + i + 1;
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

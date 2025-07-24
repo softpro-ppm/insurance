@@ -15,6 +15,91 @@
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Modern Dashboard Card Styles -->
+    <style>
+        .modern-card-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card-success {
+            background: linear-gradient(135deg, #5ee7df 0%, #66a6ff 100%);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(94, 231, 223, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8a00 100%);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card-info:hover,
+        .modern-card-success:hover,
+        .modern-card-warning:hover,
+        .modern-card-danger:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modern-icon-bg {
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .modern-icon-bg .avatar-title {
+            background: transparent !important;
+            color: white !important;
+        }
+        
+        .modern-card-info a,
+        .modern-card-success a,
+        .modern-card-warning a,
+        .modern-card-danger a {
+            color: white !important;
+        }
+        
+        .modern-card-info a:hover,
+        .modern-card-success a:hover,
+        .modern-card-warning a:hover,
+        .modern-card-danger a:hover {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .modern-chart-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-chart-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .modern-chart-card .card-header {
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+            border-radius: 15px 15px 0 0;
+        }
+    </style>
 </head>
 
 <body data-sidebar="dark">
@@ -47,19 +132,20 @@
                                     $totalpolicy = mysqli_num_rows($sql1);
                                 ?>
                                 <div class="col-md-3">
-                                    <div class="card mini-stats-wid">
-                                        <div class="card-body" style="background-color: #17a2b8 !important;">
+                                    <div class="card mini-stats-wid modern-card-info">
+                                        <div class="card-body">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <a href="policies.php?latest=latest">     
-                                                        <p class="text-muted fw-medium" style="color: white !important;">Policies</p>
-                                                        <h4 class="mb-0" style="color:white"><?=$totalpolicy?></h4>
+                                                    <a href="policies.php?latest=latest" class="text-decoration-none">     
+                                                        <p class="text-white fw-medium mb-2">Policies</p>
+                                                        <h4 class="mb-0 text-white fw-bold"><?=$totalpolicy?></h4>
                                                     </a>    
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
-                                                    <div class="mini-stat-icon avatar-sm rounded-circle bg-primary" style="color:white"> <span class="avatar-title">
-                                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                                            </span>
+                                                    <div class="mini-stat-icon avatar-sm rounded-circle modern-icon-bg"> 
+                                                        <span class="avatar-title">
+                                                            <i class="bx bx-copy-alt font-size-24"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -74,17 +160,18 @@
                                     }
                                 ?>
                                 <div class="col-md-3">
-                                    <div class="card mini-stats-wid">
-                                        <div class="card-body" style="background-color: #28a745!important;">
+                                    <div class="card mini-stats-wid modern-card-success">
+                                        <div class="card-body">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <p class="text-muted fw-medium" style="color: white !important;">Premium</p>
-                                                    <h4 class="mb-0" style="color: white !important;">&#8377;<?=$totalpremium;?></h4>
+                                                    <p class="text-white fw-medium mb-2">Premium</p>
+                                                    <h4 class="mb-0 text-white fw-bold">&#8377;<?=$totalpremium;?></h4>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center ">
-                                                    <div class="avatar-sm rounded-circle bg-primary mini-stat-icon"> <span class="avatar-title rounded-circle bg-primary">
-                                                                <i class="bx bx-archive-in font-size-24"></i>
-                                                            </span>
+                                                    <div class="avatar-sm rounded-circle modern-icon-bg"> 
+                                                        <span class="avatar-title rounded-circle">
+                                                            <i class="bx bx-archive-in font-size-24"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,19 +184,20 @@
                                     $renewaltotal = mysqli_num_rows($renewalsql);
                                 ?>
                                 <div class="col-md-3">
-                                    <div class="card mini-stats-wid">
-                                        <div class="card-body" style="background-color: #ffc107!important;">
+                                    <div class="card mini-stats-wid modern-card-warning">
+                                        <div class="card-body">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <a href="manage-renewal.php?renewal=renewal">
-                                                        <p class="text-muted fw-medium" style="color: white !important;">Total Renewal</p>
-                                                        <h4 class="mb-0" style="color: white !important;"><?=$renewaltotal;?></h4>
+                                                    <a href="manage-renewal.php?renewal=renewal" class="text-decoration-none">
+                                                        <p class="text-white fw-medium mb-2">Total Renewal</p>
+                                                        <h4 class="mb-0 text-white fw-bold"><?=$renewaltotal;?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
-                                                    <div class="avatar-sm rounded-circle bg-primary mini-stat-icon"> <span class="avatar-title rounded-circle bg-primary">
-                                                                <i class="bx bx-purchase-tag-alt font-size-24"></i>
-                                                            </span>
+                                                    <div class="avatar-sm rounded-circle modern-icon-bg"> 
+                                                        <span class="avatar-title rounded-circle">
+                                                            <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -123,19 +211,20 @@
                                     $pendingrenewaltotal = mysqli_num_rows($pendingrenewalsql);
                                 ?>
                                 <div class="col-md-3">
-                                    <div class="card mini-stats-wid">
-                                        <div class="card-body" style="background-color: #dc3545!important;">
+                                    <div class="card mini-stats-wid modern-card-danger">
+                                        <div class="card-body">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <a href="manage-renewal.php?pending=pending">
-                                                        <p class="text-muted fw-medium" style="color: white !important;">Pending Renewal</p>
-                                                        <h4 class="mb-0" style="color: white !important;"><?=$pendingrenewaltotal?></h4>
+                                                    <a href="manage-renewal.php?pending=pending" class="text-decoration-none">
+                                                        <p class="text-white fw-medium mb-2">Pending Renewal</p>
+                                                        <h4 class="mb-0 text-white fw-bold"><?=$pendingrenewaltotal?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
-                                                    <div class="avatar-sm rounded-circle bg-primary mini-stat-icon"> <span class="avatar-title rounded-circle bg-primary">
-                                                                <i class="bx bx-purchase-tag-alt font-size-24"></i>
-                                                            </span>
+                                                    <div class="avatar-sm rounded-circle modern-icon-bg"> 
+                                                        <span class="avatar-title rounded-circle">
+                                                            <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,9 +236,9 @@
                             
                             <!--Bar chart start-->
                             
-                            <div class="card card-success">
+                            <div class="card modern-chart-card">
                               <div class="card-header">
-                                <!--<h3 class="card-title">Bar Chart</h3>-->
+                                <h4 class="card-title mb-0">Monthly Analytics</h4>
                                 <div class="ms-auto">
                                             <ul class="nav nav-pills">
                                                 <li class="nav-item"> 
@@ -195,17 +284,10 @@
                                                 </li>
                                             </ul>
                                         </div>
-                
-                                <div class="card-tools">
-                                
-                                </div>
                               </div>
                               <div class="card-body">
-                                <div class="chart">
-                                  <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                                </div>
+                                <div id="modern-analytics-chart" class="apex-charts" dir="ltr"></div>
                               </div>
-                              <!-- /.card-body -->
                             </div>  
                             
                              <!--Bar chart start-->
@@ -440,107 +522,129 @@
     <script src="assets/js/app.js"></script>
     
     
-    <!--Bar chart script start-->
-    
-    <!-- ChartJS -->
-    <script src="https://adminlte.io/themes/v3/plugins/chart.js/Chart.min.js"></script>
-    
-    
+    <!--Modern Analytics Chart Script-->
     <script>
-  $(function () {
-    /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
-
-
-     var areaChartData = {
-     // labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    //  labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [
-        {
-          label               : 'Premium',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : ['<?=$totalpremium[0]?>', '<?=$totalpremium[1]?>', '<?=$totalpremium[2]?>', '<?=$totalpremium[3]?>', '<?=$totalpremium[4]?>', '<?=$totalpremium[5]?>', '<?=$totalpremium[6]?>','<?=$totalpremium[7]?>','<?=$totalpremium[8]?>','<?=$totalpremium[9]?>','<?=$totalpremium[10]?>','<?=$totalpremium[11]?>']
-        },
-        {
-          label               : 'Policies',
-          backgroundColor     : '#FF0000',
-          borderColor         : '#000',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : ['<?=$totaldata[0]?>', '<?=$totaldata[1]?>', '<?=$totaldata[2]?>', '<?=$totaldata[3]?>', '<?=$totaldata[4]?>', '<?=$totaldata[5]?>', '<?=$totaldata[6]?>','<?=$totaldata[7]?>','<?=$totaldata[8]?>','<?=$totaldata[9]?>','<?=$totaldata[10]?>','<?=$totaldata[11]?>']
-        },
-        {
-          label               : 'Revenue',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : ['<?=$totalrevenue[0]?>', '<?=$totalrevenue[1]?>', '<?=$totalrevenue[2]?>', '<?=$totalrevenue[3]?>', '<?=$totalrevenue[4]?>', '<?=$totalrevenue[5]?>', '<?=$totalrevenue[6]?>','<?=$totalrevenue[7]?>','<?=$totalrevenue[8]?>','<?=$totalrevenue[9]?>','<?=$totalrevenue[10]?>','<?=$totalrevenue[11]?>']
-        },
-      ]
-    }
-
-    //-------------
-    //- BAR CHART -
-   //- BAR CHART -
-    //-------------
-    var barChartData = $.extend(true, {}, areaChartData)
-    var temp0 = areaChartData.datasets[0]
-    var temp1 = areaChartData.datasets[1]
-    barChartData.datasets[0] = temp1
-    barChartData.datasets[1] = temp0
-
-    var barChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false,
-      datasetFill             : false
-    }
-
-    //---------------------
-    //- STACKED BAR CHART -
-    //---------------------
-    var stackedBarChartCanvas = $('#barChart').get(0).getContext('2d')
-  //  var stackedBarChartCanva1 = $('#stackedBarChart').get(0).getContext('2d')
-    var stackedBarChartData = $.extend(true, {}, barChartData)
-
-    var stackedBarChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false,
-      scales: {
-        xAxes: [{
-          stacked: true,
-        }],
-        yAxes: [{
-          stacked: true
-        }]
-      }
-    }
-
-    new Chart(stackedBarChartCanvas, {
-      type: 'bar',
-      data: stackedBarChartData,
-      options: stackedBarChartOptions
-    })
-  })
-</script>
+        // Modern Analytics Chart with ApexCharts
+        var analyticsOptions = {
+            series: [{
+                name: 'Premium',
+                data: [<?=$totalpremium[0]?>, <?=$totalpremium[1]?>, <?=$totalpremium[2]?>, <?=$totalpremium[3]?>, <?=$totalpremium[4]?>, <?=$totalpremium[5]?>, <?=$totalpremium[6]?>, <?=$totalpremium[7]?>, <?=$totalpremium[8]?>, <?=$totalpremium[9]?>, <?=$totalpremium[10]?>, <?=$totalpremium[11]?>],
+                type: 'column'
+            }, {
+                name: 'Policies',
+                data: [<?=$totaldata[0]?>, <?=$totaldata[1]?>, <?=$totaldata[2]?>, <?=$totaldata[3]?>, <?=$totaldata[4]?>, <?=$totaldata[5]?>, <?=$totaldata[6]?>, <?=$totaldata[7]?>, <?=$totaldata[8]?>, <?=$totaldata[9]?>, <?=$totaldata[10]?>, <?=$totaldata[11]?>],
+                type: 'line'
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true,
+                        selection: false,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: false,
+                        reset: true
+                    }
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
+            },
+            colors: ['#667eea', '#764ba2'],
+            plotOptions: {
+                bar: {
+                    borderRadius: 8,
+                    columnWidth: '60%'
+                }
+            },
+            stroke: {
+                width: [0, 4],
+                curve: 'smooth'
+            },
+            dataLabels: {
+                enabled: false
+            },
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: {
+                    style: {
+                        colors: '#8e8da4'
+                    }
+                }
+            },
+            yaxis: [{
+                title: {
+                    text: 'Premium Amount (₹)',
+                    style: {
+                        color: '#667eea'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#667eea'
+                    },
+                    formatter: function (val) {
+                        return "₹" + val;
+                    }
+                }
+            }, {
+                opposite: true,
+                title: {
+                    text: 'Number of Policies',
+                    style: {
+                        color: '#764ba2'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#764ba2'
+                    }
+                }
+            }],
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                strokeDashArray: 3
+            },
+            tooltip: {
+                shared: true,
+                intersect: false,
+                y: [{
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return "₹" + y.toFixed(0);
+                        }
+                        return y;
+                    }
+                }, {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0) + " policies";
+                        }
+                        return y;
+                    }
+                }]
+            }
+        };
+        
+        var analyticsChart = new ApexCharts(document.querySelector("#modern-analytics-chart"), analyticsOptions);
+        analyticsChart.render();
+    </script>
     
-    <!--Barchart script end-->
-    
+    <!--Modern Analytics Chart End-->
     
     
     <script type="text/javascript">
