@@ -116,9 +116,11 @@
 													$sn=1;
 													
 													if(isset($_GET['pending'])){
-													     $sql = "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ";
+													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'";
 													}elseif(isset($_GET['renewal'])){
-													     $sql = "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ";
+													     // Total Renewal = All policies expiring this month (July 2025)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'";
 													    
 													}elseif(isset($_POST['submit'])){
 														if($_POST['type'] == '1'){
