@@ -12,7 +12,17 @@
     <link rel="shortcut icon" href="assets/logo.PNG">
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="assets/css/        // Modern Analytics Chart with ApexCharts
+        var analyticsOptions = {
+            series: [{
+                name: 'Premium',
+                data: [<?=$totalpremium[0]?>, <?=$totalpremium[1]?>, <?=$totalpremium[2]?>, <?=$totalpremium[3]?>, <?=$totalpremium[4]?>, <?=$totalpremium[5]?>, <?=$totalpremium[6]?>, <?=$totalpremium[7]?>, <?=$totalpremium[8]?>, <?=$totalpremium[9]?>, <?=$totalpremium[10]?>, <?=$totalpremium[11]?>],
+                type: 'column'
+            }, {
+                name: 'Revenue',
+                data: [<?=$totalrevenue[0]?>, <?=$totalrevenue[1]?>, <?=$totalrevenue[2]?>, <?=$totalrevenue[3]?>, <?=$totalrevenue[4]?>, <?=$totalrevenue[5]?>, <?=$totalrevenue[6]?>, <?=$totalrevenue[7]?>, <?=$totalrevenue[8]?>, <?=$totalrevenue[9]?>, <?=$totalrevenue[10]?>, <?=$totalrevenue[11]?>],
+                type: 'line'
+            }]," id="app-style" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     
@@ -366,9 +376,9 @@
                     </div> 
                     <div class="row" >
                         <div class="col-xl-6">
-                            <div class="card">
+                            <div class="card modern-chart-card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-4">Policy type</h4>
+                                    <h4 class="card-title mb-4">Policy Types Distribution</h4>
                                     
                                     <div id="policy_type_chart" class="apex-charts" dir="ltr"></div>  
                                 </div>
@@ -376,9 +386,9 @@
                             
                         </div>
                         <div class="col-xl-6">
-                            <div class="card">
+                            <div class="card modern-chart-card">
                                 <div class="card-body">
-                                    <h4 class="card-title mb-4">Vehicles</h4>
+                                    <h4 class="card-title mb-4">Vehicle Types Distribution</h4>
                                     
                                     <div id="vehicle_chart" class="apex-charts" dir="ltr"></div>
                                 </div>
@@ -463,16 +473,34 @@
         $totalpremium = array();
         $totalrevenue = array();
         $monthname = array();
-        if(!empty($_GET['year'])){
-        $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue, month(policy_issue_date) as month, policy_issue_date FROM policy where year(policy_issue_date)='".$_GET['year']."' GROUP BY month");
-        }else{
-        $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue, month(policy_issue_date) as month, policy_issue_date FROM policy where year(policy_issue_date)='".date('Y')."' GROUP BY month");
-        }
-        while ($monthr = mysqli_fetch_array($monthsql)) {
-            $totaldata[] = $monthr['total'];
-            $totalpremium[] = $monthr['totalpremium'];
-            $totalrevenue[] = $monthr['totalrevenue'];
-            $monthname[] = date('M y', strtotime($monthr['policy_issue_date']));
+        
+        // Generate previous 12 months data (current month is the last one)
+        for($i = 11; $i >= 0; $i--) {
+            $targetDate = date('Y-m', strtotime("-$i months"));
+            $year = date('Y', strtotime("-$i months"));
+            $month = date('m', strtotime("-$i months"));
+            
+            if(!empty($_GET['year'])){
+                if($_GET['year'] == $year) {
+                    $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '$year' AND MONTH(policy_issue_date) = '$month'");
+                } else {
+                    // If selected year doesn't match this month, set zero values
+                    $totaldata[] = 0;
+                    $totalpremium[] = 0;
+                    $totalrevenue[] = 0;
+                    $monthname[] = date('M Y', strtotime("-$i months"));
+                    continue;
+                }
+            } else {
+                $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '$year' AND MONTH(policy_issue_date) = '$month'");
+            }
+            
+            $monthr = mysqli_fetch_array($monthsql);
+            
+            $totaldata[] = $monthr['total'] ? $monthr['total'] : 0;
+            $totalpremium[] = $monthr['totalpremium'] ? $monthr['totalpremium'] : 0;
+            $totalrevenue[] = $monthr['totalrevenue'] ? $monthr['totalrevenue'] : 0;
+            $monthname[] = date('M Y', strtotime("-$i months"));
         }
 
     ?>
@@ -570,9 +598,9 @@
             dataLabels: {
                 enabled: false
             },
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: <?=json_encode($monthname,true);?>,
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                categories: <?=json_encode($monthname,true);?>,
                 labels: {
                     style: {
                         colors: '#8e8da4'
@@ -597,7 +625,7 @@
             }, {
                 opposite: true,
                 title: {
-                    text: 'Number of Policies',
+                    text: 'Revenue Amount (₹)',
                     style: {
                         color: '#764ba2'
                     }
@@ -605,6 +633,9 @@
                 labels: {
                     style: {
                         colors: '#764ba2'
+                    },
+                    formatter: function (val) {
+                        return "₹" + val;
                     }
                 }
             }],
@@ -632,7 +663,7 @@
                 }, {
                     formatter: function (y) {
                         if (typeof y !== "undefined") {
-                            return y.toFixed(0) + " policies";
+                            return "₹" + y.toFixed(0);
                         }
                         return y;
                     }
@@ -799,26 +830,39 @@
                     height: 350,
                     type: "bar",
                     toolbar: {
-                        show: !1
+                        show: false
                     }
                 },
                 plotOptions: {
                     bar: {
-                        horizontal: !0
+                        horizontal: true,
+                        borderRadius: 8,
+                        barHeight: '70%'
                     }
                 },
                 dataLabels: {
-                    enabled: !1
+                    enabled: true,
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
                 },
                 series: [{
                     data: <?=json_encode($annualdata,JSON_NUMERIC_CHECK);?>
                 }],
-                colors: ["#34c38f"],
+                colors: ["#667eea", "#764ba2", "#5ee7df", "#66a6ff", "#ffc107", "#ff8a00", "#ff6b6b", "#ee5a52"],
                 grid: {
                     borderColor: "#f1f1f1"
                 },
                 xaxis: {
                     categories: <?=json_encode($annualname,true);?>
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " vehicles"
+                        }
+                    }
                 }
             };
             (chart = new ApexCharts(document.querySelector("#vehicle_chart"), options)).render();
@@ -827,30 +871,71 @@
             options = {
                 chart: {
                     height: 370,
-                    type: "radialBar"
+                    type: "donut"
                 },
                 plotOptions: {
-                    radialBar: {
-                        dataLabels: {
-                            name: {
-                                fontSize: "22px"
-                            },
-                            value: {
-                                fontSize: "16px"
-                            },
-                            total: {
-                                show: !0,
-                                label: "Total",
-                                formatter: function (e) {
-                                    return 100
+                    pie: {
+                        donut: {
+                            size: '70%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: 'Total Policies',
+                                    fontSize: '16px',
+                                    fontWeight: 600,
+                                    color: '#373d3f',
+                                    formatter: function (w) {
+                                        return w.globals.seriesTotals.reduce((a, b) => {
+                                            return a + b
+                                        }, 0)
+                                    }
                                 }
                             }
                         }
                     }
                 },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                    },
+                    dropShadow: {
+                        enabled: false
+                    }
+                },
                 series: <?=json_encode($policytypedata,JSON_NUMERIC_CHECK);?>,
                 labels: <?=json_encode($policytypename,true);?>,
-                colors: ["#556ee6", "#34c38f", "#f46a6a"]
+                colors: ["#667eea", "#764ba2", "#5ee7df", "#66a6ff", "#ffc107", "#ff8a00", "#ff6b6b", "#ee5a52"],
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'center',
+                    fontSize: '14px',
+                    markers: {
+                        width: 12,
+                        height: 12,
+                        radius: 6
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }],
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " policies"
+                        }
+                    }
+                }
             };
             (chart = new ApexCharts(document.querySelector("#policy_type_chart"), options)).render();
         });
