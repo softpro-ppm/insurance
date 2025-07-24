@@ -238,52 +238,49 @@
                             
                             <div class="card modern-chart-card">
                               <div class="card-header">
-                                <h4 class="card-title mb-0">Monthly Analytics</h4>
-                                <div class="ms-auto">
-                                            <ul class="nav nav-pills">
-                                                <li class="nav-item"> 
-                                                    <select class="form-control" id="year" >
-                                                        <option>Select</option>
-                                                        <?php if($_GET['year'] == '2019'){ ?>
-                                                        <option selected value="2019" >2019</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2019" >2019</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2020'){ ?>
-                                                        <option selected value="2020" >2020</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2020" >2020</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2021'){ ?>
-                                                        <option selected value="2021" >2021</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2021" >2021</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2022'){ ?>
-                                                        <option selected value="2022" >2022</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2022" >2022</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2023'){ ?>
-                                                        <option selected value="2023" >2023</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2023" >2023</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2024'){ ?>
-                                                        <option selected value="2024" >2024</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2024" >2024</option>
-                                                        <?php } ?>
-                                                        <?php if($_GET['year'] == '2025'){ ?>
-                                                        <option selected value="2025" >2025</option>
-                                                        <?php }else{ ?>
-                                                        <option value="2025" >2025</option>
-                                                        <?php } ?>
-                                                        
-                                                    </select>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title mb-0">Monthly Analytics</h4>
+                                    <div class="ms-auto">
+                                        <select class="form-control" id="year" style="min-width: 120px;">
+                                            <option>Select</option>
+                                            <?php if($_GET['year'] == '2019'){ ?>
+                                            <option selected value="2019" >2019</option>
+                                            <?php }else{ ?>
+                                            <option value="2019" >2019</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2020'){ ?>
+                                            <option selected value="2020" >2020</option>
+                                            <?php }else{ ?>
+                                            <option value="2020" >2020</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2021'){ ?>
+                                            <option selected value="2021" >2021</option>
+                                            <?php }else{ ?>
+                                            <option value="2021" >2021</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2022'){ ?>
+                                            <option selected value="2022" >2022</option>
+                                            <?php }else{ ?>
+                                            <option value="2022" >2022</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2023'){ ?>
+                                            <option selected value="2023" >2023</option>
+                                            <?php }else{ ?>
+                                            <option value="2023" >2023</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2024'){ ?>
+                                            <option selected value="2024" >2024</option>
+                                            <?php }else{ ?>
+                                            <option value="2024" >2024</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2025'){ ?>
+                                            <option selected value="2025" >2025</option>
+                                            <?php }else{ ?>
+                                            <option value="2025" >2025</option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
                               </div>
                               <div class="card-body">
                                 <div id="modern-analytics-chart" class="apex-charts" dir="ltr"></div>
