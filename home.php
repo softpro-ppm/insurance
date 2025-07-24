@@ -242,41 +242,41 @@
                                     <h4 class="card-title mb-0">Monthly Analytics</h4>
                                     <div class="ms-auto">
                                         <select class="form-control" id="year" style="min-width: 120px;">
-                                            <option>Select</option>
+                                            <option>Select Year</option>
                                             <?php if($_GET['year'] == '2019'){ ?>
-                                            <option selected value="2019" >2019</option>
+                                            <option selected value="2019" >FY 2019-20</option>
                                             <?php }else{ ?>
-                                            <option value="2019" >2019</option>
+                                            <option value="2019" >FY 2019-20</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2020'){ ?>
-                                            <option selected value="2020" >2020</option>
+                                            <option selected value="2020" >FY 2020-21</option>
                                             <?php }else{ ?>
-                                            <option value="2020" >2020</option>
+                                            <option value="2020" >FY 2020-21</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2021'){ ?>
-                                            <option selected value="2021" >2021</option>
+                                            <option selected value="2021" >FY 2021-22</option>
                                             <?php }else{ ?>
-                                            <option value="2021" >2021</option>
+                                            <option value="2021" >FY 2021-22</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2022'){ ?>
-                                            <option selected value="2022" >2022</option>
+                                            <option selected value="2022" >FY 2022-23</option>
                                             <?php }else{ ?>
-                                            <option value="2022" >2022</option>
+                                            <option value="2022" >FY 2022-23</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2023'){ ?>
-                                            <option selected value="2023" >2023</option>
+                                            <option selected value="2023" >FY 2023-24</option>
                                             <?php }else{ ?>
-                                            <option value="2023" >2023</option>
+                                            <option value="2023" >FY 2023-24</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2024'){ ?>
-                                            <option selected value="2024" >2024</option>
+                                            <option selected value="2024" >FY 2024-25</option>
                                             <?php }else{ ?>
-                                            <option value="2024" >2024</option>
+                                            <option value="2024" >FY 2024-25</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2025'){ ?>
-                                            <option selected value="2025" >2025</option>
+                                            <option selected value="2025" >FY 2025-26</option>
                                             <?php }else{ ?>
-                                            <option value="2025" >2025</option>
+                                            <option value="2025" >FY 2025-26</option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -396,8 +396,6 @@
                                                     <th class="text-center">NAME</th>
                                                     <th class="text-center">PHONE</th>
                                                     <th class="text-center">VEHICLE&nbsp;TYPE</th>
-                                                    <th class="text-center">POLICY&nbsp;TYPE</th>
-                                                    <th class="text-center">INSURANCE&nbsp;COMPANY</th>
                                                     <th class="text-center">POLICY&nbsp;END DATE</th>
                                                     <th class="text-center">ACTIONS</th>
                                                 </tr>
@@ -405,7 +403,7 @@
                                             <tbody>
                                                 <?php  
                                                     $sn=1;
-                                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date)='".date('m')."' and year(policy_end_date)='".date('Y')."' ");
+                                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date)='".date('m')."' and year(policy_end_date)='".date('Y')."' ORDER BY policy_end_date ASC");
                                                     if(mysqli_num_rows($renewalsql) > 0 ){
                                                     while($renewalr=mysqli_fetch_array($renewalsql)){
                                                 ?>
@@ -415,8 +413,6 @@
                                                     <td class="text-center" ><?=$renewalr['name'];?></td>
                                                     <td class="text-center" ><?=$renewalr['phone'];?></td>
                                                     <td class="text-center" ><?=$renewalr['vehicle_type'];?></td>
-                                                    <td class="text-center" ><?=$renewalr['policy_type'];?></td>
-                                                    <td class="text-center" ><?=$renewalr['insurance_company'];?></td>
                                                     <td class="text-center" ><?=date('d-m-Y', strtotime($renewalr['policy_end_date']));?></td>
                                                     <td class="text-center" >
                                                         <a href="edit.php?id=<?=$renewalr['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
@@ -461,33 +457,52 @@
         $totalrevenue = array();
         $monthname = array();
         
-        // Generate previous 12 months data (current month is the last one)
-        for($i = 11; $i >= 0; $i--) {
-            $targetDate = date('Y-m', strtotime("-$i months"));
-            $year = date('Y', strtotime("-$i months"));
-            $month = date('m', strtotime("-$i months"));
+        if(!empty($_GET['year'])){
+            // Financial Year logic: April to March
+            $fyYear = $_GET['year'];
+            $fyStartYear = $fyYear;
+            $fyEndYear = $fyYear + 1;
             
-            if(!empty($_GET['year'])){
-                if($_GET['year'] == $year) {
-                    $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '$year' AND MONTH(policy_issue_date) = '$month'");
-                } else {
-                    // If selected year doesn't match this month, set zero values
-                    $totaldata[] = 0;
-                    $totalpremium[] = 0;
-                    $totalrevenue[] = 0;
-                    $monthname[] = date('M Y', strtotime("-$i months"));
-                    continue;
-                }
-            } else {
-                $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '$year' AND MONTH(policy_issue_date) = '$month'");
+            // Generate 12 months of Financial Year data (April to March)
+            $fyMonths = [
+                ['year' => $fyStartYear, 'month' => '04', 'name' => 'Apr ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '05', 'name' => 'May ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '06', 'name' => 'Jun ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '07', 'name' => 'Jul ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '08', 'name' => 'Aug ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '09', 'name' => 'Sep ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '10', 'name' => 'Oct ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '11', 'name' => 'Nov ' . $fyStartYear],
+                ['year' => $fyStartYear, 'month' => '12', 'name' => 'Dec ' . $fyStartYear],
+                ['year' => $fyEndYear, 'month' => '01', 'name' => 'Jan ' . $fyEndYear],
+                ['year' => $fyEndYear, 'month' => '02', 'name' => 'Feb ' . $fyEndYear],
+                ['year' => $fyEndYear, 'month' => '03', 'name' => 'Mar ' . $fyEndYear]
+            ];
+            
+            foreach($fyMonths as $monthData) {
+                $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '".$monthData['year']."' AND MONTH(policy_issue_date) = '".$monthData['month']."'");
+                $monthr = mysqli_fetch_array($monthsql);
+                
+                $totaldata[] = $monthr['total'] ? $monthr['total'] : 0;
+                $totalpremium[] = $monthr['totalpremium'] ? $monthr['totalpremium'] : 0;
+                $totalrevenue[] = $monthr['totalrevenue'] ? $monthr['totalrevenue'] : 0;
+                $monthname[] = $monthData['name'];
             }
-            
-            $monthr = mysqli_fetch_array($monthsql);
-            
-            $totaldata[] = $monthr['total'] ? $monthr['total'] : 0;
-            $totalpremium[] = $monthr['totalpremium'] ? $monthr['totalpremium'] : 0;
-            $totalrevenue[] = $monthr['totalrevenue'] ? $monthr['totalrevenue'] : 0;
-            $monthname[] = date('M Y', strtotime("-$i months"));
+        } else {
+            // Default: Generate previous 12 months data (current month is the last one)
+            for($i = 11; $i >= 0; $i--) {
+                $targetDate = date('Y-m', strtotime("-$i months"));
+                $year = date('Y', strtotime("-$i months"));
+                $month = date('m', strtotime("-$i months"));
+                
+                $monthsql = mysqli_query($con, "SELECT COUNT(*) as total, SUM(premium) as totalpremium, SUM(revenue) as totalrevenue FROM policy WHERE YEAR(policy_issue_date) = '$year' AND MONTH(policy_issue_date) = '$month'");
+                $monthr = mysqli_fetch_array($monthsql);
+                
+                $totaldata[] = $monthr['total'] ? $monthr['total'] : 0;
+                $totalpremium[] = $monthr['totalpremium'] ? $monthr['totalpremium'] : 0;
+                $totalrevenue[] = $monthr['totalrevenue'] ? $monthr['totalrevenue'] : 0;
+                $monthname[] = date('M Y', strtotime("-$i months"));
+            }
         }
 
     ?>
@@ -925,6 +940,31 @@
                 }
             };
             (chart = new ApexCharts(document.querySelector("#policy_type_chart"), options)).render();
+        });
+    </script>
+    
+    <!-- Custom script for renewal table serial numbering -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Initialize DataTable for renewal table with custom configuration
+            var renewalTable = $('#datatable').DataTable({
+                "order": [[5, "asc"]], // Sort by Policy End Date (column index 5) ascending
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                "drawCallback": function(settings) {
+                    // Recalculate serial numbers on every redraw (search, sort, pagination)
+                    var api = this.api();
+                    var startIndex = api.page.info().start;
+                    api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                        cell.innerHTML = startIndex + i + 1;
+                    });
+                }
+            });
         });
     </script>
 </body>
