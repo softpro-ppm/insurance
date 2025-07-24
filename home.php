@@ -12,17 +12,7 @@
     <link rel="shortcut icon" href="assets/logo.PNG">
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/        // Modern Analytics Chart with ApexCharts
-        var analyticsOptions = {
-            series: [{
-                name: 'Premium',
-                data: [<?=$totalpremium[0]?>, <?=$totalpremium[1]?>, <?=$totalpremium[2]?>, <?=$totalpremium[3]?>, <?=$totalpremium[4]?>, <?=$totalpremium[5]?>, <?=$totalpremium[6]?>, <?=$totalpremium[7]?>, <?=$totalpremium[8]?>, <?=$totalpremium[9]?>, <?=$totalpremium[10]?>, <?=$totalpremium[11]?>],
-                type: 'column'
-            }, {
-                name: 'Revenue',
-                data: [<?=$totalrevenue[0]?>, <?=$totalrevenue[1]?>, <?=$totalrevenue[2]?>, <?=$totalrevenue[3]?>, <?=$totalrevenue[4]?>, <?=$totalrevenue[5]?>, <?=$totalrevenue[6]?>, <?=$totalrevenue[7]?>, <?=$totalrevenue[8]?>, <?=$totalrevenue[9]?>, <?=$totalrevenue[10]?>, <?=$totalrevenue[11]?>],
-                type: 'line'
-            }]," id="app-style" rel="stylesheet" type="text/css" />
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     
@@ -559,8 +549,8 @@
                 data: [<?=$totalpremium[0]?>, <?=$totalpremium[1]?>, <?=$totalpremium[2]?>, <?=$totalpremium[3]?>, <?=$totalpremium[4]?>, <?=$totalpremium[5]?>, <?=$totalpremium[6]?>, <?=$totalpremium[7]?>, <?=$totalpremium[8]?>, <?=$totalpremium[9]?>, <?=$totalpremium[10]?>, <?=$totalpremium[11]?>],
                 type: 'column'
             }, {
-                name: 'Policies',
-                data: [<?=$totaldata[0]?>, <?=$totaldata[1]?>, <?=$totaldata[2]?>, <?=$totaldata[3]?>, <?=$totaldata[4]?>, <?=$totaldata[5]?>, <?=$totaldata[6]?>, <?=$totaldata[7]?>, <?=$totaldata[8]?>, <?=$totaldata[9]?>, <?=$totaldata[10]?>, <?=$totaldata[11]?>],
+                name: 'Revenue',
+                data: [<?=$totalrevenue[0]?>, <?=$totalrevenue[1]?>, <?=$totalrevenue[2]?>, <?=$totalrevenue[3]?>, <?=$totalrevenue[4]?>, <?=$totalrevenue[5]?>, <?=$totalrevenue[6]?>, <?=$totalrevenue[7]?>, <?=$totalrevenue[8]?>, <?=$totalrevenue[9]?>, <?=$totalrevenue[10]?>, <?=$totalrevenue[11]?>],
                 type: 'line'
             }],
             chart: {
