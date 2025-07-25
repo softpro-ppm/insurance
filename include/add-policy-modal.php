@@ -12,25 +12,25 @@
                 <form id="addPolicyForm" action="include/add-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
                     
                     <!-- Customer & Vehicle Information -->
-                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3"><i class="bx bx-user me-2"></i>Customer & Vehicle Information</h6>
+                            <h6 class="card-title mb-3 text-primary"><i class="bx bx-user me-2"></i>Customer & Vehicle Information</h6>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Vehicle Number <span class="text-warning">*</span></label>
-                                    <input type="text" name="vehicle_number" id="modal_vehicle_number" class="form-control uppercase" required placeholder="e.g., MH12AB1234" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Vehicle Number <span class="text-danger">*</span></label>
+                                    <input type="text" name="vehicle_number" id="modal_vehicle_number" class="form-control uppercase" required placeholder="e.g., MH12AB1234">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Phone Number <span class="text-warning">*</span></label>
-                                    <input type="text" name="phone" maxlength="10" class="form-control" required placeholder="10-digit number" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="text" name="phone" maxlength="10" class="form-control" required placeholder="10-digit number">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Full Name <span class="text-warning">*</span></label>
-                                    <input type="text" name="name" class="form-control uppercase" required placeholder="Customer name" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control uppercase" required placeholder="Customer name">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">Vehicle Type <span class="text-warning">*</span></label>
-                                    <select name="vehicle_type" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
+                                    <select name="vehicle_type" class="form-select" required>
                                         <option value="">Select Vehicle Type</option>
                                         <option value="Two Wheeler">Two Wheeler</option>
                                         <option value="Four Wheeler">Four Wheeler</option>
@@ -48,21 +48,21 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">Chassis Number</label>
-                                    <input type="text" name="chassiss" class="form-control uppercase" placeholder="Chassis number" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Chassis Number</label>
+                                    <input type="text" name="chassiss" class="form-control uppercase" placeholder="Chassis number">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Insurance & Policy Details -->
-                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                    <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3"><i class="bx bx-shield me-2"></i>Insurance & Policy Details</h6>
+                            <h6 class="card-title mb-3 text-success"><i class="bx bx-shield me-2"></i>Insurance & Policy Details</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">Insurance Company <span class="text-warning">*</span></label>
-                                    <select name="insurance_company" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Insurance Company <span class="text-danger">*</span></label>
+                                    <select name="insurance_company" class="form-select" required>
                                         <option value="">Select Insurance Company</option>
                                         <option value="HDFC ERGO General Insurance Company Ltd">HDFC ERGO</option>
                                         <option value="ICICI Lombard General Insurance Company Ltd">ICICI Lombard</option>
@@ -89,8 +89,8 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">Policy Type <span class="text-warning">*</span></label>
-                                    <select name="policy_type" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Policy Type <span class="text-danger">*</span></label>
+                                    <select name="policy_type" class="form-select" required>
                                         <option value="">Select Policy Type</option>
                                         <option value="Comprehensive">Comprehensive</option>
                                         <option value="Third Party">Third Party</option>
@@ -100,57 +100,57 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Policy Issue Date <span class="text-warning">*</span></label>
-                                    <input type="date" name="policy_issue_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Policy Issue Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="policy_issue_date" class="form-control" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Policy Start Date <span class="text-warning">*</span></label>
-                                    <input type="date" name="policy_start_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Policy Start Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="policy_start_date" class="form-control" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Policy End Date <span class="text-warning">*</span></label>
-                                    <input type="date" name="policy_end_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="policy_end_date" class="form-control" required>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Financial & Additional Details -->
-                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                    <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3"><i class="bx bx-money me-2"></i>Financial & Additional Details</h6>
+                            <h6 class="card-title mb-3 text-info"><i class="bx bx-money me-2"></i>Financial & Additional Details</h6>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Premium Amount <span class="text-warning">*</span></label>
-                                    <input type="number" name="premium" id="modal_premium" class="form-control" required placeholder="Enter premium amount" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Premium Amount <span class="text-danger">*</span></label>
+                                    <input type="number" name="premium" id="modal_premium" class="form-control" required placeholder="Enter premium amount">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Revenue Amount <span class="text-warning">*</span></label>
-                                    <input type="number" name="revenue" id="modal_revenue" class="form-control" required placeholder="Enter revenue amount" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Revenue Amount <span class="text-danger">*</span></label>
+                                    <input type="number" name="revenue" id="modal_revenue" class="form-control" required placeholder="Enter revenue amount">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Profit/Loss</label>
-                                    <input type="text" id="modal_profit_loss" class="form-control" readonly placeholder="Auto-calculated" style="background: rgba(255,255,255,0.6);">
+                                    <label class="form-label">Profit/Loss</label>
+                                    <input type="text" id="modal_profit_loss" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">FC Expiry Date</label>
-                                    <input type="date" name="fc_expiry_date" class="form-control" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" class="form-control">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Permit Expiry Date</label>
-                                    <input type="date" name="permit_expiry_date" class="form-control" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" class="form-control">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label text-white-50">Policy Files</label>
-                                    <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">Policy Files</label>
+                                    <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">RC Files</label>
-                                    <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="background: rgba(255,255,255,0.9);">
+                                    <label class="form-label">RC Files</label>
+                                    <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label text-white-50">Comments</label>
-                                    <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes" style="background: rgba(255,255,255,0.9);"></textarea>
+                                    <label class="form-label">Comments</label>
+                                    <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
 
 <style>
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background: #6f42c1 !important;
 }
 
 .modal-content {
@@ -191,18 +191,27 @@
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    border-color: #6f42c1;
+    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
 }
 
-.card {
+.custom-outline-card {
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    border: 2px solid #e9ecef !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    background: #ffffff;
 }
 
-.card:hover {
-    transform: translateY(-2px);
+.custom-outline-card:hover {
+    border-color: #dee2e6 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.custom-outline-card .card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
 .uppercase {
@@ -222,7 +231,7 @@
 /* Auto-calculation styling */
 #modal_profit_loss {
     font-weight: bold;
-    color: #333 !important;
+    background-color: #f8f9fa !important;
 }
 
 /* Loading spinner animation */
@@ -233,6 +242,29 @@
 
 .bx-spin {
     animation: spin 1s linear infinite;
+}
+
+/* Clean form styling */
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.text-info {
+    color: #0dcaf0 !important;
 }
 </style>
 
@@ -249,14 +281,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Color coding
         if (profitLoss > 0) {
-            profitLossField.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
-            profitLossField.style.color = '#28a745';
+            profitLossField.style.backgroundColor = '#d1edff';
+            profitLossField.style.borderColor = '#0dcaf0';
+            profitLossField.style.color = '#055160';
         } else if (profitLoss < 0) {
-            profitLossField.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
-            profitLossField.style.color = '#dc3545';
+            profitLossField.style.backgroundColor = '#f8d7da';
+            profitLossField.style.borderColor = '#dc3545';
+            profitLossField.style.color = '#721c24';
         } else {
-            profitLossField.style.backgroundColor = 'rgba(255,255,255,0.6)';
-            profitLossField.style.color = '#333';
+            profitLossField.style.backgroundColor = '#f8f9fa';
+            profitLossField.style.borderColor = '#dee2e6';
+            profitLossField.style.color = '#495057';
         }
     }
 
@@ -303,8 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addPolicyModal').addEventListener('hidden.bs.modal', function() {
         document.getElementById('addPolicyForm').reset();
         document.getElementById('modal_profit_loss').value = '';
-        document.getElementById('modal_profit_loss').style.backgroundColor = 'rgba(255,255,255,0.6)';
-        document.getElementById('modal_profit_loss').style.color = '#333';
+        document.getElementById('modal_profit_loss').style.backgroundColor = '#f8f9fa';
+        document.getElementById('modal_profit_loss').style.borderColor = '#dee2e6';
+        document.getElementById('modal_profit_loss').style.color = '#495057';
         
         // Reset submit button if it was in loading state
         const submitBtn = document.querySelector('button[type="submit"]');
