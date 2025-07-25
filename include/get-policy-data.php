@@ -4,7 +4,7 @@ session_start();
 include 'config.php';
 
 // Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
     echo json_encode(['success' => false, 'message' => 'Not authenticated']);
     exit;
 }

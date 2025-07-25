@@ -159,7 +159,9 @@
 													<td><?=$r['premium'];?></td>
 													<td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 													<td>
-														<a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
+														<button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal(<?=$r['id'];?>)">
+															<i class="fas fa-pencil-alt"></i>
+														</button>
 														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
 													</td>
 												</tr>
@@ -329,7 +331,57 @@
             });
         });
     </script>
+    
+    <script type="text/javascript">
+        // Function to open edit modal
+        function openEditModal(policyId) {
+            // Show the modal
+            $('#editPolicyModal').modal('show');
+            
+            // Show loading state
+            const form = document.getElementById('editPolicyForm');
+            form.style.opacity = '0.5';
+            
+            // Fetch policy data
+            fetch(`include/get-policy-data.php?id=${policyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success === false) {
+                        alert('Error: ' + data.message);
+                        $('#editPolicyModal').modal('hide');
+                        return;
+                    }
+                    
+                    // Populate form fields
+                    document.getElementById('edit_policy_id').value = data.id;
+                    document.getElementById('edit_vehicle_number').value = data.vehicle_number || '';
+                    document.getElementById('edit_phone').value = data.phone || '';
+                    document.getElementById('edit_name').value = data.name || '';
+                    document.getElementById('edit_vehicle_type').value = data.vehicle_type || '';
+                    document.getElementById('edit_insurance_company').value = data.insurance_company || '';
+                    document.getElementById('edit_policy_type').value = data.policy_type || '';
+                    document.getElementById('edit_policy_start_date').value = data.policy_start_date || '';
+                    document.getElementById('edit_policy_end_date').value = data.policy_end_date || '';
+                    document.getElementById('edit_premium').value = data.premium || '';
+                    document.getElementById('edit_payout').value = data.payout || '';
+                    document.getElementById('edit_customer_paid').value = data.customer_paid || '';
+                    document.getElementById('edit_comments').value = data.comments || '';
+                    
+                    // Calculate and update financial fields
+                    calculateEditFinancials();
+                    
+                    // Remove loading state
+                    form.style.opacity = '1';
+                })
+                .catch(error => {
+                    console.error('Error fetching policy data:', error);
+                    alert('Error loading policy data. Please try again.');
+                    $('#editPolicyModal').modal('hide');
+                });
+        }
+    </script>
 
     <?php include 'include/add-policy-modal.php'; ?>
+    <?php include 'include/edit-policy-modal.php'; ?>
 </body>
 </html>
