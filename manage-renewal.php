@@ -102,10 +102,9 @@
 													<th>PHONE</th>
 													<th>VEHICLE&nbsp;TYPE</th>
 													<th>POLICY&nbsp;TYPE</th>
-													<th>INSURANCE&nbsp;COMPANY</th>
+													<th>POLICY&nbsp;END&nbsp;DATE</th>
 													<th>PREMIUM</th>
 													<th>POLICY&nbsp;START&nbsp;DATE</th>
-													<th>POLICY&nbsp;END&nbsp;DATE</th>
 													<th>
 														<span style="visibility: hidden;" >A</span>ACTIONS<span style="visibility: hidden;" >A</span>
 													</th>
@@ -156,10 +155,9 @@
 													<td><?=$r['phone'];?></td>
 													<td><?=$r['vehicle_type'];?></td>
 													<td><?=$r['policy_type'];?></td>
-													<td><?=$r['insurance_company'];?></td>
+													<td><strong class="text-danger"><?=date('d-m-Y',strtotime($r['policy_end_date']));?></strong></td>
 													<td><?=$r['premium'];?></td>
 													<td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
-													<td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
 													<td>
 														<a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
 														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
@@ -167,7 +165,7 @@
 												</tr>
 												<?php $sn++; } }else{ ?> 
 					                        <tr>
-         										<td colspan="10" >No Policy found</td>
+         										<td colspan="9" >No Policy found</td>
 					                        </tr>
              								<?php } ?>
 											</tbody>

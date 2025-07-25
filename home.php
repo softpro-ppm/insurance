@@ -403,7 +403,8 @@
                                             <tbody>
                                                 <?php  
                                                     $sn=1;
-                                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date)='".date('m')."' and year(policy_end_date)='".date('Y')."' ORDER BY policy_end_date ASC");
+                                                    // Sort by policy end date from start to end of current month
+                                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date)='".date('m')."' and year(policy_end_date)='".date('Y')."' ORDER BY DAY(policy_end_date) ASC");
                                                     if(mysqli_num_rows($renewalsql) > 0 ){
                                                     while($renewalr=mysqli_fetch_array($renewalsql)){
                                                 ?>

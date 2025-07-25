@@ -34,7 +34,7 @@
         <!-- Search Box -->
         <div class="app-search d-none d-lg-block ms-3">
             <div class="position-relative">
-                <input type="text" class="form-control" placeholder="Search policies, renewals..." id="global-search">
+                <input type="text" class="form-control" placeholder="Search policies, renewals..." id="global-search" onkeyup="performGlobalSearch()">
                 <span class="bx bx-search-alt"></span>
             </div>
         </div>
@@ -46,8 +46,8 @@
             <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="bx bx-bell bx-tada"></i>
                 <?php
-                    // Count pending renewals
-                    $pendingCount = mysqli_query($con, "SELECT COUNT(*) as count FROM policy WHERE month(policy_end_date) = '".date("m")."' AND year(policy_end_date) = '".date("Y")."' AND policy_end_date <= '".date("Y-m-d")."'");
+                    // Count pending renewals by current date
+                    $pendingCount = mysqli_query($con, "SELECT COUNT(*) as count FROM policy WHERE policy_end_date <= '".date("Y-m-d")."' AND policy_end_date >= '".date("Y-m-01")."'");
                     $pending = mysqli_fetch_array($pendingCount);
                     if($pending['count'] > 0) {
                         echo '<span class="badge bg-danger rounded-pill">'.$pending['count'].'</span>';
@@ -58,10 +58,10 @@
                 <div class="p-3">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="m-0">Notifications</h6>
+                            <h6 class="m-0">Pending Renewals</h6>
                         </div>
                         <div class="col-auto">
-                            <a href="#!" class="small">View All</a>
+                            <a href="manage-renewal.php?pending=pending" class="small">View All</a>
                         </div>
                     </div>
                 </div>
@@ -75,14 +75,19 @@
                                 </span>
                             </div>
                             <div class="flex-grow-1">
-                                <h6 class="mb-1">Pending Renewals</h6>
+                                <h6 class="mb-1">Urgent Renewals</h6>
                                 <div class="font-size-12 text-muted">
-                                    <p class="mb-1"><?=$pending['count']?> policies require immediate attention</p>
-                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> Just now</p>
+                                    <p class="mb-1"><?=$pending['count']?> policies expired or expiring soon</p>
+                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> Check now</p>
                                 </div>
                             </div>
                         </div>
                     </a>
+                    <?php } else { ?>
+                    <div class="text-center p-4">
+                        <i class="bx bx-check-circle text-success font-size-24"></i>
+                        <p class="text-muted mt-2">No pending renewals</p>
+                    </div>
                     <?php } ?>
                 </div>
             </div>
@@ -93,13 +98,6 @@
             <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen"> 
                 <i class="bx bx-fullscreen"></i>
             </button>
-        </div>
-
-        <!-- Quick Add Policy -->
-        <div class="dropdown d-none d-sm-inline-block ms-1">
-            <a href="add.php" class="btn header-item noti-icon waves-effect" title="Add New Policy">
-                <i class="bx bx-plus-circle text-success"></i>
-            </a>
         </div>
 
         <!-- User Profile -->
@@ -147,12 +145,19 @@
 
 <!-- Global Search JavaScript -->
 <script>
-$(document).ready(function() {
-    $('#global-search').on('keyup', function() {
-        var searchTerm = $(this).val().toLowerCase();
-        if (searchTerm.length > 2) {
-            // Implement global search functionality here
-            console.log('Searching for: ' + searchTerm);
+function performGlobalSearch() {
+    var searchTerm = document.getElementById('global-search').value.toLowerCase();
+    if (searchTerm.length > 2) {
+        // Redirect to policies page with search parameter
+        window.location.href = 'policies.php?search=' + encodeURIComponent(searchTerm);
+    }
+}
+
+// Also handle Enter key press
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('global-search').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performGlobalSearch();
         }
     });
 });
