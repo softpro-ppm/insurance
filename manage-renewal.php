@@ -352,20 +352,23 @@
                         return;
                     }
                     
+                    // Extract policy object from response
+                    const policy = data.policy;
+                    
                     // Populate form fields
-                    document.getElementById('edit_policy_id').value = data.id;
-                    document.getElementById('edit_vehicle_number').value = data.vehicle_number || '';
-                    document.getElementById('edit_phone').value = data.phone || '';
-                    document.getElementById('edit_name').value = data.name || '';
-                    document.getElementById('edit_vehicle_type').value = data.vehicle_type || '';
-                    document.getElementById('edit_insurance_company').value = data.insurance_company || '';
-                    document.getElementById('edit_policy_type').value = data.policy_type || '';
-                    document.getElementById('edit_policy_start_date').value = data.policy_start_date || '';
-                    document.getElementById('edit_policy_end_date').value = data.policy_end_date || '';
-                    document.getElementById('edit_premium').value = data.premium || '';
-                    document.getElementById('edit_payout').value = data.payout || '';
-                    document.getElementById('edit_customer_paid').value = data.customer_paid || '';
-                    document.getElementById('edit_comments').value = data.comments || '';
+                    document.getElementById('edit_policy_id').value = policy.id;
+                    document.getElementById('edit_vehicle_number').value = policy.vehicle_number || '';
+                    document.getElementById('edit_phone').value = policy.phone || '';
+                    document.getElementById('edit_name').value = policy.name || '';
+                    document.getElementById('edit_vehicle_type').value = policy.vehicle_type || '';
+                    document.getElementById('edit_insurance_company').value = policy.insurance_company || '';
+                    document.getElementById('edit_policy_type').value = policy.policy_type || '';
+                    document.getElementById('edit_policy_start_date').value = policy.policy_start_date || '';
+                    document.getElementById('edit_policy_end_date').value = policy.policy_end_date || '';
+                    document.getElementById('edit_premium').value = policy.premium || '';
+                    document.getElementById('edit_payout').value = policy.payout || '';
+                    document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
+                    document.getElementById('edit_comments').value = policy.comments || '';
                     
                     // Calculate and update financial fields
                     calculateEditFinancials();
