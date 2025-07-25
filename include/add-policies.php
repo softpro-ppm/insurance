@@ -21,7 +21,14 @@
 	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : '';
 	
 	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
-	$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0;
+	$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0; // Legacy field
+	
+	// New financial fields
+	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : NULL;
+	$customer_paid = !empty($_POST['customer_paid']) ? floatval($_POST['customer_paid']) : NULL;
+	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : NULL;
+	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : NULL;
+	
 	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
 
 	// Validate required fields
@@ -48,8 +55,24 @@
 		exit;
 	}
 
-	// Insert new policy
-	$insertSql = "INSERT INTO policy (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date, chassiss, comments) VALUES ('$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', '$policy_issue_date', '$policy_start_date', '$policy_end_date', '$fc_expiry_date', '$permit_expiry_date', '$premium', '$revenue', NOW(), '$chassiss', '$comments')";
+	// Insert new policy with enhanced financial fields
+	$insertSql = "INSERT INTO policy (
+		name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, 
+		policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, 
+		premium, revenue, payout, customer_paid, discount, calculated_revenue, 
+		created_date, chassiss, comments, updated_at
+	) VALUES (
+		'$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', 
+		'$policy_issue_date', '$policy_start_date', '$policy_end_date', 
+		" . (!empty($fc_expiry_date) ? "'$fc_expiry_date'" : "NULL") . ", 
+		" . (!empty($permit_expiry_date) ? "'$permit_expiry_date'" : "NULL") . ", 
+		$premium, $revenue, 
+		" . ($payout !== NULL ? $payout : "NULL") . ", 
+		" . ($customer_paid !== NULL ? $customer_paid : "NULL") . ", 
+		" . ($discount !== NULL ? $discount : "NULL") . ", 
+		" . ($calculated_revenue !== NULL ? $calculated_revenue : "NULL") . ", 
+		NOW(), '$chassiss', '$comments', NOW()
+	)";
 
 	$result = mysqli_query($con, $insertSql);
 	

@@ -1,15 +1,16 @@
-<!-- Enhanced Single-Step Add Policy Modal -->
-<div class="modal fade" id="addPolicyModal" tabindex="-1" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
+<!-- Enhanced Edit Policy Modal -->
+<div class="modal fade" id="editPolicyModal" tabindex="-1" aria-labelledby="editPolicyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-gradient-primary text-white border-0">
-                <h5 class="modal-title" id="addPolicyModalLabel">
-                    <i class="bx bx-plus-circle me-2"></i>Add New Policy
+                <h5 class="modal-title" id="editPolicyModalLabel">
+                    <i class="bx bx-edit me-2"></i>Edit Policy
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-                <form id="addPolicyForm" action="include/add-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form id="editPolicyForm" action="include/edit-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <input type="hidden" name="policy_id" id="edit_policy_id">
                     
                     <!-- Customer & Vehicle Information -->
                     <div class="card border mb-4 custom-outline-card">
@@ -18,19 +19,19 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Vehicle Number <span class="text-danger">*</span></label>
-                                    <input type="text" name="vehicle_number" id="modal_vehicle_number" class="form-control uppercase" required placeholder="e.g., MH12AB1234">
+                                    <input type="text" name="vehicle_number" id="edit_vehicle_number" class="form-control uppercase" required placeholder="e.g., MH12AB1234">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                    <input type="text" name="phone" maxlength="10" class="form-control" required placeholder="10-digit number">
+                                    <input type="text" name="phone" id="edit_phone" maxlength="10" class="form-control" required placeholder="10-digit number">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" class="form-control uppercase" required placeholder="Customer name">
+                                    <input type="text" name="name" id="edit_name" class="form-control uppercase" required placeholder="Customer name">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
-                                    <select name="vehicle_type" class="form-select" required>
+                                    <select name="vehicle_type" id="edit_vehicle_type" class="form-select" required>
                                         <option value="">Select Vehicle Type</option>
                                         <option value="Two Wheeler">Two Wheeler</option>
                                         <option value="Four Wheeler">Four Wheeler</option>
@@ -49,7 +50,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Chassis Number</label>
-                                    <input type="text" name="chassiss" class="form-control uppercase" placeholder="Chassis number">
+                                    <input type="text" name="chassiss" id="edit_chassiss" class="form-control uppercase" placeholder="Chassis number">
                                 </div>
                             </div>
                         </div>
@@ -62,7 +63,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Insurance Company <span class="text-danger">*</span></label>
-                                    <select name="insurance_company" class="form-select" required>
+                                    <select name="insurance_company" id="edit_insurance_company" class="form-select" required>
                                         <option value="">Select Insurance Company</option>
                                         <option value="HDFC ERGO General Insurance Company Ltd">HDFC ERGO</option>
                                         <option value="ICICI Lombard General Insurance Company Ltd">ICICI Lombard</option>
@@ -90,7 +91,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Policy Type <span class="text-danger">*</span></label>
-                                    <select name="policy_type" class="form-select" required>
+                                    <select name="policy_type" id="edit_policy_type" class="form-select" required>
                                         <option value="">Select Policy Type</option>
                                         <option value="Comprehensive">Comprehensive</option>
                                         <option value="Third Party">Third Party</option>
@@ -101,15 +102,15 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Policy Issue Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="policy_issue_date" class="form-control" required>
+                                    <input type="date" name="policy_issue_date" id="edit_policy_issue_date" class="form-control" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Policy Start Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="policy_start_date" id="modal_policy_start_date" class="form-control" required>
+                                    <input type="date" name="policy_start_date" id="edit_policy_start_date" class="form-control" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="policy_end_date" id="modal_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
+                                    <input type="date" name="policy_end_date" id="edit_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
                             </div>
                         </div>
@@ -122,55 +123,47 @@
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Premium Amount <span class="text-danger">*</span></label>
-                                    <input type="number" step="0.01" name="premium" id="modal_premium" class="form-control" required placeholder="Enter premium amount">
+                                    <input type="number" step="0.01" name="premium" id="edit_premium" class="form-control" required placeholder="Enter premium amount">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Payout Amount</label>
-                                    <input type="number" step="0.01" name="payout" id="modal_payout" class="form-control" placeholder="Enter payout amount">
+                                    <input type="number" step="0.01" name="payout" id="edit_payout" class="form-control" placeholder="Enter payout amount">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Customer Paid</label>
-                                    <input type="number" step="0.01" name="customer_paid" id="modal_customer_paid" class="form-control" placeholder="Amount paid by customer">
+                                    <input type="number" step="0.01" name="customer_paid" id="edit_customer_paid" class="form-control" placeholder="Amount paid by customer">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Discount</label>
-                                    <input type="text" id="modal_discount" class="form-control" readonly placeholder="Auto-calculated">
+                                    <input type="text" id="edit_discount" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Revenue (New Logic)</label>
-                                    <input type="text" id="modal_calculated_revenue" class="form-control" readonly placeholder="Auto-calculated">
+                                    <input type="text" id="edit_calculated_revenue" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Legacy Revenue</label>
-                                    <input type="number" step="0.01" name="revenue" id="modal_legacy_revenue" class="form-control" placeholder="Optional legacy field">
+                                    <input type="number" step="0.01" name="revenue" id="edit_legacy_revenue" class="form-control" placeholder="Optional legacy field">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">FC Expiry Date</label>
-                                    <input type="date" name="fc_expiry_date" class="form-control">
+                                    <input type="date" name="fc_expiry_date" id="edit_fc_expiry_date" class="form-control">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Permit Expiry Date</label>
-                                    <input type="date" name="permit_expiry_date" class="form-control">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Policy Files</label>
-                                    <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">RC Files</label>
-                                    <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                    <input type="date" name="permit_expiry_date" id="edit_permit_expiry_date" class="form-control">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Comments</label>
-                                    <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
+                                    <textarea name="comments" id="edit_comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Hidden fields for calculated values -->
-                    <input type="hidden" name="discount" id="hidden_discount">
-                    <input type="hidden" name="calculated_revenue" id="hidden_calculated_revenue">
+                    <input type="hidden" name="discount" id="edit_hidden_discount">
+                    <input type="hidden" name="calculated_revenue" id="edit_hidden_calculated_revenue">
 
                 </form>
             </div>
@@ -178,8 +171,8 @@
                 <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
                     <i class="bx bx-x me-2"></i>Cancel
                 </button>
-                <button type="submit" form="addPolicyForm" class="btn btn-primary btn-lg">
-                    <i class="bx bx-check me-2"></i>Add Policy
+                <button type="submit" form="editPolicyForm" class="btn btn-primary btn-lg">
+                    <i class="bx bx-save me-2"></i>Update Policy
                 </button>
             </div>
         </div>
@@ -187,6 +180,7 @@
 </div>
 
 <style>
+/* Same styling as add modal */
 .bg-gradient-primary {
     background: #6f42c1 !important;
 }
@@ -245,7 +239,7 @@
 }
 
 /* Auto-calculation styling */
-#modal_profit_loss {
+#edit_discount, #edit_calculated_revenue {
     font-weight: bold;
     background-color: #f8f9fa !important;
 }
@@ -286,11 +280,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-calculate financial fields
-    function calculateFinancials() {
-        const premium = parseFloat(document.getElementById('modal_premium').value) || 0;
-        const payout = parseFloat(document.getElementById('modal_payout').value) || 0;
-        const customerPaid = parseFloat(document.getElementById('modal_customer_paid').value) || 0;
+    // Auto-calculate financial fields for edit modal
+    function calculateEditFinancials() {
+        const premium = parseFloat(document.getElementById('edit_premium').value) || 0;
+        const payout = parseFloat(document.getElementById('edit_payout').value) || 0;
+        const customerPaid = parseFloat(document.getElementById('edit_customer_paid').value) || 0;
         
         // Calculate Discount: Premium - Customer Paid
         const discount = premium - customerPaid;
@@ -299,16 +293,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const calculatedRevenue = payout - discount;
         
         // Update discount field
-        const discountField = document.getElementById('modal_discount');
+        const discountField = document.getElementById('edit_discount');
         discountField.value = discount.toFixed(2);
         
         // Update calculated revenue field
-        const revenueField = document.getElementById('modal_calculated_revenue');
+        const revenueField = document.getElementById('edit_calculated_revenue');
         revenueField.value = calculatedRevenue.toFixed(2);
         
         // Update hidden fields for form submission
-        document.getElementById('hidden_discount').value = discount.toFixed(2);
-        document.getElementById('hidden_calculated_revenue').value = calculatedRevenue.toFixed(2);
+        document.getElementById('edit_hidden_discount').value = discount.toFixed(2);
+        document.getElementById('edit_hidden_calculated_revenue').value = calculatedRevenue.toFixed(2);
         
         // Color coding for discount
         if (discount > 0) {
@@ -341,10 +335,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Auto-calculate policy end date (start date + 1 year - 1 day)
-    function calculatePolicyEndDate() {
-        const startDateInput = document.getElementById('modal_policy_start_date');
-        const endDateInput = document.getElementById('modal_policy_end_date');
+    // Auto-calculate policy end date for edit modal
+    function calculateEditPolicyEndDate() {
+        const startDateInput = document.getElementById('edit_policy_start_date');
+        const endDateInput = document.getElementById('edit_policy_end_date');
         
         if (startDateInput.value) {
             const startDate = new Date(startDateInput.value);
@@ -361,74 +355,133 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event listeners for financial calculations
-    document.getElementById('modal_premium').addEventListener('input', calculateFinancials);
-    document.getElementById('modal_payout').addEventListener('input', calculateFinancials);
-    document.getElementById('modal_customer_paid').addEventListener('input', calculateFinancials);
+    if (document.getElementById('edit_premium')) {
+        document.getElementById('edit_premium').addEventListener('input', calculateEditFinancials);
+        document.getElementById('edit_payout').addEventListener('input', calculateEditFinancials);
+        document.getElementById('edit_customer_paid').addEventListener('input', calculateEditFinancials);
+    }
 
     // Event listener for policy date calculation
-    document.getElementById('modal_policy_start_date').addEventListener('change', calculatePolicyEndDate);
+    if (document.getElementById('edit_policy_start_date')) {
+        document.getElementById('edit_policy_start_date').addEventListener('change', calculateEditPolicyEndDate);
+    }
 
-    // Phone number validation
-    document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length > 10) {
-            this.value = this.value.slice(0, 10);
-        }
-    });
+    // Phone number validation for edit modal
+    if (document.getElementById('edit_phone')) {
+        document.getElementById('edit_phone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+    }
 
-    // Vehicle number formatting
-    document.getElementById('modal_vehicle_number').addEventListener('input', function(e) {
-        this.value = this.value.toUpperCase();
-    });
+    // Vehicle number formatting for edit modal
+    if (document.getElementById('edit_vehicle_number')) {
+        document.getElementById('edit_vehicle_number').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
+    }
 
-    // Form validation and submission
-    document.getElementById('addPolicyForm').addEventListener('submit', function(e) {
-        const phone = document.querySelector('input[name="phone"]').value;
-        if (phone.length !== 10) {
-            e.preventDefault();
-            alert('Please enter a valid 10-digit phone number.');
-            return;
-        }
+    // Form validation and submission for edit modal
+    if (document.getElementById('editPolicyForm')) {
+        document.getElementById('editPolicyForm').addEventListener('submit', function(e) {
+            const phone = document.getElementById('edit_phone').value;
+            if (phone.length !== 10) {
+                e.preventDefault();
+                alert('Please enter a valid 10-digit phone number.');
+                return;
+            }
 
-        // Show loading state
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Adding Policy...';
-        submitBtn.disabled = true;
+            // Show loading state
+            const submitBtn = document.querySelector('#editPolicyModal button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Updating Policy...';
+            submitBtn.disabled = true;
 
-        // Reset after 10 seconds if form doesn't submit
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }, 10000);
-    });
+            // Reset after 10 seconds if form doesn't submit
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 10000);
+        });
+    }
 
     // Reset modal on close
-    document.getElementById('addPolicyModal').addEventListener('hidden.bs.modal', function() {
-        document.getElementById('addPolicyForm').reset();
-        
-        // Reset calculated fields
-        document.getElementById('modal_discount').value = '';
-        document.getElementById('modal_calculated_revenue').value = '';
-        
-        // Reset field styling
-        const resetFields = ['modal_discount', 'modal_calculated_revenue'];
-        resetFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            field.style.backgroundColor = '#f8f9fa';
-            field.style.borderColor = '#dee2e6';
-            field.style.color = '#495057';
+    if (document.getElementById('editPolicyModal')) {
+        document.getElementById('editPolicyModal').addEventListener('hidden.bs.modal', function() {
+            // Reset calculated fields
+            document.getElementById('edit_discount').value = '';
+            document.getElementById('edit_calculated_revenue').value = '';
+            
+            // Reset field styling
+            const resetFields = ['edit_discount', 'edit_calculated_revenue'];
+            resetFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                field.style.backgroundColor = '#f8f9fa';
+                field.style.borderColor = '#dee2e6';
+                field.style.color = '#495057';
+            });
+            
+            // Reset submit button if it was in loading state
+            const submitBtn = document.querySelector('#editPolicyModal button[type="submit"]');
+            submitBtn.innerHTML = '<i class="bx bx-save me-2"></i>Update Policy';
+            submitBtn.disabled = false;
         });
-        
-        // Reset submit button if it was in loading state
-        const submitBtn = document.querySelector('button[type="submit"]');
-        submitBtn.innerHTML = '<i class="bx bx-check me-2"></i>Add Policy';
-        submitBtn.disabled = false;
-    });
+    }
 
-    // Modal show event - focus on first input
-    document.getElementById('addPolicyModal').addEventListener('shown.bs.modal', function() {
-        document.getElementById('modal_vehicle_number').focus();
+    // Listen for the custom event to trigger calculations after modal is loaded
+    window.addEventListener('editModalLoaded', function() {
+        calculateEditFinancials();
     });
 });
+
+// Function to load policy data into edit modal (globally accessible)
+function loadPolicyForEdit(policyId) {
+    fetch(`include/get-policy-data.php?id=${policyId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const policy = data.policy;
+                
+                // Populate form fields
+                document.getElementById('edit_policy_id').value = policy.id;
+                document.getElementById('edit_vehicle_number').value = policy.vehicle_number;
+                document.getElementById('edit_phone').value = policy.phone;
+                document.getElementById('edit_name').value = policy.name;
+                document.getElementById('edit_vehicle_type').value = policy.vehicle_type;
+                document.getElementById('edit_chassiss').value = policy.chassiss;
+                document.getElementById('edit_insurance_company').value = policy.insurance_company;
+                document.getElementById('edit_policy_type').value = policy.policy_type;
+                document.getElementById('edit_policy_issue_date').value = policy.policy_issue_date;
+                document.getElementById('edit_policy_start_date').value = policy.policy_start_date;
+                document.getElementById('edit_policy_end_date').value = policy.policy_end_date;
+                document.getElementById('edit_premium').value = policy.premium;
+                document.getElementById('edit_legacy_revenue').value = policy.revenue;
+                document.getElementById('edit_fc_expiry_date').value = policy.fc_expiry_date;
+                document.getElementById('edit_permit_expiry_date').value = policy.permit_expiry_date;
+                document.getElementById('edit_comments').value = policy.comments;
+                
+                // Populate new financial fields (if available)
+                if (policy.payout !== null) document.getElementById('edit_payout').value = policy.payout;
+                if (policy.customer_paid !== null) document.getElementById('edit_customer_paid').value = policy.customer_paid;
+                if (policy.discount !== null) document.getElementById('edit_discount').value = policy.discount;
+                if (policy.calculated_revenue !== null) document.getElementById('edit_calculated_revenue').value = policy.calculated_revenue;
+                
+                // Trigger calculations (need to call the function within DOMContentLoaded scope)
+                // So we'll dispatch a custom event
+                window.dispatchEvent(new CustomEvent('editModalLoaded'));
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+                modal.show();
+            } else {
+                alert('Error loading policy data: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading policy data');
+        });
+}
 </script>

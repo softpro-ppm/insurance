@@ -110,8 +110,12 @@
 						                            <td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 						                            <td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
 						                            <td>
-						                                <a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
-						                                <a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
+						                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy">
+						                                    <i class="fas fa-pencil-alt"></i>
+						                                </button>
+						                                <a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm" title="Delete Policy">
+						                                    <i class="fas fa-trash-alt"></i>
+						                                </a>
 						                            </td>
 						                        </tr>
 						                        <?php $sn++; } }else{ ?> 
@@ -289,5 +293,6 @@
     </script>
 
     <?php include 'include/add-policy-modal.php'; ?>
+    <?php include 'include/edit-policy-modal.php'; ?>
 </body>
 </html>
