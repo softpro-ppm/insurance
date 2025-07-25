@@ -150,10 +150,6 @@
                         </div>
                     </div>
 
-                    <!-- Hidden fields for calculated values -->
-                    <input type="hidden" name="discount" id="hidden_discount">
-                    <input type="hidden" name="calculated_revenue" id="hidden_calculated_revenue">
-
                 </form>
             </div>
             <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
@@ -363,12 +359,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form validation and submission
     document.getElementById('addPolicyForm').addEventListener('submit', function(e) {
+        // Trigger calculations one more time before submission
+        calculateFinancials();
+        
         const phone = document.querySelector('input[name="phone"]').value;
         if (phone.length !== 10) {
             e.preventDefault();
             alert('Please enter a valid 10-digit phone number.');
             return;
         }
+
+        // Debug: Show what's being submitted
+        const discountValue = document.getElementById('hidden_discount').value;
+        const revenueValue = document.getElementById('hidden_calculated_revenue').value;
+        
+        console.log('Form submission values:');
+        console.log('Discount:', discountValue);
+        console.log('Calculated Revenue:', revenueValue);
 
         // Show loading state
         const submitBtn = document.querySelector('button[type="submit"]');

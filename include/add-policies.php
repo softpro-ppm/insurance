@@ -31,8 +31,20 @@
 	// Debug: Log the values
 	error_log("DEBUG - Premium: $premium, Payout: $payout, Customer Paid: $customer_paid, Discount: $discount, Calculated Revenue: $calculated_revenue");
 	
-	// Use calculated revenue, but ensure it's not 0
-	$revenue = $calculated_revenue > 0 ? $calculated_revenue : ($payout > 0 ? $payout - $discount : 0);
+	// Calculate discount and revenue manually if not provided from frontend
+	if ($discount == 0 && $premium > 0 && $customer_paid > 0) {
+		$discount = $premium - $customer_paid;
+	}
+	
+	if ($calculated_revenue == 0 && $payout > 0 && $discount > 0) {
+		$calculated_revenue = $payout - $discount;
+	}
+	
+	// Use calculated revenue as the final revenue value
+	$revenue = $calculated_revenue > 0 ? $calculated_revenue : 0;
+	
+	// Final debug log
+	error_log("FINAL VALUES - Discount: $discount, Revenue: $revenue");
 	
 	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
 

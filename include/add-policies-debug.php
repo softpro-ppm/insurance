@@ -1,7 +1,14 @@
 <?php
 // Simple debug version of add-policies.php to identify the issue
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_e# Try simple insert first
+$simple_insert = "INSERT INTO policy (
+    name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, 
+    policy_start_date, policy_end_date, premium, revenue, created_date
+) VALUES (
+    '$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', 
+    '$policy_start_date', '$policy_end_date', $premium, $final_revenue, NOW()
+)";1);
 
 require 'session.php';
 require 'config.php';
@@ -62,7 +69,28 @@ echo "<li>Calculated Revenue: $calculated_revenue</li>";
 echo "</ul>";
 
 // Calculate revenue
-$revenue = $calculated_revenue > 0 ? $calculated_revenue : ($payout > 0 ? $payout - $discount : 0);
+# Calculate revenue
+$manual_discount = $premium - $customer_paid;
+$manual_revenue = $payout - $manual_discount;
+
+# Use manual calculations if form values are 0
+$final_discount = $discount > 0 ? $discount : $manual_discount;
+$final_revenue = $calculated_revenue > 0 ? $calculated_revenue : $manual_revenue;
+
+echo "<h3>🧮 Calculations:</h3>";
+echo "<ul>";
+echo "<li><strong>Manual Discount:</strong> $manual_discount (Premium $premium - Customer Paid $customer_paid)</li>";
+echo "<li><strong>Manual Revenue:</strong> $manual_revenue (Payout $payout - Discount $manual_discount)</li>";
+echo "<li><strong>Form Discount:</strong> $discount</li>";
+echo "<li><strong>Form Revenue:</strong> $calculated_revenue</li>";
+echo "<li><strong>Final Discount:</strong> $final_discount</li>";
+echo "<li><strong>Final Revenue:</strong> $final_revenue</li>";
+echo "</ul>";
+
+echo "<h3>✅ Final Revenue to Save:</h3>";
+echo "<p style='background: " . ($final_revenue > 0 ? '#d4edda' : '#f8d7da') . "; padding: 10px; border-radius: 5px;'>";
+echo "<strong>Revenue: ₹$final_revenue</strong>";
+echo "</p>";
 
 echo "<h3>Final Revenue: $revenue</h3>";
 
@@ -119,7 +147,7 @@ if ($result) {
         $description = 'Insurance';
         $category = 'Insurance';
         $subcategory = 'Insurance';
-        $amount = $revenue;
+        $amount = $final_revenue;
         $received = $revenue;
         $balance = 0;
         $insurance_id = $policy_id;
