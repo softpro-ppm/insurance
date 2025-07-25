@@ -2,40 +2,71 @@
 	require 'session.php';
 	require 'config.php';
 
-	$name = $_POST['name'];
-	$chassiss = $_POST['chassiss'];
-	$phone = $_POST['phone'];
-	$vehicle_number = $_POST['vehicle_number'];
-	$vehicle_type = $_POST['vehicle_type'];
-	$insurance_company = $_POST['insurance_company'];
-	$policy_type = $_POST['policy_type'];
-	$policy_issue_date = date('Y-m-d',strtotime($_POST['policy_issue_date']));
-	$policy_start_date = date('Y-m-d',strtotime($_POST['policy_start_date']));
-	$policy_end_date = date('Y-m-d',strtotime($_POST['policy_end_date']));
-	if(!empty($_POST['fc_expiry_date'])){
-		$fc_expiry_date = date('Y-m-d',strtotime($_POST['fc_expiry_date']));
-	}else{
-		$fc_expiry_date = '';
-	}
-	if(!empty($_POST['permit_expiry_date'])){
-	$permit_expiry_date = date('Y-m-d',strtotime($_POST['permit_expiry_date']));
-	}else{
-	$permit_expiry_date = '';
-	}
-	$premium = $_POST['premium'];
-	$revenue = $_POST['revenue'];
+	// Input validation and sanitization
+	$name = InputValidator::sanitizeString($_POST['name']);
+	$chassiss = InputValidator::sanitizeString($_POST['chassiss']);
+	$phone = InputValidator::validatePhone($_POST['phone']);
+	$vehicle_number = InputValidator::sanitizeString($_POST['vehicle_number']);
+	$vehicle_type = InputValidator::sanitizeString($_POST['vehicle_type']);
+	$insurance_company = InputValidator::sanitizeString($_POST['insurance_company']);
+	$policy_type = InputValidator::sanitizeString($_POST['policy_type']);
+	
+	// Handle date inputs (already in Y-m-d format from HTML5 date inputs)
+	$policy_issue_date = $_POST['policy_issue_date'];
+	$policy_start_date = $_POST['policy_start_date'];
+	$policy_end_date = $_POST['policy_end_date'];
+	
+	// Optional dates
+	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : null;
+	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : null;
+	
+	$premium = InputValidator::validateNumber($_POST['premium'], 0);
+	$revenue = !empty($_POST['revenue']) ? InputValidator::validateNumber($_POST['revenue'], 0) : 0;
+	$comments = InputValidator::sanitizeString($_POST['comments']);
 
-	$chk = mysqli_query($con, "select * from policy where vehicle_number='".$vehicle_number."'");
-	if(mysqli_num_rows($chk) > 0){
-		echo "<script>alert('policy is already exist, Please try again with other vehicle number')</script>";
-		echo "<script>window.location.href='../add.php';</script>";
-	}else{
+	// Validate required fields
+	if (!$phone) {
+		echo "<script>alert('Invalid phone number format')</script>";
+		echo "<script>window.history.back();</script>";
+		exit;
+	}
 
-		$sql = mysqli_query($con, "insert into policy (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date, chassiss ) values ('$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', '$policy_issue_date', '$policy_start_date', '$policy_end_date', '$fc_expiry_date', '$permit_expiry_date', '$premium', '$revenue', now(), '$chassiss')");
+	if (!$premium) {
+		echo "<script>alert('Invalid premium amount')</script>";
+		echo "<script>window.history.back();</script>";
+		exit;
+	}
+
+	// Check if policy already exists using prepared statement
+	$checkStmt = $secureDB->query("SELECT id FROM policy WHERE vehicle_number = ?", [$vehicle_number]);
+	$existing = $checkStmt->get_result();
+	
+	if($existing && $existing->num_rows > 0){
+		echo "<script>alert('Policy already exists for this vehicle number. Please use a different vehicle number or update the existing policy.')</script>";
+		echo "<script>window.history.back();</script>";
+		exit;
+	}
+
+	// Insert new policy using prepared statement
+	$insertSql = "INSERT INTO policy (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date, chassiss, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
+	
+	$params = [
+		$name, $phone, $vehicle_number, $vehicle_type, $insurance_company, 
+		$policy_type, $policy_issue_date, $policy_start_date, $policy_end_date, 
+		$fc_expiry_date, $permit_expiry_date, $premium, $revenue, $chassiss, $comments
+	];
+
+	try {
+		$policy_id = $secureDB->insert($insertSql, $params);
 		
-
-
-		$policy_id = $con->insert_id;
+		// Log the action
+		if (isset($auditLogger)) {
+			$auditLogger->log('ADD_POLICY', 'policy', $policy_id, null, [
+				'vehicle_number' => $vehicle_number,
+				'name' => $name,
+				'policy_type' => $policy_type
+			]);
+		}
 		
 		
 		// inserting data in account 
@@ -127,21 +158,23 @@
 			mysqli_query($con,$docx_sql);
 			
 		}
-		
-		
 
-		if(!empty($_POST["comments"])){
+		// Handle comments
+		if(!empty($comments)){
 			date_default_timezone_set("Asia/Calcutta");
 		    $time = date('Y-m-d H:i:s');
-			$c_comment=mysqli_query($con, "insert into comments (policy_id,user,  comments, date) values ('".$policy_id."', '".$_SESSION['username']."','".$_POST["comments"]."', '".$time."')");
+			$commentSql = "INSERT INTO comments (policy_id, user, comments, date) VALUES (?, ?, ?, ?)";
+			$secureDB->query($commentSql, [$policy_id, $_SESSION['username'], $comments, $time]);
 		}
 
-		if($sql){
-			echo "<script>alert('Policy Added successfully')</script>";
-			echo "<script>window.location.href='../policies.php';</script>";
-		}else{
-			echo "<script>alert('Please try again')</script>";
-			echo "<script>window.location.href='../add.php';</script>";
-		}
+		// Success response
+		echo "<script>alert('Policy added successfully! 🎉')</script>";
+		echo "<script>window.location.href='../home.php';</script>";
+		
+	} catch (Exception $e) {
+		// Log error and show user-friendly message
+		error_log("Policy addition error: " . $e->getMessage());
+		echo "<script>alert('An error occurred while adding the policy. Please try again.')</script>";
+		echo "<script>window.history.back();</script>";
 	}
 ?>

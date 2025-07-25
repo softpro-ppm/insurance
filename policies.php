@@ -40,8 +40,10 @@
 								<div class="page-title-right">
 									<ol class="breadcrumb m-0">
 										<li class="breadcrumb-item">
-											<a id="btnExport" class="btn btn-primary btn-sm text-white" href="excel.php"  ><i class="fa fa-download" ></i>&nbsp;Export</a>
-											<a class="btn btn-primary btn-sm text-white" href="add.php"><i class="fa fa-plus" ></i>&nbsp;ADD POLICY</a>
+											<a id="btnExport" class="btn btn-outline-primary btn-sm" href="excel.php"><i class="bx bx-download"></i> Export</a>
+											<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addPolicyModal">
+												<i class="bx bx-plus"></i> Add Policy
+											</button>
 										</li>
 									</ol>
 								</div>
@@ -285,5 +287,7 @@
             });
         }
     </script>
+
+    <?php include 'include/add-policy-modal.php'; ?>
 </body>
 </html>

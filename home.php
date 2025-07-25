@@ -119,7 +119,9 @@
                 <div class="container-fluid">
                     <div class="row text-end" >
                         <div class="col-xl-12 " >
-                            <a href="add.php" style="float: right;margin-bottom: 15px;" class="btn btn-outline-primary" ><i class="fa fa-plus" ></i>Add Policy</a>
+                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyModal">
+                                <i class="bx bx-plus-circle"></i> Add New Policy
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1066,6 +1068,8 @@
             });
         });
     </script>
+
+    <?php include 'include/add-policy-modal.php'; ?>
 </body>
 
 </html>

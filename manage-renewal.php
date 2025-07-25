@@ -329,5 +329,7 @@
             });
         });
     </script>
+
+    <?php include 'include/add-policy-modal.php'; ?>
 </body>
 </html>
