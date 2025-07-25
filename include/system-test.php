@@ -31,9 +31,10 @@ try {
 // Test 3: Database Connection Test
 echo "<h3>3. Database Connection Test:</h3>";
 try {
+    // Use the same credentials as config.php
     $host = "localhost";
     $username = "u820431346_newinsurance";
-    $password = "W0q[lX8JD";
+    $password = "Metx@123";
     $database = "u820431346_newinsurance";
     
     $con = new mysqli($host, $username, $password, $database);
