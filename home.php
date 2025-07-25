@@ -243,40 +243,40 @@
                                     <div class="ms-auto">
                                         <select class="form-control" id="year" style="min-width: 120px;">
                                             <option>Select Year</option>
-                                            <?php if($_GET['year'] == '2019'){ ?>
-                                            <option selected value="2019" >FY 2019-20</option>
+                                            <?php if($_GET['year'] == '2025'){ ?>
+                                            <option selected value="2025" >FY 2025-26</option>
                                             <?php }else{ ?>
-                                            <option value="2019" >FY 2019-20</option>
-                                            <?php } ?>
-                                            <?php if($_GET['year'] == '2020'){ ?>
-                                            <option selected value="2020" >FY 2020-21</option>
-                                            <?php }else{ ?>
-                                            <option value="2020" >FY 2020-21</option>
-                                            <?php } ?>
-                                            <?php if($_GET['year'] == '2021'){ ?>
-                                            <option selected value="2021" >FY 2021-22</option>
-                                            <?php }else{ ?>
-                                            <option value="2021" >FY 2021-22</option>
-                                            <?php } ?>
-                                            <?php if($_GET['year'] == '2022'){ ?>
-                                            <option selected value="2022" >FY 2022-23</option>
-                                            <?php }else{ ?>
-                                            <option value="2022" >FY 2022-23</option>
-                                            <?php } ?>
-                                            <?php if($_GET['year'] == '2023'){ ?>
-                                            <option selected value="2023" >FY 2023-24</option>
-                                            <?php }else{ ?>
-                                            <option value="2023" >FY 2023-24</option>
+                                            <option value="2025" >FY 2025-26</option>
                                             <?php } ?>
                                             <?php if($_GET['year'] == '2024'){ ?>
                                             <option selected value="2024" >FY 2024-25</option>
                                             <?php }else{ ?>
                                             <option value="2024" >FY 2024-25</option>
                                             <?php } ?>
-                                            <?php if($_GET['year'] == '2025'){ ?>
-                                            <option selected value="2025" >FY 2025-26</option>
+                                            <?php if($_GET['year'] == '2023'){ ?>
+                                            <option selected value="2023" >FY 2023-24</option>
                                             <?php }else{ ?>
-                                            <option value="2025" >FY 2025-26</option>
+                                            <option value="2023" >FY 2023-24</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2022'){ ?>
+                                            <option selected value="2022" >FY 2022-23</option>
+                                            <?php }else{ ?>
+                                            <option value="2022" >FY 2022-23</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2021'){ ?>
+                                            <option selected value="2021" >FY 2021-22</option>
+                                            <?php }else{ ?>
+                                            <option value="2021" >FY 2021-22</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2020'){ ?>
+                                            <option selected value="2020" >FY 2020-21</option>
+                                            <?php }else{ ?>
+                                            <option value="2020" >FY 2020-21</option>
+                                            <?php } ?>
+                                            <?php if($_GET['year'] == '2019'){ ?>
+                                            <option selected value="2019" >FY 2019-20</option>
+                                            <?php }else{ ?>
+                                            <option value="2019" >FY 2019-20</option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -548,6 +548,16 @@
     <script src="assets/js/pages/dashboard.init.js"></script>
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="assets/libs/jszip/jszip.min.js"></script>
+    <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
     
     
@@ -950,12 +960,63 @@
                 $('#datatable').DataTable().destroy();
             }
             
-            // Initialize DataTable for renewal table with custom configuration
+            // Initialize DataTable for renewal table with advanced features
             var renewalTable = $('#datatable').DataTable({
                 "order": [[5, "asc"]], // Sort by Policy End Date (column index 5) ascending
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-primary btn-sm',
+                        text: '<i class="fas fa-copy"></i> Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-csv"></i> CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Renewal Policies - ' + new Date().toLocaleDateString()
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-danger btn-sm',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        title: 'Renewal Policies - ' + new Date().toLocaleDateString(),
+                        orientation: 'landscape',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-info btn-sm',
+                        text: '<i class="fas fa-print"></i> Print',
+                        title: 'Renewal Policies'
+                    },
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-secondary btn-sm',
+                        text: '<i class="fas fa-columns"></i> Columns'
+                    }
+                ],
                 "columnDefs": [
                     {
                         "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": -1, // Last column (Actions)
                         "searchable": false,
                         "orderable": false
                     }
@@ -966,6 +1027,39 @@
                     var startIndex = api.page.info().start;
                     api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
                         cell.innerHTML = startIndex + i + 1;
+                    });
+                },
+                "language": {
+                    "search": "Search renewals:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ renewal policies",
+                    "infoEmpty": "No renewal policies found",
+                    "infoFiltered": "(filtered from _MAX_ total policies)",
+                    "zeroRecords": "No matching renewal policies found",
+                    "emptyTable": "No renewal policies available"
+                },
+                "initComplete": function() {
+                    // Add custom search functionality
+                    this.api().columns().every(function() {
+                        var column = this;
+                        if (column.index() !== 0 && column.index() !== 6) { // Skip S.No and Actions columns
+                            var select = $('<select class="form-control form-control-sm"><option value="">All</option></select>')
+                                .appendTo($(column.header()))
+                                .on('change', function() {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function(d, j) {
+                                if (d) {
+                                    select.append('<option value="' + d + '">' + d + '</option>');
+                                }
+                            });
+                        }
                     });
                 }
             });

@@ -169,12 +169,68 @@
 	<!-- Custom script for serial numbering -->
 	<script type="text/javascript">
         $(document).ready(function() {
-            // Initialize DataTable with custom configuration
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+            }
+            
+            // Initialize DataTable with advanced features
             var table = $('#datatable').DataTable({
                 "order": [], // No initial sorting to maintain our ORDER BY DESC from SQL
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-primary btn-sm',
+                        text: '<i class="fas fa-copy"></i> Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-csv"></i> CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Insurance Policies - ' + new Date().toLocaleDateString()
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-danger btn-sm',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        title: 'Insurance Policies - ' + new Date().toLocaleDateString(),
+                        orientation: 'landscape',
+                        pageSize: 'A3'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-info btn-sm',
+                        text: '<i class="fas fa-print"></i> Print',
+                        title: 'Insurance Policies'
+                    },
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-secondary btn-sm',
+                        text: '<i class="fas fa-columns"></i> Columns'
+                    }
+                ],
                 "columnDefs": [
                     {
                         "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": -1, // Last column (Actions)
                         "searchable": false,
                         "orderable": false
                     }
@@ -186,6 +242,15 @@
                     api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
                         cell.innerHTML = startIndex + i + 1;
                     });
+                },
+                "language": {
+                    "search": "Search policies:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ policies",
+                    "infoEmpty": "No policies found",
+                    "infoFiltered": "(filtered from _MAX_ total policies)",
+                    "zeroRecords": "No matching policies found",
+                    "emptyTable": "No policies available"
                 }
             });
         });
