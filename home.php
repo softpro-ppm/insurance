@@ -119,8 +119,12 @@
                 <div class="container-fluid">
                     <div class="row text-end" >
                         <div class="col-xl-12 " >
-                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyModal">
+                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyModal" onclick="console.log('Button clicked!')">
                                 <i class="bx bx-plus-circle"></i> Add New Policy
+                            </button>
+                            <!-- Debug button -->
+                            <button type="button" style="float: right;margin-bottom: 15px;margin-right: 10px;" class="btn btn-success" onclick="testModal()">
+                                <i class="bx bx-bug"></i> Test Modal
                             </button>
                         </div>
                     </div>
@@ -1067,6 +1071,33 @@
                 }
             });
         });
+        
+        // Test function for modal debugging
+        function testModal() {
+            console.log('Test Modal function called');
+            console.log('Bootstrap version:', typeof bootstrap !== 'undefined' ? 'Bootstrap 5' : 'Bootstrap 4 or not loaded');
+            
+            const modalElement = document.getElementById('addPolicyModal');
+            if (modalElement) {
+                console.log('Modal element found');
+                
+                // Try Bootstrap 5 method
+                if (typeof bootstrap !== 'undefined') {
+                    console.log('Using Bootstrap 5 method');
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                } else {
+                    console.log('Bootstrap 5 not available, trying jQuery method');
+                    if (typeof $ !== 'undefined') {
+                        $('#addPolicyModal').modal('show');
+                    } else {
+                        console.log('jQuery not available either');
+                    }
+                }
+            } else {
+                console.log('Modal element not found!');
+            }
+        }
     </script>
 
     <?php include 'include/add-policy-modal.php'; ?>
