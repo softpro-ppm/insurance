@@ -23,13 +23,16 @@
 	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
 	
 	// New financial fields
-	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : NULL;
-	$customer_paid = !empty($_POST['customer_paid']) ? floatval($_POST['customer_paid']) : NULL;
-	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : NULL;
-	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : NULL;
+	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : 0;
+	$customer_paid = !empty($_POST['customer_paid']) ? floatval($_POST['customer_paid']) : 0;
+	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : 0;
+	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : 0;
 	
-	// Use calculated revenue as the default revenue value
-	$revenue = $calculated_revenue !== NULL ? $calculated_revenue : 0;
+	// Debug: Log the values
+	error_log("DEBUG - Premium: $premium, Payout: $payout, Customer Paid: $customer_paid, Discount: $discount, Calculated Revenue: $calculated_revenue");
+	
+	// Use calculated revenue, but ensure it's not 0
+	$revenue = $calculated_revenue > 0 ? $calculated_revenue : ($payout > 0 ? $payout - $discount : 0);
 	
 	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
 
@@ -69,10 +72,10 @@
 		" . (!empty($fc_expiry_date) ? "'$fc_expiry_date'" : "NULL") . ", 
 		" . (!empty($permit_expiry_date) ? "'$permit_expiry_date'" : "NULL") . ", 
 		$premium, $revenue, 
-		" . ($payout !== NULL ? $payout : "NULL") . ", 
-		" . ($customer_paid !== NULL ? $customer_paid : "NULL") . ", 
-		" . ($discount !== NULL ? $discount : "NULL") . ", 
-		" . ($calculated_revenue !== NULL ? $calculated_revenue : "NULL") . ", 
+		" . ($payout > 0 ? $payout : "NULL") . ", 
+		" . ($customer_paid > 0 ? $customer_paid : "NULL") . ", 
+		" . ($discount > 0 ? $discount : "NULL") . ", 
+		" . ($calculated_revenue > 0 ? $calculated_revenue : "NULL") . ", 
 		NOW(), '$chassiss', '$comments', NOW()
 	)";
 
@@ -118,47 +121,59 @@
 		
 		
 		// inserting data in account 
+		echo "<!-- DEBUG: Starting account integration -->";
+		echo "<!-- DEBUG: Revenue value: $revenue -->";
 		
-            	
-            
-                // Include your database connection
-                include 'account.php'; // $acc connection defined here
-                
-                // Sample or dynamic input values
-                $date = date('Y-m-d');
-                //$name = ''; // Fill from $_POST or leave blank if not used
-                //$phone = ''; // Fill from $_POST or leave blank if not used
-                $description = 'Insurance';
-                $category = 'Insurance';
-                $subcategory = 'Insurance';
-                $amount = $revenue;       // Example: 10000.00
-                $received = $revenue;     // Example: 10000.00
-                $balance = 0;             // Can also calculate: $amount - $received
-                $insurance_id = $policy_id; // Must be defined before
-                
-                // Prepare the INSERT query
-                $stmt = $acc->prepare("INSERT INTO income (
-                    date, name, phone, description, category, subcategory,
-                    amount, received, balance, created_at, updated_at, insurance_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)");
-                
-                // Bind parameters
-                $stmt->bind_param(
-                    "ssssssddds",
-                    $date, $name, $phone, $description,
-                    $category, $subcategory, $amount, $received, $balance, $insurance_id
-                );
-                
-                // Execute
-                if ($stmt->execute()) {
-                    echo "✅ Income record inserted successfully!";
-                } else {
-                    echo "❌ Error inserting record: " . $stmt->error;
-                }
-                
-                // Close
-                $stmt->close();
-                $acc->close();
+		try {
+			// Include your database connection
+			include 'account.php'; // $acc connection defined here
+			
+			// Sample or dynamic input values
+			$date = date('Y-m-d');
+			$description = 'Insurance';
+			$category = 'Insurance';
+			$subcategory = 'Insurance';
+			$amount = $revenue;       // Use the calculated revenue
+			$received = $revenue;     // Same as amount for now
+			$balance = 0;             // Balance is 0 since amount = received
+			$insurance_id = $policy_id; // Policy ID from insurance database
+			
+			echo "<!-- DEBUG: Amount to insert: $amount -->";
+			
+			// Check if all required values are present
+			if ($amount > 0) {
+				// Prepare the INSERT query
+				$stmt = $acc->prepare("INSERT INTO income (
+					date, name, phone, description, category, subcategory,
+					amount, received, balance, created_at, updated_at, insurance_id
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)");
+				
+				// Bind parameters (check parameter count)
+				$stmt->bind_param(
+					"ssssssdddi",
+					$date, $name, $phone, $description,
+					$category, $subcategory, $amount, $received, $balance, $insurance_id
+				);
+				
+				// Execute
+				if ($stmt->execute()) {
+					echo "<!-- ✅ Income record inserted successfully with amount: $amount -->";
+				} else {
+					echo "<!-- ❌ Error inserting record: " . $stmt->error . " -->";
+				}
+				
+				// Close statement
+				$stmt->close();
+			} else {
+				echo "<!-- ⚠️ Revenue is 0, skipping account insertion -->";
+			}
+			
+			// Close connection
+			$acc->close();
+			
+		} catch (Exception $e) {
+			echo "<!-- ❌ Account integration error: " . $e->getMessage() . " -->";
+		}
                 
 
 

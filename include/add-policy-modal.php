@@ -127,10 +127,12 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Discount</label>
                                     <input type="text" id="modal_discount" class="form-control" readonly placeholder="Auto-calculated">
+                                    <input type="hidden" name="discount" id="hidden_discount">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Revenue (New Logic)</label>
                                     <input type="text" id="modal_calculated_revenue" class="form-control" readonly placeholder="Auto-calculated">
+                                    <input type="hidden" name="calculated_revenue" id="hidden_calculated_revenue">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Policy Files</label>
@@ -266,58 +268,56 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-calculate financial fields
+    // Function to calculate financial values
     function calculateFinancials() {
         const premium = parseFloat(document.getElementById('modal_premium').value) || 0;
-        const payout = parseFloat(document.getElementById('modal_payout').value) || 0;
         const customerPaid = parseFloat(document.getElementById('modal_customer_paid').value) || 0;
+        const payout = parseFloat(document.getElementById('modal_payout').value) || 0;
         
-        // Calculate Discount: Premium - Customer Paid
+        // Calculate discount: Premium - Customer Paid
         const discount = premium - customerPaid;
         
-        // Calculate Revenue: Payout - Discount
-        const calculatedRevenue = payout - discount;
+        // Calculate revenue: Payout - Discount
+        const revenue = payout - discount;
         
-        // Update discount field
-        const discountField = document.getElementById('modal_discount');
-        discountField.value = discount.toFixed(2);
-        
-        // Update calculated revenue field
-        const revenueField = document.getElementById('modal_calculated_revenue');
-        revenueField.value = calculatedRevenue.toFixed(2);
+        // Update display fields
+        document.getElementById('modal_discount').value = discount.toFixed(2);
+        document.getElementById('modal_calculated_revenue').value = revenue.toFixed(2);
         
         // Update hidden fields for form submission
         document.getElementById('hidden_discount').value = discount.toFixed(2);
-        document.getElementById('hidden_calculated_revenue').value = calculatedRevenue.toFixed(2);
+        document.getElementById('hidden_calculated_revenue').value = revenue.toFixed(2);
         
-        // Color coding for discount
+        // Debug logging
+        console.log('Financial Calculation:');
+        console.log('Premium:', premium);
+        console.log('Customer Paid:', customerPaid); 
+        console.log('Payout:', payout);
+        console.log('Discount:', discount);
+        console.log('Revenue:', revenue);
+        
+        // Visual feedback for calculated fields
+        const discountField = document.getElementById('modal_discount');
+        const revenueField = document.getElementById('modal_calculated_revenue');
+        
         if (discount > 0) {
-            discountField.style.backgroundColor = '#f8d7da';
-            discountField.style.borderColor = '#dc3545';
-            discountField.style.color = '#721c24';
-        } else if (discount < 0) {
-            discountField.style.backgroundColor = '#d1edff';
-            discountField.style.borderColor = '#0dcaf0';
-            discountField.style.color = '#055160';
+            discountField.style.backgroundColor = '#d4edda';
+            discountField.style.borderColor = '#c3e6cb';
+            discountField.style.color = '#155724';
         } else {
-            discountField.style.backgroundColor = '#f8f9fa';
-            discountField.style.borderColor = '#dee2e6';
-            discountField.style.color = '#495057';
+            discountField.style.backgroundColor = '#f8d7da';
+            discountField.style.borderColor = '#f5c6cb';
+            discountField.style.color = '#721c24';
         }
         
-        // Color coding for calculated revenue
-        if (calculatedRevenue > 0) {
-            revenueField.style.backgroundColor = '#d1edff';
-            revenueField.style.borderColor = '#0dcaf0';
-            revenueField.style.color = '#055160';
-        } else if (calculatedRevenue < 0) {
-            revenueField.style.backgroundColor = '#f8d7da';
-            revenueField.style.borderColor = '#dc3545';
-            revenueField.style.color = '#721c24';
+        if (revenue > 0) {
+            revenueField.style.backgroundColor = '#d4edda';
+            revenueField.style.borderColor = '#c3e6cb';
+            revenueField.style.color = '#155724';
         } else {
-            revenueField.style.backgroundColor = '#f8f9fa';
-            revenueField.style.borderColor = '#dee2e6';
-            revenueField.style.color = '#495057';
+            revenueField.style.backgroundColor = '#f8d7da';
+            revenueField.style.borderColor = '#f5c6cb';
+            revenueField.style.color = '#721c24';
         }
     }
 
