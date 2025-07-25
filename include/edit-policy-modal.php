@@ -48,10 +48,6 @@
                                         <option value="Misc">Misc</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Chassis Number</label>
-                                    <input type="text" name="chassiss" id="edit_chassiss" class="form-control uppercase" placeholder="Chassis number">
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -100,15 +96,11 @@
                                         <option value="Health">Health</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">Policy Issue Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="policy_issue_date" id="edit_policy_issue_date" class="form-control" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Policy Start Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_start_date" id="edit_policy_start_date" class="form-control" required>
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_end_date" id="edit_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
@@ -121,39 +113,27 @@
                         <div class="card-body">
                             <h6 class="card-title mb-3 text-info"><i class="bx bx-money me-2"></i>Financial & Additional Details</h6>
                             <div class="row">
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Premium Amount <span class="text-danger">*</span></label>
                                     <input type="number" step="0.01" name="premium" id="edit_premium" class="form-control" required placeholder="Enter premium amount">
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Payout Amount</label>
                                     <input type="number" step="0.01" name="payout" id="edit_payout" class="form-control" placeholder="Enter payout amount">
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Customer Paid</label>
                                     <input type="number" step="0.01" name="customer_paid" id="edit_customer_paid" class="form-control" placeholder="Amount paid by customer">
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Discount</label>
                                     <input type="text" id="edit_discount" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">Revenue (New Logic)</label>
                                     <input type="text" id="edit_calculated_revenue" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Legacy Revenue</label>
-                                    <input type="number" step="0.01" name="revenue" id="edit_legacy_revenue" class="form-control" placeholder="Optional legacy field">
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">FC Expiry Date</label>
-                                    <input type="date" name="fc_expiry_date" id="edit_fc_expiry_date" class="form-control">
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Permit Expiry Date</label>
-                                    <input type="date" name="permit_expiry_date" id="edit_permit_expiry_date" class="form-control">
-                                </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" id="edit_comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
                                 </div>
@@ -450,16 +430,11 @@ function loadPolicyForEdit(policyId) {
                 document.getElementById('edit_phone').value = policy.phone;
                 document.getElementById('edit_name').value = policy.name;
                 document.getElementById('edit_vehicle_type').value = policy.vehicle_type;
-                document.getElementById('edit_chassiss').value = policy.chassiss;
                 document.getElementById('edit_insurance_company').value = policy.insurance_company;
                 document.getElementById('edit_policy_type').value = policy.policy_type;
-                document.getElementById('edit_policy_issue_date').value = policy.policy_issue_date;
                 document.getElementById('edit_policy_start_date').value = policy.policy_start_date;
                 document.getElementById('edit_policy_end_date').value = policy.policy_end_date;
                 document.getElementById('edit_premium').value = policy.premium;
-                document.getElementById('edit_legacy_revenue').value = policy.revenue;
-                document.getElementById('edit_fc_expiry_date').value = policy.fc_expiry_date;
-                document.getElementById('edit_permit_expiry_date').value = policy.permit_expiry_date;
                 document.getElementById('edit_comments').value = policy.comments;
                 
                 // Populate new financial fields (if available)

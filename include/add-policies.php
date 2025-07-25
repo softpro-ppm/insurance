@@ -4,7 +4,6 @@
 
 	// Simple input sanitization
 	$name = mysqli_real_escape_string($con, trim($_POST['name']));
-	$chassiss = mysqli_real_escape_string($con, trim($_POST['chassiss']));
 	$phone = mysqli_real_escape_string($con, trim($_POST['phone']));
 	$vehicle_number = mysqli_real_escape_string($con, trim($_POST['vehicle_number']));
 	$vehicle_type = mysqli_real_escape_string($con, trim($_POST['vehicle_type']));
@@ -12,16 +11,16 @@
 	$policy_type = mysqli_real_escape_string($con, trim($_POST['policy_type']));
 	
 	// Handle date inputs (already in Y-m-d format from HTML5 date inputs)
-	$policy_issue_date = $_POST['policy_issue_date'];
 	$policy_start_date = $_POST['policy_start_date'];
 	$policy_end_date = $_POST['policy_end_date'];
 	
-	// Optional dates
-	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : '';
-	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : '';
+	// Removed fields - set defaults for backward compatibility
+	$chassiss = ''; // No longer collected from frontend
+	$policy_issue_date = $policy_start_date; // Use start date as issue date
+	$fc_expiry_date = null; // No longer collected from frontend
+	$permit_expiry_date = null; // No longer collected from frontend
 	
 	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
-	$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0; // Legacy field
 	
 	// New financial fields
 	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : NULL;
@@ -29,10 +28,13 @@
 	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : NULL;
 	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : NULL;
 	
+	// Use calculated revenue as the default revenue value
+	$revenue = $calculated_revenue !== NULL ? $calculated_revenue : 0;
+	
 	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
 
 	// Validate required fields
-	if (empty($name) || empty($phone) || empty($vehicle_number) || empty($vehicle_type) || empty($insurance_company) || empty($policy_type) || empty($policy_issue_date) || empty($policy_start_date) || empty($policy_end_date) || $premium <= 0) {
+	if (empty($name) || empty($phone) || empty($vehicle_number) || empty($vehicle_type) || empty($insurance_company) || empty($policy_type) || empty($policy_start_date) || empty($policy_end_date) || $premium <= 0) {
 		echo "<script>alert('Please fill all required fields properly.')</script>";
 		echo "<script>window.history.back();</script>";
 		exit;
@@ -76,8 +78,43 @@
 
 	$result = mysqli_query($con, $insertSql);
 	
+	// If the enhanced query fails (columns don't exist), try the legacy query
+	if (!$result) {
+		$error = mysqli_error($con);
+		
+		// Check if error is about unknown columns
+		if (strpos($error, "Unknown column") !== false) {
+			echo "<!-- DEBUG: Using legacy insert query -->";
+			
+			// Legacy insert query (original columns only)
+			$legacyInsertSql = "INSERT INTO policy (
+				name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, 
+				policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, 
+				premium, revenue, created_date, chassiss
+			) VALUES (
+				'$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', 
+				'$policy_issue_date', '$policy_start_date', '$policy_end_date', 
+				" . (!empty($fc_expiry_date) ? "'$fc_expiry_date'" : "NULL") . ", 
+				" . (!empty($permit_expiry_date) ? "'$permit_expiry_date'" : "NULL") . ", 
+				$premium, $revenue, NOW(), '$chassiss'
+			)";
+			
+			$result = mysqli_query($con, $legacyInsertSql);
+		}
+	}
+	
 	if ($result) {
 		$policy_id = mysqli_insert_id($con);
+		echo "<!-- DEBUG: Policy inserted successfully with ID: $policy_id -->";
+	} else {
+		// Debug: Show the actual error
+		$error = mysqli_error($con);
+		echo "<script>alert('Database Error: $error');</script>";
+		echo "<script>console.log('SQL Error: $error');</script>";
+		echo "<script>console.log('SQL Query: $insertSql');</script>";
+		echo "<script>window.location.href='../policies.php';</script>";
+		exit;
+	}
 		
 		
 		// inserting data in account 

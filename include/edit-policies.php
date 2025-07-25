@@ -10,23 +10,16 @@
 	$vehicle_type = $_POST['vehicle_type'];
 	$insurance_company = $_POST['insurance_company'];
 	$policy_type = $_POST['policy_type'];
-	$policy_issue_date = date('Y-m-d',strtotime($_POST['policy_issue_date']));
 	$policy_start_date = date('Y-m-d',strtotime($_POST['policy_start_date']));
 	$policy_end_date = date('Y-m-d',strtotime($_POST['policy_end_date']));
 	
-	if(!empty($_POST['fc_expiry_date'])){
-		$fc_expiry_date = date('Y-m-d',strtotime($_POST['fc_expiry_date']));
-	}else{
-		$fc_expiry_date = null;
-	}
-	if(!empty($_POST['permit_expiry_date'])){
-		$permit_expiry_date = date('Y-m-d',strtotime($_POST['permit_expiry_date']));
-	}else{
-		$permit_expiry_date = null;
-	}
+	// Removed fields - set defaults for backward compatibility
+	$chassiss = ''; // No longer collected from frontend
+	$policy_issue_date = $policy_start_date; // Use start date as issue date
+	$fc_expiry_date = null; // No longer collected from frontend
+	$permit_expiry_date = null; // No longer collected from frontend
 	
 	$premium = floatval($_POST['premium']);
-	$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : null; // Legacy revenue field
 	
 	// New financial fields
 	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : null;
@@ -35,7 +28,9 @@
 	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : null;
 	$comments = !empty($_POST['comments']) ? trim($_POST['comments']) : null;
 	
-	$chassiss = !empty($_POST['chassiss']) ? strtoupper(trim($_POST['chassiss'])) : null;
+	// Use calculated revenue as the revenue value for backward compatibility
+	$revenue = $calculated_revenue !== null ? $calculated_revenue : 0;
+	
 	// Prepare update query with new financial fields
 	$update_sql = "UPDATE policy SET 
 		name = ?, phone = ?, vehicle_number = ?, vehicle_type = ?, 
