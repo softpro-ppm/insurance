@@ -4,7 +4,7 @@
 	// Database configuration
 	$host = "localhost";
 	$username = "u820431346_newinsurance";
-	$password = "Metx@123";
+	$password = "Softpro@123";
 	$database = "u820431346_newinsurance";
 
 	// Legacy connection for existing code

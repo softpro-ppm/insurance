@@ -9,7 +9,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-                <form id="addPolicyForm" action="include/account-only-test.php" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form id="addPolicyForm" action="include/add-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
                     
                     <!-- Customer & Vehicle Information -->
                     <div class="card border mb-4 custom-outline-card">
