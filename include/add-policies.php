@@ -2,14 +2,14 @@
 	require 'session.php';
 	require 'config.php';
 
-	// Input validation and sanitization
-	$name = InputValidator::sanitizeString($_POST['name']);
-	$chassiss = InputValidator::sanitizeString($_POST['chassiss']);
-	$phone = InputValidator::validatePhone($_POST['phone']);
-	$vehicle_number = InputValidator::sanitizeString($_POST['vehicle_number']);
-	$vehicle_type = InputValidator::sanitizeString($_POST['vehicle_type']);
-	$insurance_company = InputValidator::sanitizeString($_POST['insurance_company']);
-	$policy_type = InputValidator::sanitizeString($_POST['policy_type']);
+	// Simple input sanitization
+	$name = mysqli_real_escape_string($con, trim($_POST['name']));
+	$chassiss = mysqli_real_escape_string($con, trim($_POST['chassiss']));
+	$phone = mysqli_real_escape_string($con, trim($_POST['phone']));
+	$vehicle_number = mysqli_real_escape_string($con, trim($_POST['vehicle_number']));
+	$vehicle_type = mysqli_real_escape_string($con, trim($_POST['vehicle_type']));
+	$insurance_company = mysqli_real_escape_string($con, trim($_POST['insurance_company']));
+	$policy_type = mysqli_real_escape_string($con, trim($_POST['policy_type']));
 	
 	// Handle date inputs (already in Y-m-d format from HTML5 date inputs)
 	$policy_issue_date = $_POST['policy_issue_date'];
@@ -17,56 +17,44 @@
 	$policy_end_date = $_POST['policy_end_date'];
 	
 	// Optional dates
-	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : null;
-	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : null;
+	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : '';
+	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : '';
 	
-	$premium = InputValidator::validateNumber($_POST['premium'], 0);
-	$revenue = !empty($_POST['revenue']) ? InputValidator::validateNumber($_POST['revenue'], 0) : 0;
-	$comments = InputValidator::sanitizeString($_POST['comments']);
+	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
+	$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0;
+	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
 
 	// Validate required fields
-	if (!$phone) {
-		echo "<script>alert('Invalid phone number format')</script>";
+	if (empty($name) || empty($phone) || empty($vehicle_number) || empty($vehicle_type) || empty($insurance_company) || empty($policy_type) || empty($policy_issue_date) || empty($policy_start_date) || empty($policy_end_date) || $premium <= 0) {
+		echo "<script>alert('Please fill all required fields properly.')</script>";
 		echo "<script>window.history.back();</script>";
 		exit;
 	}
 
-	if (!$premium) {
-		echo "<script>alert('Invalid premium amount')</script>";
+	// Validate phone number
+	if (!preg_match('/^[0-9]{10}$/', $phone)) {
+		echo "<script>alert('Please enter a valid 10-digit phone number.')</script>";
 		echo "<script>window.history.back();</script>";
 		exit;
 	}
 
-	// Check if policy already exists using prepared statement
-	$checkStmt = $secureDB->query("SELECT id FROM policy WHERE vehicle_number = ?", [$vehicle_number]);
-	$existing = $checkStmt->get_result();
+	// Check if policy already exists
+	$checkSql = "SELECT id FROM policy WHERE vehicle_number = '$vehicle_number'";
+	$checkResult = mysqli_query($con, $checkSql);
 	
-	if($existing && $existing->num_rows > 0){
+	if(mysqli_num_rows($checkResult) > 0){
 		echo "<script>alert('Policy already exists for this vehicle number. Please use a different vehicle number or update the existing policy.')</script>";
 		echo "<script>window.history.back();</script>";
 		exit;
 	}
 
-	// Insert new policy using prepared statement
-	$insertSql = "INSERT INTO policy (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date, chassiss, comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
-	
-	$params = [
-		$name, $phone, $vehicle_number, $vehicle_type, $insurance_company, 
-		$policy_type, $policy_issue_date, $policy_start_date, $policy_end_date, 
-		$fc_expiry_date, $permit_expiry_date, $premium, $revenue, $chassiss, $comments
-	];
+	// Insert new policy
+	$insertSql = "INSERT INTO policy (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date, chassiss, comments) VALUES ('$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', '$policy_issue_date', '$policy_start_date', '$policy_end_date', '$fc_expiry_date', '$permit_expiry_date', '$premium', '$revenue', NOW(), '$chassiss', '$comments')";
 
-	try {
-		$policy_id = $secureDB->insert($insertSql, $params);
-		
-		// Log the action
-		if (isset($auditLogger)) {
-			$auditLogger->log('ADD_POLICY', 'policy', $policy_id, null, [
-				'vehicle_number' => $vehicle_number,
-				'name' => $name,
-				'policy_type' => $policy_type
-			]);
-		}
+	$result = mysqli_query($con, $insertSql);
+	
+	if ($result) {
+		$policy_id = mysqli_insert_id($con);
 		
 		
 		// inserting data in account 
@@ -163,18 +151,17 @@
 		if(!empty($comments)){
 			date_default_timezone_set("Asia/Calcutta");
 		    $time = date('Y-m-d H:i:s');
-			$commentSql = "INSERT INTO comments (policy_id, user, comments, date) VALUES (?, ?, ?, ?)";
-			$secureDB->query($commentSql, [$policy_id, $_SESSION['username'], $comments, $time]);
+			$commentSql = "INSERT INTO comments (policy_id, user, comments, date) VALUES ('$policy_id', '".$_SESSION['username']."', '$comments', '$time')";
+			mysqli_query($con, $commentSql);
 		}
 
 		// Success response
 		echo "<script>alert('Policy added successfully! 🎉')</script>";
 		echo "<script>window.location.href='../home.php';</script>";
 		
-	} catch (Exception $e) {
-		// Log error and show user-friendly message
-		error_log("Policy addition error: " . $e->getMessage());
-		echo "<script>alert('An error occurred while adding the policy. Please try again.')</script>";
+	} else {
+		// Error handling
+		echo "<script>alert('An error occurred while adding the policy. Please try again. Error: " . mysqli_error($con) . "')</script>";
 		echo "<script>window.history.back();</script>";
 	}
 ?>
