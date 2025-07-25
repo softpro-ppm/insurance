@@ -1,0 +1,320 @@
+<!-- Enhanced Single-Step Add Policy Modal -->
+<div class="modal fade" id="addPolicyModal" tabindex="-1" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gradient-primary text-white border-0">
+                <h5 class="modal-title" id="addPolicyModalLabel">
+                    <i class="bx bx-plus-circle me-2"></i>Add New Policy
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addPolicyForm" action="include/add-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
+                    
+                    <!-- Customer & Vehicle Information -->
+                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3"><i class="bx bx-user me-2"></i>Customer & Vehicle Information</h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Vehicle Number <span class="text-warning">*</span></label>
+                                    <input type="text" name="vehicle_number" id="modal_vehicle_number" class="form-control uppercase" required placeholder="e.g., MH12AB1234" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Phone Number <span class="text-warning">*</span></label>
+                                    <input type="text" name="phone" maxlength="10" class="form-control" required placeholder="10-digit number" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Full Name <span class="text-warning">*</span></label>
+                                    <input type="text" name="name" class="form-control uppercase" required placeholder="Customer name" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">Vehicle Type <span class="text-warning">*</span></label>
+                                    <select name="vehicle_type" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                        <option value="">Select Vehicle Type</option>
+                                        <option value="Two Wheeler">Two Wheeler</option>
+                                        <option value="Four Wheeler">Four Wheeler</option>
+                                        <option value="Commercial Vehicle">Commercial Vehicle</option>
+                                        <option value="Tractor">Tractor</option>
+                                        <option value="Three Wheeler">Three Wheeler</option>
+                                        <option value="Auto">Auto</option>
+                                        <option value="Car">Car</option>
+                                        <option value="Trailer">Trailer</option>
+                                        <option value="Bolero">Bolero</option>
+                                        <option value="Lorry">Lorry</option>
+                                        <option value="JCB">JCB</option>
+                                        <option value="Bus">Bus</option>
+                                        <option value="Misc">Misc</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">Chassis Number</label>
+                                    <input type="text" name="chassiss" class="form-control uppercase" placeholder="Chassis number" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insurance & Policy Details -->
+                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3"><i class="bx bx-shield me-2"></i>Insurance & Policy Details</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">Insurance Company <span class="text-warning">*</span></label>
+                                    <select name="insurance_company" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                        <option value="">Select Insurance Company</option>
+                                        <option value="HDFC ERGO General Insurance Company Ltd">HDFC ERGO</option>
+                                        <option value="ICICI Lombard General Insurance Company Ltd">ICICI Lombard</option>
+                                        <option value="Bharti AXA General Insurance Company Ltd">Bharti AXA</option>
+                                        <option value="Bajaj Allianz General Insurance Company Ltd">Bajaj Allianz</option>
+                                        <option value="Reliance General Insurance Company Ltd">Reliance General</option>
+                                        <option value="Tata AIG General Insurance Company Ltd">Tata AIG</option>
+                                        <option value="New India Assurance Company Ltd">New India Assurance</option>
+                                        <option value="United India Insurance Company Ltd">United India</option>
+                                        <option value="National Insurance Company Ltd">National Insurance</option>
+                                        <option value="Oriental Insurance Company Ltd">Oriental Insurance</option>
+                                        <option value="Cholamandalam MS General Insurance Company Ltd">Cholamandalam MS</option>
+                                        <option value="Future Generali India Insurance Company Ltd">Future Generali</option>
+                                        <option value="Iffco Tokio General Insurance Company Ltd">Iffco Tokio</option>
+                                        <option value="SBI General Insurance Company Ltd">SBI General</option>
+                                        <option value="Shriram General Insurance Company Ltd">Shriram General</option>
+                                        <option value="Go Digit General Insurance Company Ltd">Go Digit</option>
+                                        <option value="Acko General Insurance Company Ltd">Acko General</option>
+                                        <option value="Kotak Mahindra General Insurance Company Ltd">Kotak Mahindra</option>
+                                        <option value="Zuno General Insurance Company Ltd">Zuno General</option>
+                                        <option value="Magma">Magma</option>
+                                        <option value="Royal Sundaram">Royal Sundaram</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">Policy Type <span class="text-warning">*</span></label>
+                                    <select name="policy_type" class="form-select" required style="background: rgba(255,255,255,0.9);">
+                                        <option value="">Select Policy Type</option>
+                                        <option value="Comprehensive">Comprehensive</option>
+                                        <option value="Third Party">Third Party</option>
+                                        <option value="Own Damage">Own Damage</option>
+                                        <option value="Full">Full</option>
+                                        <option value="Health">Health</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Policy Issue Date <span class="text-warning">*</span></label>
+                                    <input type="date" name="policy_issue_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Policy Start Date <span class="text-warning">*</span></label>
+                                    <input type="date" name="policy_start_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Policy End Date <span class="text-warning">*</span></label>
+                                    <input type="date" name="policy_end_date" class="form-control" required style="background: rgba(255,255,255,0.9);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial & Additional Details -->
+                    <div class="card border-0 mb-4" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3"><i class="bx bx-money me-2"></i>Financial & Additional Details</h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Premium Amount <span class="text-warning">*</span></label>
+                                    <input type="number" name="premium" id="modal_premium" class="form-control" required placeholder="Enter premium amount" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Revenue Amount <span class="text-warning">*</span></label>
+                                    <input type="number" name="revenue" id="modal_revenue" class="form-control" required placeholder="Enter revenue amount" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Profit/Loss</label>
+                                    <input type="text" id="modal_profit_loss" class="form-control" readonly placeholder="Auto-calculated" style="background: rgba(255,255,255,0.6);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" class="form-control" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" class="form-control" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label text-white-50">Policy Files</label>
+                                    <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">RC Files</label>
+                                    <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="background: rgba(255,255,255,0.9);">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white-50">Comments</label>
+                                    <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes" style="background: rgba(255,255,255,0.9);"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
+                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
+                    <i class="bx bx-x me-2"></i>Cancel
+                </button>
+                <button type="submit" form="addPolicyForm" class="btn btn-primary btn-lg">
+                    <i class="bx bx-check me-2"></i>Add Policy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-radius: 15px 15px 0 0;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Auto-calculation styling */
+#modal_profit_loss {
+    font-weight: bold;
+    color: #333 !important;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.bx-spin {
+    animation: spin 1s linear infinite;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-calculate profit/loss
+    function calculateProfitLoss() {
+        const premium = parseFloat(document.getElementById('modal_premium').value) || 0;
+        const revenue = parseFloat(document.getElementById('modal_revenue').value) || 0;
+        const profitLoss = revenue - premium;
+        
+        const profitLossField = document.getElementById('modal_profit_loss');
+        profitLossField.value = profitLoss.toFixed(2);
+        
+        // Color coding
+        if (profitLoss > 0) {
+            profitLossField.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+            profitLossField.style.color = '#28a745';
+        } else if (profitLoss < 0) {
+            profitLossField.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+            profitLossField.style.color = '#dc3545';
+        } else {
+            profitLossField.style.backgroundColor = 'rgba(255,255,255,0.6)';
+            profitLossField.style.color = '#333';
+        }
+    }
+
+    // Event listeners for auto-calculation
+    document.getElementById('modal_premium').addEventListener('input', calculateProfitLoss);
+    document.getElementById('modal_revenue').addEventListener('input', calculateProfitLoss);
+
+    // Phone number validation
+    document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+    });
+
+    // Vehicle number formatting
+    document.getElementById('modal_vehicle_number').addEventListener('input', function(e) {
+        this.value = this.value.toUpperCase();
+    });
+
+    // Form validation and submission
+    document.getElementById('addPolicyForm').addEventListener('submit', function(e) {
+        const phone = document.querySelector('input[name="phone"]').value;
+        if (phone.length !== 10) {
+            e.preventDefault();
+            alert('Please enter a valid 10-digit phone number.');
+            return;
+        }
+
+        // Show loading state
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Adding Policy...';
+        submitBtn.disabled = true;
+
+        // Reset after 10 seconds if form doesn't submit
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 10000);
+    });
+
+    // Reset modal on close
+    document.getElementById('addPolicyModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('addPolicyForm').reset();
+        document.getElementById('modal_profit_loss').value = '';
+        document.getElementById('modal_profit_loss').style.backgroundColor = 'rgba(255,255,255,0.6)';
+        document.getElementById('modal_profit_loss').style.color = '#333';
+        
+        // Reset submit button if it was in loading state
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="bx bx-check me-2"></i>Add Policy';
+        submitBtn.disabled = false;
+    });
+
+    // Modal show event - focus on first input
+    document.getElementById('addPolicyModal').addEventListener('shown.bs.modal', function() {
+        document.getElementById('modal_vehicle_number').focus();
+    });
+});
+</script>
