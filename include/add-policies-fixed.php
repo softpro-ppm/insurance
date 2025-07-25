@@ -97,19 +97,53 @@
 		
 		// ACCOUNT INTEGRATION: Only save to account if revenue > 0
 		if ($revenue > 0) {
-			include 'account.php';
-			
-			$account_sql = "INSERT INTO income (income_date, amount, source, details, created_at) VALUES (?, ?, ?, ?, NOW())";
-			$account_stmt = $acc->prepare($account_sql);
-			
-			$income_date = date('Y-m-d');
-			$source = "Insurance Policy";
-			$details = "Revenue from policy: $vehicle_number ($name)";
-			
-			$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
-			$account_stmt->execute();
-			$account_stmt->close();
-			$acc->close();
+			try {
+				include 'account.php';
+				
+				// Check if income table exists and get its structure
+				$table_check = $acc->query("SHOW TABLES LIKE 'income'");
+				if ($table_check->num_rows > 0) {
+					// Get column structure
+					$columns = $acc->query("DESCRIBE income");
+					$column_names = [];
+					while ($col = $columns->fetch_assoc()) {
+						$column_names[] = $col['Field'];
+					}
+					
+					// Adapt to different possible column structures
+					if (in_array('income_date', $column_names)) {
+						// Structure 1: income_date column exists
+						$account_sql = "INSERT INTO income (income_date, amount, source, details, created_at) VALUES (?, ?, ?, ?, NOW())";
+						$account_stmt = $acc->prepare($account_sql);
+						$income_date = date('Y-m-d');
+						$source = "Insurance Policy";
+						$details = "Revenue from policy: $vehicle_number ($name)";
+						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
+					} elseif (in_array('date', $column_names)) {
+						// Structure 2: date column exists
+						$account_sql = "INSERT INTO income (date, amount, source, details, created_at) VALUES (?, ?, ?, ?, NOW())";
+						$account_stmt = $acc->prepare($account_sql);
+						$income_date = date('Y-m-d');
+						$source = "Insurance Policy";
+						$details = "Revenue from policy: $vehicle_number ($name)";
+						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
+					} else {
+						// Structure 3: minimal structure
+						$account_sql = "INSERT INTO income (amount, source, details) VALUES (?, ?, ?)";
+						$account_stmt = $acc->prepare($account_sql);
+						$source = "Insurance Policy";
+						$details = "Revenue from policy: $vehicle_number ($name)";
+						$account_stmt->bind_param("dss", $revenue, $source, $details);
+					}
+					
+					$account_stmt->execute();
+					$account_stmt->close();
+				}
+				$acc->close();
+			} catch (Exception $e) {
+				// Account integration failed, but don't stop policy creation
+				error_log("Account integration failed: " . $e->getMessage());
+			}
 		}
 		
 		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue')</script>";
