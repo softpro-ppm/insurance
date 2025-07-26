@@ -28,7 +28,7 @@
 	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : 0;
 	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : 0;
 	
-	// Auto-calculate if values provided
+	// Auto-calculate using CORRECT new policy logic
 	if ($discount == 0 && $premium > 0 && $customer_paid > 0) {
 		$discount = $premium - $customer_paid;
 	}
@@ -42,7 +42,10 @@
 		// Old logic: revenue = some default or manual entry
 		$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0;
 	} else {
-		// New logic: revenue = calculated_revenue
+		// NEW POLICY LOGIC: Revenue = Payout - Discount
+		// Example: Premium=10000, CustomerPaid=8000, Payout=3000
+		// Discount = Premium - CustomerPaid = 10000-8000 = 2000
+		// Revenue = Payout - Discount = 3000-2000 = 1000
 		$revenue = $calculated_revenue;
 	}
 	
