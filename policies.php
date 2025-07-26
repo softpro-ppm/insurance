@@ -284,10 +284,20 @@
     </script>
     <script type="text/javascript">
         function viewpolicy(identifier) {
+            console.log("viewpolicy function called");
             var id= $(identifier).data("id");
+            console.log("Policy ID:", id);
+            
             $('#renewalpolicyview').modal("show");
+            console.log("Modal show called");
+            
             $.post("include/view-policy.php",{ id:id }, function(data) {
+                console.log("AJAX response received, length:", data.length);
                 $('#viewpolicydata').html(data);
+            }).fail(function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                console.error("Response:", xhr.responseText);
+                alert("Error loading policy data: " + error);
             });
         }
     </script>

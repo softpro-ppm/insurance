@@ -186,29 +186,19 @@
                             while ($r1=mysqli_fetch_array($sql1)) {
                                 $doc_count++;
                                 $file_path = "assets/uploads/".$r1['files'];
-                                $original_filename = $r1['files'];
-                                
-                                // Extract original filename without timestamp prefix
-                                $display_name = preg_replace('/^\d+/', '', $original_filename);
-                                if (empty($display_name)) {
-                                    $display_name = $original_filename;
-                                }
-                                
                                 // Check if file actually exists
                                 if (file_exists("../".$file_path)) {
-                        $data .='<a href="include/file-download.php?file='.$r1['files'].'" target="_blank" class="btn btn-primary btn-sm me-2 mb-2" title="'.$display_name.'">
+                        $data .='<a href="include/file-download.php?file='.$r1['files'].'" target="_blank" class="btn btn-primary btn-sm me-2 mb-2">
                                     <i class="bx bx-download me-1"></i>Policy Doc '.$doc_count.'
                                 </a>';
                                 } else {
-                        $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled title="File missing: '.$display_name.'">
+                        $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled>
                                     <i class="bx bx-x me-1"></i>Doc '.$doc_count.' (Missing)
                                 </span>';
                                 }
                         	}
                         	if ($doc_count == 0) {
                         	    $data .= '<span class="text-muted"><i class="bx bx-info-circle me-1"></i>No policy documents uploaded</span>';
-                        	} else {
-                        	    $data .= '<br><small class="text-muted">Total: '.$doc_count.' document(s)</small>';
                         	}
                         $data .='</div>
                             </div>
@@ -222,32 +212,12 @@
                             while ($r1=mysqli_fetch_array($sql1)) {
                                 $rc_count++;
                                 $file_path = "assets/uploads/".$r1['files'];
-                                $original_filename = $r1['files'];
-                                
-                                // Extract original filename without timestamp prefix
-                                $display_name = preg_replace('/^\d+/', '', $original_filename);
-                                if (empty($display_name)) {
-                                    $display_name = $original_filename;
-                                }
-                                
                                 // Check if file actually exists
                                 if (file_exists("../".$file_path)) {
-                        $data .='<a href="include/file-download.php?file='.$r1['files'].'" target="_blank" class="btn btn-success btn-sm me-2 mb-2" title="'.$display_name.'">
+                        $data .='<a href="include/file-download.php?file='.$r1['files'].'" target="_blank" class="btn btn-success btn-sm me-2 mb-2">
                                     <i class="bx bx-download me-1"></i>RC Doc '.$rc_count.'
                                 </a>';
                                 } else {
-                        $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled title="File missing: '.$display_name.'">
-                                    <i class="bx bx-x me-1"></i>RC '.$rc_count.' (Missing)
-                                </span>';
-                                }
-                        	}
-                        	if ($rc_count == 0) {
-                        	    $data .= '<span class="text-muted"><i class="bx bx-info-circle me-1"></i>No RC documents uploaded</span>';
-                        	} else {
-                        	    $data .= '<br><small class="text-muted">Total: '.$rc_count.' document(s)</small>';
-                        	}
-                        $data .='</div>
-                            </div>
                         $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled>
                                     <i class="bx bx-x me-1"></i>RC '.$rc_count.' (Missing)
                                 </span>';
