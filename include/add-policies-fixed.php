@@ -121,7 +121,7 @@
 						$account_stmt = $acc->prepare($account_sql);
 						$income_date = date('Y-m-d');
 						$source = "Insurance Policy - NEW";
-						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d H:i:s');
 						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
 					} elseif (in_array('date', $column_names)) {
 						// Structure 2: date column exists
@@ -129,28 +129,39 @@
 						$account_stmt = $acc->prepare($account_sql);
 						$income_date = date('Y-m-d');
 						$source = "Insurance Policy - NEW";
-						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d H:i:s');
 						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
 					} else {
 						// Structure 3: minimal structure
 						$account_sql = "INSERT INTO income (amount, source, details) VALUES (?, ?, ?)";
 						$account_stmt = $acc->prepare($account_sql);
 						$source = "Insurance Policy - NEW";
-						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d H:i:s');
 						$account_stmt->bind_param("dss", $revenue, $source, $details);
 					}
 					
-					$account_stmt->execute();
+					if ($account_stmt->execute()) {
+						$sync_message = " + ₹$revenue synced to account software";
+					} else {
+						$sync_message = " (Account sync failed: " . $account_stmt->error . ")";
+						error_log("Account sync failed for policy $policy_id: " . $account_stmt->error);
+					}
 					$account_stmt->close();
+				} else {
+					$sync_message = " (Income table not found in account software)";
+					error_log("Income table not found in account database");
 				}
 				$acc->close();
 			} catch (Exception $e) {
 				// Account integration failed, but don't stop policy creation
-				error_log("Account integration failed: " . $e->getMessage());
+				$sync_message = " (Account sync error: " . $e->getMessage() . ")";
+				error_log("Account integration failed for policy $policy_id: " . $e->getMessage());
 			}
+		} else {
+			$sync_message = " (No revenue to sync)";
 		}
 		
-		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue')</script>";
+		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue$sync_message')</script>";
 		echo "<script>window.location.href='../policies.php';</script>";
 	} else {
 		echo "<script>alert('Error adding policy: " . $con->error . "')</script>";

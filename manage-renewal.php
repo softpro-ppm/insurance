@@ -180,8 +180,8 @@
 				</div>
 			</div>
 			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content" id="viewpolicydata" ></div>
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
 			<footer class="footer">
