@@ -50,11 +50,97 @@
             </ul>
         </div>
 
-        <div class="info-box">
-            <h2>🔍 Database Test</h2>
-            <p>This section is simplified to avoid database connection issues.</p>
-            <p>Please check the policy table and account income table in your database to verify policy entries and revenue syncing.</p>
-        </div>
+        <?php
+        // Test account database connection
+        echo "<div class='info-box'>";
+        echo "<h2>🔍 Account Database Test</h2>";
+        
+        try {
+            require_once 'include/account.php';
+            echo "<p>✅ Account database connection successful</p>";
+            
+            // Check income table
+            $table_check = $acc->query("SHOW TABLES LIKE 'income'");
+            if ($table_check->num_rows > 0) {
+                echo "<p>✅ Income table exists</p>";
+                
+                // Get table structure
+                $columns = $acc->query("DESCRIBE income");
+                echo "<h3>Income Table Structure:</h3>";
+                echo "<table>";
+                echo "<tr><th>Column</th><th>Type</th><th>Null</th><th>Default</th></tr>";
+                while ($col = $columns->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $col['Field'] . "</td>";
+                    echo "<td>" . $col['Type'] . "</td>";
+                    echo "<td>" . $col['Null'] . "</td>";
+                    echo "<td>" . ($col['Default'] ?? 'NULL') . "</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+                
+                // Check recent entries
+                $recent = $acc->query("SELECT * FROM income ORDER BY id DESC LIMIT 3");
+                if ($recent && $recent->num_rows > 0) {
+                    echo "<h3>Recent Income Entries:</h3>";
+                    echo "<table>";
+                    echo "<tr><th>ID</th><th>Amount</th><th>Source</th><th>Details</th></tr>";
+                    while ($row = $recent->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['id'] . "</td>";
+                        echo "<td>₹" . number_format($row['amount'], 2) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['source']) . "</td>";
+                        echo "<td>" . htmlspecialchars(substr($row['details'], 0, 50)) . "...</td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
+                } else {
+                    echo "<p>⚠️ No recent income entries found</p>";
+                }
+                
+            } else {
+                echo "<p>❌ Income table not found</p>";
+            }
+            
+            $acc->close();
+        } catch (Exception $e) {
+            echo "<p>❌ Account database error: " . $e->getMessage() . "</p>";
+        }
+        echo "</div>";
+
+        // Check recent policies from insurance database  
+        require_once 'include/config.php';
+        echo "<div class='info-box'>";
+        echo "<h2>📊 Recent Policies (Last 3)</h2>";
+        
+        $recent_sql = "SELECT id, name, vehicle_number, premium, revenue, payout, customer_paid, discount, created_date 
+                       FROM policy 
+                       ORDER BY id DESC 
+                       LIMIT 3";
+        $recent_result = mysqli_query($con, $recent_sql);
+        
+        if (mysqli_num_rows($recent_result) > 0) {
+            echo "<table>";
+            echo "<tr><th>ID</th><th>Vehicle</th><th>Customer</th><th>Premium</th><th>Revenue</th><th>Payout</th><th>Customer Paid</th><th>Date</th></tr>";
+            
+            while ($row = mysqli_fetch_assoc($recent_result)) {
+                echo "<tr>";
+                echo "<td>" . $row['id'] . "</td>";
+                echo "<td>" . $row['vehicle_number'] . "</td>";
+                echo "<td>" . $row['name'] . "</td>";
+                echo "<td>₹" . number_format($row['premium'], 2) . "</td>";
+                echo "<td>₹" . number_format($row['revenue'], 2) . "</td>";
+                echo "<td>₹" . number_format($row['payout'], 2) . "</td>";
+                echo "<td>₹" . number_format($row['customer_paid'], 2) . "</td>";
+                echo "<td>" . $row['created_date'] . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "<p>No policies found.</p>";
+        }
+        echo "</div>";
+        ?>
 
         <div class="warning-box">
             <h2>🧪 Test Instructions</h2>
