@@ -4,10 +4,14 @@
 let currentEditPolicyId = null;
 
 function openEditModal(policyId) {
+    console.log('openEditModal called with policyId:', policyId);
     currentEditPolicyId = policyId;
     showEditModalLoading();
     loadPolicyData(policyId);
 }
+
+// Ensure the function is globally accessible
+window.openEditModal = openEditModal;
 
 function showEditModalLoading() {
     const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
