@@ -2,21 +2,7 @@
 	require 'session.php';
 	require 'config.php';
 
-	$                                $stmt->bind_param(
-                    "ssssssdddi",
-                    $date, $name, $phone, $description,
-                    $category, $subcategory, $amount, $received, $balance, $insurance_id
-                ); = $acc->prepare("INSERT INTO income (
-                    date, name, phone, description, category, subcategory,
-                    amount, received, balance, created_at, updated_at, insurance_id, chassiss
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)");
-                
-                // Bind parameters
-                $stmt->bind_param(
-                    "ssssssddisi",
-                    $date, $name, $phone, $description,
-                    $category, $subcategory, $amount, $received, $balance, $insurance_id, $chassiss
-                );ST['name'];
+	$name = $_POST['name'];
 	$chassiss = $_POST['chassiss'];
 	$phone = $_POST['phone'];
 	$vehicle_number = $_POST['vehicle_number'];
@@ -79,16 +65,16 @@
                 
                 // Bind parameters
                 $stmt->bind_param(
-                    "ssssssddis",
+                    "ssssssdddi",
                     $date, $name, $phone, $description,
-                    $category, $subcategory, $amount, $received, $balance, $insurance_id, $chassiss
+                    $category, $subcategory, $amount, $received, $balance, $insurance_id
                 );
                 
                 // Execute
                 if ($stmt->execute()) {
-                    echo "✅ Income record inserted successfully!";
+                    // echo "✅ Income record inserted successfully!";
                 } else {
-                    echo "❌ Error inserting record: " . $stmt->error;
+                    // echo "❌ Error inserting record: " . $stmt->error;
                 }
                 
                 // Close
