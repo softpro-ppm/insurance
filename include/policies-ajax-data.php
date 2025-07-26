@@ -136,7 +136,7 @@
                     $data .='</td>
                             <td>
                                 <a href="view.php?id='.$r['id'].'" class="btn btn-dark btn-sm" >View</a>
-                                <a href="edit.php?id='.$r['id'].'" class="btn btn-primary btn-sm" >Edit</a>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="openEditModal('.$r['id'].')">Edit</button>
                                 <a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="'.$r['id'].'" class="btn btn-danger btn-sm" >Delete</a>
                             </td>
                         </tr>';

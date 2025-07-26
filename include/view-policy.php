@@ -265,9 +265,9 @@
         
         $data .= '</div>
         <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
-            <a href="edit.php?id='.$r['id'].'" class="btn btn-primary btn-lg">
+            <button type="button" class="btn btn-primary btn-lg" onclick="openEditModal('.$r['id'].')">
                 <i class="bx bx-edit me-2"></i>Edit Policy
-            </a>
+            </button>
             <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
                 <i class="bx bx-x me-2"></i>Close
             </button>

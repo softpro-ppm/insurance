@@ -169,7 +169,10 @@
 		$sync_message = "";
 		if ($revenue > 0) {
 			try {
-				include 'account.php';
+				include_once 'account.php';
+				
+				// Debug: Log that we're attempting account sync
+				error_log("Attempting account sync for policy $policy_id with revenue: $revenue");
 				
 				// Check if income table exists and get its structure
 				$table_check = $acc->query("SHOW TABLES LIKE 'income'");
@@ -180,6 +183,8 @@
 					while ($col = $columns->fetch_assoc()) {
 						$column_names[] = $col['Field'];
 					}
+					
+					error_log("Income table columns: " . implode(", ", $column_names));
 					
 					// Adapt to different possible column structures
 					if (in_array('income_date', $column_names)) {
@@ -206,6 +211,8 @@
 						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d H:i:s');
 						$account_stmt->bind_param("dss", $revenue, $source, $details);
 					}
+					
+					error_log("Executing account SQL: " . $account_sql);
 					
 					if ($account_stmt->execute()) {
 						$sync_message = "✅ ₹$revenue synced to account software";
