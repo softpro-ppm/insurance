@@ -113,59 +113,74 @@
 											<tbody>
 												<?php  
 													$sn=1;
+													$sql = "";
 													
-													if(isset($_GET['pending'])){
-													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
-													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."' ORDER BY policy_end_date DESC";
-													}elseif(isset($_GET['renewal'])){
-													     // Total Renewal = All policies expiring this month (July 2025)
-													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' ORDER BY policy_end_date DESC";
+													try {
+													    if(isset($_GET['pending'])){
+													         // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+													         $sql = "SELECT * FROM policy WHERE MONTH(policy_end_date) = '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."' AND policy_end_date <= '".date("Y-m-d")."' ORDER BY policy_end_date DESC";
+													    }elseif(isset($_GET['renewal'])){
+													         // Total Renewal = All policies expiring this month (July 2025)
+													         $sql = "SELECT * FROM policy WHERE MONTH(policy_end_date) = '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."' ORDER BY policy_end_date DESC";
+													        
+													    }elseif(isset($_POST['submit']) && !empty($_POST['fromdate']) && !empty($_POST['todate'])){
+													        $fromdate = mysqli_real_escape_string($con, $_POST['fromdate']);
+													        $todate = mysqli_real_escape_string($con, $_POST['todate']);
+													        
+													        if($_POST['type'] == '1'){
+													            $sql = "SELECT * FROM policy WHERE policy_end_date >= '".date("Y-m-d", strtotime($fromdate))."' AND policy_end_date <= '".date("Y-m-d", strtotime($todate))."' ORDER BY policy_end_date DESC";
+													        }elseif($_POST['type'] == '2'){
+													            $sql = "SELECT * FROM policy WHERE fc_expiry_date IS NOT NULL AND fc_expiry_date >= '".date("Y-m-d", strtotime($fromdate))."' AND fc_expiry_date <= '".date("Y-m-d", strtotime($todate))."' ORDER BY fc_expiry_date DESC";
+													        }elseif($_POST['type'] == '3'){
+													            $sql = "SELECT * FROM policy WHERE permit_expiry_date IS NOT NULL AND permit_expiry_date >= '".date("Y-m-d", strtotime($fromdate))."' AND permit_expiry_date <= '".date("Y-m-d", strtotime($todate))."' ORDER BY permit_expiry_date DESC";
+													        }
+													    }else{
+													        $sql = "SELECT * FROM policy WHERE MONTH(policy_end_date) = '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."' ORDER BY policy_end_date DESC";
+													    }
 													    
-													}elseif(isset($_POST['submit'])){
-														if($_POST['type'] == '1'){
-															$sql = "SELECT * FROM policy where policy_end_date >='".date("Y-m-d", strtotime($_POST['fromdate']))."' and policy_end_date <='".date("Y-m-d", strtotime($_POST['todate']))."' ORDER BY id DESC ";
-														}elseif($_POST['type'] == '2'){
-															$sql = "SELECT * FROM policy where fc_expiry_date >='".date("Y-m-d", strtotime($_POST['fromdate']))."' and fc_expiry_date <='".date("Y-m-d", strtotime($_POST['todate']))."' ORDER BY id DESC ";
-														}elseif($_POST['type'] == '3'){
-															$sql = "SELECT * FROM policy where permit_expiry_date >='".date("Y-m-d", strtotime($_POST['fromdate']))."' and permit_expiry_date <='".date("Y-m-d", strtotime($_POST['todate']))."' ORDER BY id DESC ";
-														}
-													}else{
-							                        	$sql = "SELECT * FROM policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ORDER BY policy_end_date DESC ";
-							                    	}
-							                        $rs = mysqli_query($con, $sql);
-							                        if(mysqli_num_rows($rs) > 0){
-							                        while ($r=mysqli_fetch_array($rs)) {
+													    $rs = mysqli_query($con, $sql);
+							                        
+							                        if(!$rs) {
+							                            echo "<tr><td colspan='9' class='text-center text-danger'>Database Error: " . mysqli_error($con) . "</td></tr>";
+							                        } elseif(mysqli_num_rows($rs) > 0){
+							                            while ($r=mysqli_fetch_array($rs)) {
 
-						                            if($r['fc_expiry_date'] == ''){
+						                                // Handle null dates safely
 						                                $fc_expiry_date = '';
-						                            }else{
-						                                $fc_expiry_date = date('d-m-Y',strtotime($r['fc_expiry_date']));
-						                            }
+						                                if(!empty($r['fc_expiry_date']) && $r['fc_expiry_date'] != '0000-00-00') {
+						                                    $fc_expiry_date = date('d-m-Y',strtotime($r['fc_expiry_date']));
+						                                }
 
-						                            if($r['permit_expiry_date'] == ''){
 						                                $permit_expiry_date = '';
-						                            }else{
-						                                $permit_expiry_date = date('d-m-Y',strtotime($r['permit_expiry_date']));
-						                            }
+						                                if(!empty($r['permit_expiry_date']) && $r['permit_expiry_date'] != '0000-00-00') {
+						                                    $permit_expiry_date = date('d-m-Y',strtotime($r['permit_expiry_date']));
+						                                }
+						                                
+						                                // Ensure premium is numeric
+						                                $premium = is_numeric($r['premium']) ? number_format($r['premium'], 2) : '0.00';
 												?>
-												<tr>
+												<tr class="fade-in">
 													<td><?=$sn;?></td>
-													<td><a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$r['id'];?>"><?=$r['vehicle_number'];?></a></td>
-													<td><?=$r['name'];?></td>
-													<td><?=$r['phone'];?></td>
-													<td><?=$r['vehicle_type'];?></td>
-													<td><?=$r['policy_type'];?></td>
+													<td><a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=htmlspecialchars($r['id']);?>"><?=htmlspecialchars($r['vehicle_number']);?></a></td>
+													<td><?=htmlspecialchars($r['name']);?></td>
+													<td><?=htmlspecialchars($r['phone']);?></td>
+													<td><?=htmlspecialchars($r['vehicle_type']);?></td>
+													<td><?=htmlspecialchars($r['policy_type']);?></td>
 													<td><strong class="text-danger"><?=date('d-m-Y',strtotime($r['policy_end_date']));?></strong></td>
-													<td><?=$r['premium'];?></td>
+													<td>₹<?=$premium;?></td>
 													<td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 													<td>
-														<button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal(<?=$r['id'];?>)">
+														<button type="button" class="btn btn-outline-primary btn-sm me-1" onclick="openEditModal(<?=$r['id'];?>)" title="Edit Policy">
 															<i class="fas fa-pencil-alt"></i>
 														</button>
-														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
+														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm" title="Delete Policy"><i class="fas fa-trash-alt" ></i></a>
 													</td>
 												</tr>
-												<?php $sn++; } }else{ ?> 
+												<?php $sn++; } 
+												    } catch (Exception $e) {
+												        echo "<tr><td colspan='9' class='text-center text-danger'>Error: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+												    }
+												} else { ?> 
 					                        <tr>
          										<td colspan="9" >No Policy found</td>
 					                        </tr>

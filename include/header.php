@@ -31,11 +31,20 @@
             <i class="fa fa-fw fa-bars"></i>
         </button>
         
-        <!-- Search Box -->
+        <!-- Enhanced Search Box with Loading State -->
         <div class="app-search d-none d-lg-block ms-3">
             <div class="position-relative">
-                <input type="text" class="form-control" placeholder="Search policies, renewals..." id="global-search" onkeyup="performGlobalSearch()">
+                <input type="text" class="form-control" placeholder="Search policies, renewals, clients..." id="global-search" onkeyup="performGlobalSearch()" autocomplete="off">
                 <span class="bx bx-search-alt"></span>
+                <div id="search-loading" class="d-none">
+                    <div class="loading-spinner"></div>
+                </div>
+                <!-- Search Results Dropdown -->
+                <div id="search-results" class="position-absolute w-100 bg-white shadow-lg rounded border d-none" style="top: 100%; z-index: 1050; max-height: 400px; overflow-y: auto;">
+                    <div id="search-content" class="p-2">
+                        <!-- Search results will be populated here -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
