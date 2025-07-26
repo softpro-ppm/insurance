@@ -131,7 +131,12 @@ include 'include/config.php';
 													                <td>₹'.$premium.'</td>
 													                <td>'.date('d-m-Y',strtotime($r['policy_start_date'])).'</td>
 													                <td>
-													                    <a href="edit.php?id='.$r['id'].'" class="btn btn-primary btn-sm">Edit</a>
+													                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy">
+													                        <i class="bx bx-edit"></i>
+													                    </button>
+													                    <button type="button" class="btn btn-outline-danger btn-sm ms-1" onclick="deletePolicy(<?=$r['id'];?>)" title="Delete Policy">
+													                        <i class="bx bx-trash"></i>
+													                    </button>
 													                </td>
 													                </tr>';
 													            $sn++;
@@ -185,6 +190,73 @@ include 'include/config.php';
                 "order": []
             });
         });
+
+        // Function to load policy for editing using modal
+        function loadPolicyForEdit(policyId) {
+            console.log('loadPolicyForEdit called with ID:', policyId);
+            console.log('window.openEditModal type:', typeof window.openEditModal);
+            console.log('openEditModal type:', typeof openEditModal);
+            
+            // Check multiple ways the function might be available
+            if (typeof window.openEditModal === 'function') {
+                console.log('Using window.openEditModal');
+                window.openEditModal(policyId);
+            } else if (typeof openEditModal === 'function') {
+                console.log('Using global openEditModal');
+                openEditModal(policyId);
+            } else {
+                // Add a longer delay and try again
+                console.log('Function not available, trying with longer delay...');
+                setTimeout(function() {
+                    if (typeof window.openEditModal === 'function') {
+                        console.log('Using window.openEditModal after delay');
+                        window.openEditModal(policyId);
+                    } else if (typeof openEditModal === 'function') {
+                        console.log('Using global openEditModal after delay');
+                        openEditModal(policyId);
+                    } else {
+                        // Fallback to old system
+                        console.warn('New edit modal system not available after delay, using fallback');
+                        window.location.href = 'edit.php?id=' + policyId;
+                    }
+                }, 500);
+            }
+        }
+
+        // Function to delete policy
+        function deletePolicy(policyId) {
+            if (confirm('Are you sure you want to delete this policy? This action cannot be undone.')) {
+                console.log('Deleting policy with ID:', policyId);
+                
+                const formData = new FormData();
+                formData.append('action', 'delete_policy');
+                formData.append('policy_id', policyId);
+                
+                fetch('include/policy-operations.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Policy deleted successfully');
+                        location.reload();
+                    } else {
+                        alert('Error deleting policy: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Network error occurred while deleting policy');
+                });
+            }
+        }
     </script>
+
+    <!-- Include the edit modal HTML -->
+    <?php include 'include/edit-policy-modal.php'; ?>
+    
+    <!-- Load edit modal functionality -->
+    <script src="assets/js/edit-policy-modal.js"></script>
 </body>
 </html>
