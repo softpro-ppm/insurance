@@ -183,7 +183,7 @@
 				
 				move_uploaded_file($_FILES['rc']['tmp_name'][$d],$uploaded_file);
 
-			$rcs[]="('".$policy_id."', '".$rc."')";
+			$rcs[]="('".$id."', '".$rc."')";
 		}
 
 		if(count($rcs)){
