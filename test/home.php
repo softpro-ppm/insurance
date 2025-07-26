@@ -2,8 +2,11 @@
     include 'include/session.php';
     include 'include/config.php'; 
 ?>
-<!doctype html>
-<html lang="en">
+<!doctype htm                                <?php  
+                                    // Total Renewal = Policies expiring this month (July 2025)
+                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'");
+                                    $renewaltotal = mysqli_num_rows($renewalsql);
+                                ?> lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -92,11 +95,8 @@
                                     </div>
                                 </div>
                                 <?php  
-                                     $renewalsql = mysqli_query($con, "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ");
-                                    
-                                   // $renewalsql = mysqli_query($con, "SELECT * FROM history WHERE MONTH(policy_end_date) >= '".date("m")."' AND YEAR(policy_end_date) = '".date("Y")."'");
-
-                                    
+                                    // Total Renewal = Policies expiring this month (July 2025)
+                                    $renewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'");
                                     $renewaltotal = mysqli_num_rows($renewalsql);
                                 ?>
                                 <div class="col-md-3">
@@ -120,7 +120,9 @@
                                     </div>
                                 </div>
                                 <?php  
-                                    $pendingrenewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ");
+                                    // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+                                    // These are policies with end_date <= today's date in July 2025
+                                    $pendingrenewalsql = mysqli_query($con, "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'");
                                     $pendingrenewaltotal = mysqli_num_rows($pendingrenewalsql);
                                 ?>
                                 <div class="col-md-3">

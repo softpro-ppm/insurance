@@ -137,9 +137,11 @@
 													$sn=1;
 													
 													if(isset($_GET['pending'])){
-													     $sql = "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ";
+													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."'";
 													}elseif(isset($_GET['renewal'])){
-													     $sql = "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ";
+													     // Total Renewal = All policies expiring this month (July 2025)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."'";
 													    
 													}elseif(isset($_POST['submit'])){
 														if($_POST['type'] == '1'){
@@ -281,8 +283,8 @@
                 </div>
                 
 			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content" id="viewpolicydata" ></div>
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
 			<footer class="footer">
@@ -315,7 +317,15 @@
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="assets/js/pages/datatables.init.js"></script>
+	<script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+	<script src="assets/libs/jszip/jszip.min.js"></script>
+	<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+	<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
 	<script type="text/javascript">
         $('.js-datepicker').datepicker({
@@ -385,6 +395,88 @@
             });
         });
         
+    </script>
+    
+    <!-- DataTable Initialization -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+            }
+            
+            // Initialize DataTable with advanced features
+            $('#datatable').DataTable({
+                "order": [],
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-primary btn-sm',
+                        text: '<i class="fas fa-copy"></i> Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-csv"></i> CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Feedback Renewal - ' + new Date().toLocaleDateString()
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-danger btn-sm',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        title: 'Feedback Renewal - ' + new Date().toLocaleDateString(),
+                        orientation: 'landscape',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-info btn-sm',
+                        text: '<i class="fas fa-print"></i> Print',
+                        title: 'Feedback Renewal'
+                    },
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-secondary btn-sm',
+                        text: '<i class="fas fa-columns"></i> Columns'
+                    }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": -1, // Last column (Actions)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                "language": {
+                    "search": "Search feedback:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ feedback entries",
+                    "infoEmpty": "No feedback found",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "zeroRecords": "No matching feedback found",
+                    "emptyTable": "No feedback available"
+                }
+            });
+        });
     </script>
 </body>
 </html>

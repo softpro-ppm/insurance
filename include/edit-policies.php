@@ -2,32 +2,64 @@
 	require 'session.php';
 	require 'config.php';
 
-	$id = $_POST['id'];
-	$name = $_POST['name'];
-	$phone = $_POST['phone'];
-	$vehicle_number = $_POST['vehicle_number'];
+	// Check if policy_id is set (from new modal) or id (from old form)
+	$id = isset($_POST['policy_id']) ? $_POST['policy_id'] : $_POST['id'];
+	$name = strtoupper(trim($_POST['name']));
+	$phone = trim($_POST['phone']);
+	$vehicle_number = strtoupper(trim($_POST['vehicle_number']));
 	$vehicle_type = $_POST['vehicle_type'];
 	$insurance_company = $_POST['insurance_company'];
 	$policy_type = $_POST['policy_type'];
-	$policy_issue_date = date('Y-m-d',strtotime($_POST['policy_issue_date']));
 	$policy_start_date = date('Y-m-d',strtotime($_POST['policy_start_date']));
 	$policy_end_date = date('Y-m-d',strtotime($_POST['policy_end_date']));
-	if(!empty($_POST['fc_expiry_date'])){
-		$fc_expiry_date = date('Y-m-d',strtotime($_POST['fc_expiry_date']));
-	}else{
-		$fc_expiry_date = '';
-	}
-	if(!empty($_POST['permit_expiry_date'])){
-	$permit_expiry_date = date('Y-m-d',strtotime($_POST['permit_expiry_date']));
-	}else{
-	$permit_expiry_date = '';
-	}
-	$premium = $_POST['premium'];
-	$revenue = $_POST['revenue'];
 	
-	$chassiss = $_POST['chassiss'];
-		$sql = mysqli_query($con, "update policy set name='$name', phone='$phone', vehicle_number='$vehicle_number', vehicle_type='$vehicle_type', insurance_company='$insurance_company', policy_type='$policy_type', policy_issue_date='$policy_issue_date', policy_start_date='$policy_start_date', policy_end_date='$policy_end_date', fc_expiry_date='$fc_expiry_date', permit_expiry_date='$permit_expiry_date', premium='$premium', revenue='$revenue', chassiss='$chassiss' where id='".$id."' ");
+	// Removed fields - set defaults for backward compatibility
+	$chassiss = ''; // No longer collected from frontend
+	$policy_issue_date = $policy_start_date; // Use start date as issue date
+	$fc_expiry_date = null; // No longer collected from frontend
+	$permit_expiry_date = null; // No longer collected from frontend
+	
+	$premium = floatval($_POST['premium']);
+	
+	// New financial fields
+	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : null;
+	$customer_paid = !empty($_POST['customer_paid']) ? floatval($_POST['customer_paid']) : null;
+	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : null;
+	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : null;
+	$comments = !empty($_POST['comments']) ? trim($_POST['comments']) : null;
+	
+	// Use calculated revenue as the revenue value for backward compatibility
+	$revenue = $calculated_revenue !== null ? $calculated_revenue : 0;
+	
+	// Prepare update query with new financial fields
+	$update_sql = "UPDATE policy SET 
+		name = ?, phone = ?, vehicle_number = ?, vehicle_type = ?, 
+		insurance_company = ?, policy_type = ?, policy_issue_date = ?, 
+		policy_start_date = ?, policy_end_date = ?, fc_expiry_date = ?, 
+		permit_expiry_date = ?, premium = ?, revenue = ?, chassiss = ?,
+		payout = ?, customer_paid = ?, discount = ?, calculated_revenue = ?,
+		comments = ?, updated_at = NOW()
+		WHERE id = ?";
+	
+	$stmt = $con->prepare($update_sql);
+	
+	if ($stmt) {
+		$stmt->bind_param("sssssssssssdssdddssi", 
+			$name, $phone, $vehicle_number, $vehicle_type,
+			$insurance_company, $policy_type, $policy_issue_date,
+			$policy_start_date, $policy_end_date, $fc_expiry_date,
+			$permit_expiry_date, $premium, $revenue, $chassiss,
+			$payout, $customer_paid, $discount, $calculated_revenue,
+			$comments, $id
+		);
 		
+		$sql_result = $stmt->execute();
+		$stmt->close();
+	} else {
+		// Fallback to old query format for backward compatibility
+		$sql = mysqli_query($con, "update policy set name='$name', phone='$phone', vehicle_number='$vehicle_number', vehicle_type='$vehicle_type', insurance_company='$insurance_company', policy_type='$policy_type', policy_issue_date='$policy_issue_date', policy_start_date='$policy_start_date', policy_end_date='$policy_end_date', fc_expiry_date='$fc_expiry_date', permit_expiry_date='$permit_expiry_date', premium='$premium', revenue='$revenue', chassiss='$chassiss' where id='".$id."' ");
+		$sql_result = $sql;
+	}
 		
             // income section is start	
             
@@ -39,8 +71,10 @@
             $description = 'Insurance';
             $category = 'Insurance';
             $subcategory = 'Insurance';
-            $amount = $revenue;       // Example: 10000.00
-            $received = $revenue;     // Example: 10000.00
+            // Use calculated_revenue if available, otherwise use legacy revenue
+            $revenue_for_income = !is_null($calculated_revenue) ? $calculated_revenue : $revenue;
+            $amount = $revenue_for_income;
+            $received = $revenue_for_income;
             $balance = 0;
             $insurance_id = $id; //$policy_id; // Must be defined before
             //$name = '';   // optional
@@ -104,8 +138,18 @@
 
             
             if(isset($_POST['policy_end_date']) ){
-				mysqli_query($con, "insert into history (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date) values ('$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', '$policy_issue_date', '$policy_start_date', '$policy_end_date', '$fc_expiry_date', '$permit_expiry_date', '$premium', '$revenue', now())");
-				
+				// Update history table with new financial fields if they exist
+				$history_revenue = !is_null($calculated_revenue) ? $calculated_revenue : $revenue;
+				$history_sql = "INSERT INTO history (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+				$history_stmt = $con->prepare($history_sql);
+				if ($history_stmt) {
+					$history_stmt->bind_param("ssssssssssssd", $name, $phone, $vehicle_number, $vehicle_type, $insurance_company, $policy_type, $policy_issue_date, $policy_start_date, $policy_end_date, $fc_expiry_date, $permit_expiry_date, $premium, $history_revenue);
+					$history_stmt->execute();
+					$history_stmt->close();
+				} else {
+					// Fallback to old query
+					mysqli_query($con, "insert into history (name, phone, vehicle_number, vehicle_type, insurance_company, policy_type, policy_issue_date, policy_start_date, policy_end_date, fc_expiry_date, permit_expiry_date, premium, revenue, created_date) values ('$name', '$phone', '$vehicle_number', '$vehicle_type', '$insurance_company', '$policy_type', '$policy_issue_date', '$policy_start_date', '$policy_end_date', '$fc_expiry_date', '$permit_expiry_date', '$premium', '$revenue', now())");
+				}
 			}
 			
             
@@ -158,12 +202,12 @@
 			$c_comment=mysqli_query($con, "insert into comments (policy_id,user,  comments, date) values ('".$id."', '".$_SESSION['username']."','".$_POST["comments"]."', '".$time."')");
 		}
 
-		if($sql){
+		if($sql_result){
 			echo "<script>alert('Policy Updated successfully')</script>";
 			echo "<script>window.location.href='../policies.php';</script>";
 		}else{
 			echo "<script>alert('Please try again')</script>";
-			echo "<script>window.location.href='../add.php';</script>";
+			echo "<script>window.location.href='../policies.php';</script>";
 		}
 
 ?>

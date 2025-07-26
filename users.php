@@ -140,6 +140,18 @@
     <script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
     <script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script src="assets/libs/%40chenfengyuan/datepicker/datepicker.min.js"></script>
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="assets/libs/jszip/jszip.min.js"></script>
+    <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/pages/form-advanced.init.js"></script>
     <script src="assets/js/app.js"></script>
     <script type="text/javascript">
@@ -168,6 +180,88 @@
             }else{
                 return false;
             }
+        });
+    </script>
+    
+    <!-- DataTable Initialization -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable-buttons')) {
+                $('#datatable-buttons').DataTable().destroy();
+            }
+            
+            // Initialize DataTable with advanced features
+            $('#datatable-buttons').DataTable({
+                "order": [],
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-primary btn-sm',
+                        text: '<i class="fas fa-copy"></i> Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-csv"></i> CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Users Management - ' + new Date().toLocaleDateString()
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-danger btn-sm',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        title: 'Users Management - ' + new Date().toLocaleDateString(),
+                        orientation: 'landscape',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-info btn-sm',
+                        text: '<i class="fas fa-print"></i> Print',
+                        title: 'Users Management'
+                    },
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-secondary btn-sm',
+                        text: '<i class="fas fa-columns"></i> Columns'
+                    }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": -1, // Last column (Actions)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                "language": {
+                    "search": "Search users:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ users",
+                    "infoEmpty": "No users found",
+                    "infoFiltered": "(filtered from _MAX_ total users)",
+                    "zeroRecords": "No matching users found",
+                    "emptyTable": "No users available"
+                }
+            });
         });
     </script>
 </body>

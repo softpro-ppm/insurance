@@ -102,10 +102,9 @@
 													<th>PHONE</th>
 													<th>VEHICLE&nbsp;TYPE</th>
 													<th>POLICY&nbsp;TYPE</th>
-													<th>INSURANCE&nbsp;COMPANY</th>
+													<th>POLICY&nbsp;END&nbsp;DATE</th>
 													<th>PREMIUM</th>
 													<th>POLICY&nbsp;START&nbsp;DATE</th>
-													<th>POLICY&nbsp;END&nbsp;DATE</th>
 													<th>
 														<span style="visibility: hidden;" >A</span>ACTIONS<span style="visibility: hidden;" >A</span>
 													</th>
@@ -116,9 +115,11 @@
 													$sn=1;
 													
 													if(isset($_GET['pending'])){
-													     $sql = "select * from policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ";
+													     // Pending Renewal = Policies that have already expired in July 2025 (up to today's date)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' and policy_end_date <= '".date("Y-m-d")."' ORDER BY policy_end_date DESC";
 													}elseif(isset($_GET['renewal'])){
-													     $sql = "select * from history where month(policy_end_date) >='".date("m")."' and year(policy_end_date)='".date("Y")."' GROUP BY vehicle_number ";
+													     // Total Renewal = All policies expiring this month (July 2025)
+													     $sql = "select * from policy where month(policy_end_date) = '".date("m")."' and year(policy_end_date) = '".date("Y")."' ORDER BY policy_end_date DESC";
 													    
 													}elseif(isset($_POST['submit'])){
 														if($_POST['type'] == '1'){
@@ -129,7 +130,7 @@
 															$sql = "SELECT * FROM policy where permit_expiry_date >='".date("Y-m-d", strtotime($_POST['fromdate']))."' and permit_expiry_date <='".date("Y-m-d", strtotime($_POST['todate']))."' ORDER BY id DESC ";
 														}
 													}else{
-							                        	$sql = "SELECT * FROM policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ORDER BY id DESC ";
+							                        	$sql = "SELECT * FROM policy where month(policy_end_date) ='".date("m")."' and year(policy_end_date)='".date("Y")."' ORDER BY policy_end_date DESC ";
 							                    	}
 							                        $rs = mysqli_query($con, $sql);
 							                        if(mysqli_num_rows($rs) > 0){
@@ -154,18 +155,19 @@
 													<td><?=$r['phone'];?></td>
 													<td><?=$r['vehicle_type'];?></td>
 													<td><?=$r['policy_type'];?></td>
-													<td><?=$r['insurance_company'];?></td>
+													<td><strong class="text-danger"><?=date('d-m-Y',strtotime($r['policy_end_date']));?></strong></td>
 													<td><?=$r['premium'];?></td>
 													<td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
-													<td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
 													<td>
-														<a href="edit.php?id=<?=$r['id'];?>" class="btn btn-outline-primary btn-sm edit" ><i class="fas fa-pencil-alt" ></i></a>
+														<button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal(<?=$r['id'];?>)">
+															<i class="fas fa-pencil-alt"></i>
+														</button>
 														<a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a>
 													</td>
 												</tr>
 												<?php $sn++; } }else{ ?> 
 					                        <tr>
-         										<td colspan="10" >No Policy found</td>
+         										<td colspan="9" >No Policy found</td>
 					                        </tr>
              								<?php } ?>
 											</tbody>
@@ -178,8 +180,8 @@
 				</div>
 			</div>
 			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content" id="viewpolicydata" ></div>
+                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
 			<footer class="footer">
@@ -211,7 +213,15 @@
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 	<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="assets/js/pages/datatables.init.js"></script>
+	<script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+	<script src="assets/libs/jszip/jszip.min.js"></script>
+	<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+	<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
 	<script type="text/javascript">
         $('.js-datepicker').datepicker({
@@ -231,5 +241,150 @@
             });
         }
     </script>
+    
+    <!-- Custom script for serial numbering -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+            }
+            
+            // Initialize DataTable with advanced features
+            var table = $('#datatable').DataTable({
+                "order": [], // No initial sorting to maintain our ORDER BY from SQL
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "responsive": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        className: 'btn btn-primary btn-sm',
+                        text: '<i class="fas fa-copy"></i> Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-csv"></i> CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-success btn-sm',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        title: 'Renewal Management - ' + new Date().toLocaleDateString()
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-danger btn-sm',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        title: 'Renewal Management - ' + new Date().toLocaleDateString(),
+                        orientation: 'landscape',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-info btn-sm',
+                        text: '<i class="fas fa-print"></i> Print',
+                        title: 'Renewal Management'
+                    },
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-secondary btn-sm',
+                        text: '<i class="fas fa-columns"></i> Columns'
+                    }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 0, // First column (S.NO.)
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": -1, // Last column (Actions)
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                "drawCallback": function(settings) {
+                    // Recalculate serial numbers on every redraw (search, sort, pagination)
+                    var api = this.api();
+                    var startIndex = api.page.info().start;
+                    api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                        cell.innerHTML = startIndex + i + 1;
+                    });
+                },
+                "language": {
+                    "search": "Search renewals:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ renewals",
+                    "infoEmpty": "No renewals found",
+                    "infoFiltered": "(filtered from _MAX_ total renewals)",
+                    "zeroRecords": "No matching renewals found",
+                    "emptyTable": "No renewals available"
+                }
+            });
+        });
+    </script>
+    
+    <script type="text/javascript">
+        // Function to open edit modal
+        function openEditModal(policyId) {
+            // Show the modal
+            $('#editPolicyModal').modal('show');
+            
+            // Show loading state
+            const form = document.getElementById('editPolicyForm');
+            form.style.opacity = '0.5';
+            
+            // Fetch policy data
+            fetch(`include/get-policy-data.php?id=${policyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success === false) {
+                        alert('Error: ' + data.message);
+                        $('#editPolicyModal').modal('hide');
+                        return;
+                    }
+                    
+                    // Extract policy object from response
+                    const policy = data.policy;
+                    
+                    // Populate form fields
+                    document.getElementById('edit_policy_id').value = policy.id;
+                    document.getElementById('edit_vehicle_number').value = policy.vehicle_number || '';
+                    document.getElementById('edit_phone').value = policy.phone || '';
+                    document.getElementById('edit_name').value = policy.name || '';
+                    document.getElementById('edit_vehicle_type').value = policy.vehicle_type || '';
+                    document.getElementById('edit_insurance_company').value = policy.insurance_company || '';
+                    document.getElementById('edit_policy_type').value = policy.policy_type || '';
+                    document.getElementById('edit_policy_start_date').value = policy.policy_start_date || '';
+                    document.getElementById('edit_policy_end_date').value = policy.policy_end_date || '';
+                    document.getElementById('edit_premium').value = policy.premium || '';
+                    document.getElementById('edit_payout').value = policy.payout || '';
+                    document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
+                    document.getElementById('edit_comments').value = policy.comments || '';
+                    
+                    // Calculate and update financial fields
+                    calculateEditFinancials();
+                    
+                    // Remove loading state
+                    form.style.opacity = '1';
+                })
+                .catch(error => {
+                    console.error('Error fetching policy data:', error);
+                    alert('Error loading policy data. Please try again.');
+                    $('#editPolicyModal').modal('hide');
+                });
+        }
+    </script>
+
+    <?php include 'include/add-policy-modal.php'; ?>
+    <?php include 'include/edit-policy-modal.php'; ?>
 </body>
 </html>
