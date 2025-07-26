@@ -95,7 +95,8 @@
 	if ($stmt->execute()) {
 		$policy_id = $con->insert_id;
 		
-		// ACCOUNT INTEGRATION: Only save to account if revenue > 0
+		// ACCOUNT INTEGRATION: Only sync revenue for NEW policies added from today onwards
+		// Old policies (added before today) will NEVER sync to account software
 		if ($revenue > 0) {
 			try {
 				include 'account.php';
@@ -116,23 +117,23 @@
 						$account_sql = "INSERT INTO income (income_date, amount, source, details, created_at) VALUES (?, ?, ?, ?, NOW())";
 						$account_stmt = $acc->prepare($account_sql);
 						$income_date = date('Y-m-d');
-						$source = "Insurance Policy";
-						$details = "Revenue from policy: $vehicle_number ($name)";
+						$source = "Insurance Policy - NEW";
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
 						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
 					} elseif (in_array('date', $column_names)) {
 						// Structure 2: date column exists
 						$account_sql = "INSERT INTO income (date, amount, source, details, created_at) VALUES (?, ?, ?, ?, NOW())";
 						$account_stmt = $acc->prepare($account_sql);
 						$income_date = date('Y-m-d');
-						$source = "Insurance Policy";
-						$details = "Revenue from policy: $vehicle_number ($name)";
+						$source = "Insurance Policy - NEW";
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
 						$account_stmt->bind_param("sdss", $income_date, $revenue, $source, $details);
 					} else {
 						// Structure 3: minimal structure
 						$account_sql = "INSERT INTO income (amount, source, details) VALUES (?, ?, ?)";
 						$account_stmt = $acc->prepare($account_sql);
-						$source = "Insurance Policy";
-						$details = "Revenue from policy: $vehicle_number ($name)";
+						$source = "Insurance Policy - NEW";
+						$details = "Revenue from NEW policy: $vehicle_number ($name) - Added: " . date('Y-m-d');
 						$account_stmt->bind_param("dss", $revenue, $source, $details);
 					}
 					
