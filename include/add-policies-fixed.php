@@ -28,25 +28,34 @@
 	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : 0;
 	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : 0;
 	
+	// DEBUG: Log received values
+	error_log("ADD POLICY DEBUG - Received values:");
+	error_log("Premium: $premium, Payout: $payout, Customer Paid: $customer_paid");
+	error_log("Discount (from form): $discount, Calculated Revenue (from form): $calculated_revenue");
+	
 	// Auto-calculate using CORRECT new policy logic
 	if ($discount == 0 && $premium > 0 && $customer_paid > 0) {
 		$discount = $premium - $customer_paid;
+		error_log("Auto-calculated Discount: $discount");
 	}
 	
 	if ($calculated_revenue == 0 && $payout > 0 && $discount >= 0) {
 		$calculated_revenue = $payout - $discount;
+		error_log("Auto-calculated Revenue: $calculated_revenue");
 	}
 	
 	// BACKWARD COMPATIBILITY: Use old logic for revenue field if new fields not provided
 	if ($payout == 0 || $customer_paid == 0) {
 		// Old logic: revenue = some default or manual entry
 		$revenue = !empty($_POST['revenue']) ? floatval($_POST['revenue']) : 0;
+		error_log("Using OLD logic - Revenue: $revenue");
 	} else {
 		// NEW POLICY LOGIC: Revenue = Payout - Discount
 		// Example: Premium=10000, CustomerPaid=8000, Payout=3000
 		// Discount = Premium - CustomerPaid = 10000-8000 = 2000
 		// Revenue = Payout - Discount = 3000-2000 = 1000
 		$revenue = $calculated_revenue;
+		error_log("Using NEW logic - Final Revenue: $revenue (Payout: $payout - Discount: $discount)");
 	}
 	
 	$comments = mysqli_real_escape_string($con, trim($_POST['comments']));
@@ -157,6 +166,7 @@
 		
 		// ACCOUNT INTEGRATION: Only sync revenue for NEW policies added from today onwards
 		// Old policies (added before today) will NEVER sync to account software
+		$sync_message = "";
 		if ($revenue > 0) {
 			try {
 				include 'account.php';
@@ -198,24 +208,26 @@
 					}
 					
 					if ($account_stmt->execute()) {
-						$sync_message = " + ₹$revenue synced to account software";
+						$sync_message = "✅ ₹$revenue synced to account software";
+						// Log successful sync
+						error_log("Account sync SUCCESS for policy $policy_id: ₹$revenue added to income table");
 					} else {
-						$sync_message = " (Account sync failed: " . $account_stmt->error . ")";
-						error_log("Account sync failed for policy $policy_id: " . $account_stmt->error);
+						$sync_message = "❌ Account sync failed: " . $account_stmt->error;
+						error_log("Account sync FAILED for policy $policy_id: " . $account_stmt->error);
 					}
 					$account_stmt->close();
 				} else {
-					$sync_message = " (Income table not found in account software)";
+					$sync_message = "❌ Income table not found in account software";
 					error_log("Income table not found in account database");
 				}
 				$acc->close();
 			} catch (Exception $e) {
 				// Account integration failed, but don't stop policy creation
-				$sync_message = " (Account sync error: " . $e->getMessage() . ")";
-				error_log("Account integration failed for policy $policy_id: " . $e->getMessage());
+				$sync_message = "❌ Account sync error: " . $e->getMessage();
+				error_log("Account integration FAILED for policy $policy_id: " . $e->getMessage());
 			}
 		} else {
-			$sync_message = " (No revenue to sync)";
+			$sync_message = "⚠️ No revenue to sync (Revenue = ₹0)";
 		}
 		
 		$upload_message = "";
@@ -223,10 +235,36 @@
 			$upload_message = " (File upload issues: " . implode(", ", $upload_errors) . ")";
 		}
 		
-		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue$sync_message$upload_message')</script>";
+		// Enhanced success message with detailed information
+		$success_msg = "Policy added successfully!\n\n";
+		$success_msg .= "Vehicle: $vehicle_number\n";
+		$success_msg .= "Customer: $name\n";
+		$success_msg .= "Premium: ₹" . number_format($premium, 2) . "\n";
+		$success_msg .= "Customer Paid: ₹" . number_format($customer_paid, 2) . "\n";
+		$success_msg .= "Discount: ₹" . number_format($discount, 2) . "\n";
+		$success_msg .= "Revenue: ₹" . number_format($revenue, 2) . "\n";
+		$success_msg .= "\nAccount Integration: " . $sync_message . "\n";
+		
+		if (!empty($upload_errors)) {
+			$success_msg .= "\nFile Upload Issues: " . implode(", ", $upload_errors);
+		} else {
+			$file_count = 0;
+			if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
+				$file_count += count(array_filter($_FILES['files']['name']));
+			}
+			if (isset($_FILES['rc']) && !empty($_FILES['rc']['name'][0])) {
+				$file_count += count(array_filter($_FILES['rc']['name']));
+			}
+			if ($file_count > 0) {
+				$success_msg .= "\nFiles Uploaded: $file_count documents uploaded successfully";
+			}
+		}
+		
+		echo "<script>alert('" . addslashes($success_msg) . "')</script>";
 		echo "<script>window.location.href='../policies.php';</script>";
 	} else {
-		echo "<script>alert('Error adding policy: " . $con->error . "')</script>";
+		$error_msg = "Error adding policy: " . $con->error;
+		echo "<script>alert('" . addslashes($error_msg) . "')</script>";
 		echo "<script>window.history.back();</script>";
 	}
 
