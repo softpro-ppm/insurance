@@ -133,6 +133,16 @@
                                     <label class="form-label">Revenue (New Logic)</label>
                                     <input type="text" id="edit_calculated_revenue" class="form-control" readonly placeholder="Auto-calculated">
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Policy Files</label>
+                                    <input type="file" name="files[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                    <div id="existing_policy_files" class="mt-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">RC Files</label>
+                                    <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                    <div id="existing_rc_files" class="mt-2"></div>
+                                </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" id="edit_comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
@@ -255,6 +265,35 @@
 
 .text-info {
     color: #0dcaf0 !important;
+}
+
+/* File display styling */
+#existing_policy_files, #existing_rc_files {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 8px;
+    min-height: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#existing_policy_files .btn, #existing_rc_files .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+#existing_policy_files:empty::after {
+    content: 'No policy files uploaded yet';
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+#existing_rc_files:empty::after {
+    content: 'No RC files uploaded yet'; 
+    color: #6c757d;
+    font-size: 0.875rem;
 }
 </style>
 
@@ -394,6 +433,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit_discount').value = '';
             document.getElementById('edit_calculated_revenue').value = '';
             
+            // Clear existing files display
+            document.getElementById('existing_policy_files').innerHTML = '';
+            document.getElementById('existing_rc_files').innerHTML = '';
+            
             // Reset field styling
             const resetFields = ['edit_discount', 'edit_calculated_revenue'];
             resetFields.forEach(fieldId => {
@@ -443,6 +486,9 @@ function loadPolicyForEdit(policyId) {
                 if (policy.discount !== null) document.getElementById('edit_discount').value = policy.discount;
                 if (policy.calculated_revenue !== null) document.getElementById('edit_calculated_revenue').value = policy.calculated_revenue;
                 
+                // Load existing files
+                loadExistingFiles(policyId);
+                
                 // Trigger calculations (need to call the function within DOMContentLoaded scope)
                 // So we'll dispatch a custom event
                 window.dispatchEvent(new CustomEvent('editModalLoaded'));
@@ -457,6 +503,56 @@ function loadPolicyForEdit(policyId) {
         .catch(error => {
             console.error('Error:', error);
             alert('Error loading policy data');
+        });
+}
+
+// Function to load existing files
+function loadExistingFiles(policyId) {
+    fetch(`include/get-policy-files.php?id=${policyId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Display existing policy files
+                const policyFilesContainer = document.getElementById('existing_policy_files');
+                if (data.policy_files.length > 0) {
+                    let policyFilesHtml = '<small class="text-muted">Existing Policy Files:</small><br>';
+                    data.policy_files.forEach(file => {
+                        policyFilesHtml += `
+                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-primary btn-sm me-1 mb-1">
+                                <i class="bx bx-download me-1"></i>${file.filename}
+                            </a>
+                        `;
+                    });
+                    policyFilesContainer.innerHTML = policyFilesHtml;
+                } else {
+                    policyFilesContainer.innerHTML = '<small class="text-muted">No policy files uploaded yet</small>';
+                }
+                
+                // Display existing RC files
+                const rcFilesContainer = document.getElementById('existing_rc_files');
+                if (data.rc_files.length > 0) {
+                    let rcFilesHtml = '<small class="text-muted">Existing RC Files:</small><br>';
+                    data.rc_files.forEach(file => {
+                        rcFilesHtml += `
+                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-success btn-sm me-1 mb-1">
+                                <i class="bx bx-download me-1"></i>${file.filename}
+                            </a>
+                        `;
+                    });
+                    rcFilesContainer.innerHTML = rcFilesHtml;
+                } else {
+                    rcFilesContainer.innerHTML = '<small class="text-muted">No RC files uploaded yet</small>';
+                }
+            } else {
+                console.warn('Could not load existing files:', data.message);
+                document.getElementById('existing_policy_files').innerHTML = '<small class="text-warning">Could not load existing files</small>';
+                document.getElementById('existing_rc_files').innerHTML = '<small class="text-warning">Could not load existing files</small>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading files:', error);
+            document.getElementById('existing_policy_files').innerHTML = '<small class="text-danger">Error loading files</small>';
+            document.getElementById('existing_rc_files').innerHTML = '<small class="text-danger">Error loading files</small>';
         });
 }
 </script>

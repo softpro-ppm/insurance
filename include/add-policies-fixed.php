@@ -196,7 +196,7 @@
 
 		if(count($docx)){
 			$docx_sql = "insert into files (policy_id, files)
-					values".implode(',',$docx);__vsc_command_complete
+					values".implode(',',$docx);
 			
 			mysqli_query($con,$docx_sql);
 		}
@@ -215,7 +215,7 @@
 
 		if(count($rcs)){
 			$docx_sql = "insert into rc (policy_id, files)
-					values".implode(',',$rcs);__vsc_command_complete
+					values".implode(',',$rcs);
 			
 			mysqli_query($con,$docx_sql);
 		}

@@ -2,43 +2,35 @@
 	require 'session.php';
 	require 'config.php';
 
-	// Simple input sanitization
-	$name = mysqli_real_escape_string($con, trim($_POST['name']));
-	$phone = mysqli_real_escape_string($con, trim($_POST['phone']));
-	$vehicle_number = mysqli_real_escape_string($con, trim($_POST['vehicle_number']));
-	$vehicle_type = mysqli_real_escape_string($con, trim($_POST['vehicle_type']));
-	$insurance_company = mysqli_real_escape_string($con, trim($_POST['insurance_company']));
-	$policy_type = mysqli_real_escape_string($con, trim($_POST['policy_type']));
-	
-	// Handle date inputs (already in Y-m-d format from HTML5 date inputs)
-	$policy_start_date = $_POST['policy_start_date'];
-	$policy_end_date = $_POST['policy_end_date'];
-	
-	// Removed fields - set defaults for backward compatibility
-	$chassiss = ''; // No longer collected from frontend
-	$policy_issue_date = $policy_start_date; // Use start date as issue date
-	$fc_expiry_date = null; // No longer collected from frontend
-	$permit_expiry_date = null; // No longer collected from frontend
-	
-	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
-	
-	// New financial fields
-	$payout = !empty($_POST['payout']) ? floatval($_POST['payout']) : 0;
-	$customer_paid = !empty($_POST['customer_paid']) ? floatval($_POST['customer_paid']) : 0;
-	$discount = !empty($_POST['discount']) ? floatval($_POST['discount']) : 0;
-	$calculated_revenue = !empty($_POST['calculated_revenue']) ? floatval($_POST['calculated_revenue']) : 0;
-	
-	// Debug: Log the values
-	error_log("DEBUG - Premium: $premium, Payout: $payout, Customer Paid: $customer_paid, Discount: $discount, Calculated Revenue: $calculated_revenue");
-	
-	// Calculate discount and revenue manually if not provided from frontend
-	if ($discount == 0 && $premium > 0 && $customer_paid > 0) {
-		$discount = $premium - $customer_paid;
+	$name = $_POST['name'];
+	$chassiss = $_POST['chassiss'];
+	$phone = $_POST['phone'];
+	$vehicle_number = $_POST['vehicle_number'];
+	$vehicle_type = $_POST['vehicle_type'];
+	$insurance_company = $_POST['insurance_company'];
+	$policy_type = $_POST['policy_type'];
+	$policy_issue_date = date('Y-m-d',strtotime($_POST['policy_issue_date']));
+	$policy_start_date = date('Y-m-d',strtotime($_POST['policy_start_date']));
+	$policy_end_date = date('Y-m-d',strtotime($_POST['policy_end_date']));
+	if(!empty($_POST['fc_expiry_date'])){
+		$fc_expiry_date = date('Y-m-d',strtotime($_POST['fc_expiry_date']));
+	}else{
+		$fc_expiry_date = '';
+	}
+	if(!empty($_POST['permit_expiry_date'])){
+	$permit_expiry_date = date('Y-m-d',strtotime($_POST['permit_expiry_date']));
+	}else{
+	$permit_expiry_date = '';
 	}
 	
-	if ($calculated_revenue == 0 && $payout > 0 && $discount > 0) {
-		$calculated_revenue = $payout - $discount;
-	}
+	// Financial fields from POST data
+	$premium = isset($_POST['premium']) ? (float)$_POST['premium'] : 0;
+	$payout = isset($_POST['payout']) ? (float)$_POST['payout'] : 0;
+	$customer_paid = isset($_POST['customer_paid']) ? (float)$_POST['customer_paid'] : 0;
+	$discount = isset($_POST['discount']) ? (float)$_POST['discount'] : 0;
+	
+	// Calculate revenue
+	$calculated_revenue = $premium - $payout - $discount;
 	
 	// Use calculated revenue as the final revenue value
 	$revenue = $calculated_revenue > 0 ? $calculated_revenue : 0;
@@ -136,56 +128,46 @@
 		echo "<!-- DEBUG: Starting account integration -->";
 		echo "<!-- DEBUG: Revenue value: $revenue -->";
 		
-		try {
-			// Include your database connection
-			include 'account.php'; // $acc connection defined here
-			
-			// Sample or dynamic input values
-			$date = date('Y-m-d');
-			$description = 'Insurance';
-			$category = 'Insurance';
-			$subcategory = 'Insurance';
-			$amount = $revenue;       // Use the calculated revenue
-			$received = $revenue;     // Same as amount for now
-			$balance = 0;             // Balance is 0 since amount = received
-			$insurance_id = $policy_id; // Policy ID from insurance database
-			
-			echo "<!-- DEBUG: Amount to insert: $amount -->";
-			
-			// Check if all required values are present
-			if ($amount > 0) {
-				// Prepare the INSERT query
-				$stmt = $acc->prepare("INSERT INTO income (
-					date, name, phone, description, category, subcategory,
-					amount, received, balance, created_at, updated_at, insurance_id
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)");
-				
-				// Bind parameters (check parameter count)
-				$stmt->bind_param(
-					"ssssssdddi",
-					$date, $name, $phone, $description,
-					$category, $subcategory, $amount, $received, $balance, $insurance_id
-				);
-				
-				// Execute
-				if ($stmt->execute()) {
-					echo "<!-- ✅ Income record inserted successfully with amount: $amount -->";
-				} else {
-					echo "<!-- ❌ Error inserting record: " . $stmt->error . " -->";
-				}
-				
-				// Close statement
-				$stmt->close();
-			} else {
-				echo "<!-- ⚠️ Revenue is 0, skipping account insertion -->";
-			}
-			
-			// Close connection
-			$acc->close();
-			
-		} catch (Exception $e) {
-			echo "<!-- ❌ Account integration error: " . $e->getMessage() . " -->";
-		}
+            	
+            
+                // Include your database connection
+                include 'account.php'; // $acc connection defined here
+                
+                // Sample or dynamic input values
+                $date = date('Y-m-d');
+                //$name = ''; // Fill from $_POST or leave blank if not used
+                //$phone = ''; // Fill from $_POST or leave blank if not used
+                $description = 'Insurance';
+                $category = 'Insurance';
+                $subcategory = 'Insurance';
+                $amount = $revenue;       // Example: 10000.00
+                $received = $revenue;     // Example: 10000.00
+                $balance = 0;             // Can also calculate: $amount - $received
+                $insurance_id = $policy_id; // Must be defined before
+                
+                // Prepare the INSERT query
+                $stmt = $acc->prepare("INSERT INTO income (
+                    date, name, phone, description, category, subcategory,
+                    amount, received, balance, created_at, updated_at, insurance_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)");
+                
+                // Bind parameters
+                $stmt->bind_param(
+                    "ssssssddds",
+                    $date, $name, $phone, $description,
+                    $category, $subcategory, $amount, $received, $balance, $insurance_id
+                );
+                
+                // Execute
+                if ($stmt->execute()) {
+                    echo "✅ Income record inserted successfully!";
+                } else {
+                    echo "❌ Error inserting record: " . $stmt->error;
+                }
+                
+                // Close
+                $stmt->close();
+                $acc->close();
                 
 
 
