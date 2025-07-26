@@ -1,6 +1,8 @@
 // Enhanced Edit Policy Modal functionality with insurance company fix
 // This file handles loading policy data and populating the edit modal
 
+console.log('Edit policy modal script loaded successfully');
+
 let currentEditPolicyId = null;
 
 function openEditModal(policyId) {
@@ -12,6 +14,9 @@ function openEditModal(policyId) {
 
 // Ensure the function is globally accessible
 window.openEditModal = openEditModal;
+
+// Debug: Log that the function has been assigned to window
+console.log('openEditModal assigned to window:', typeof window.openEditModal);
 
 function showEditModalLoading() {
     const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
