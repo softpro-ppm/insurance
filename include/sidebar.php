@@ -16,7 +16,7 @@
     <li>
         <a href="#" class="waves-effect" data-bs-toggle="modal" data-bs-target="#addPolicyModal"> 
             <i class="bx bx-plus-circle"></i>
-            <span key="t-add-policy">Add Policy</span>
+            <span key="t-add-policy">Add Policy1</span>
         </a>
     </li>
     
