@@ -98,6 +98,63 @@
 	if ($stmt->execute()) {
 		$policy_id = $con->insert_id;
 		
+		// HANDLE FILE UPLOADS AFTER POLICY CREATION
+		$upload_errors = [];
+		
+		// Handle Policy Documents (files[])
+		if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
+			$docx = array();
+			foreach(array_filter($_FILES['files']['name']) as $d => $document) {
+				$allowedExtensions = array('pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx');
+				$file_extension = strtolower(pathinfo($document, PATHINFO_EXTENSION));
+				
+				if (in_array($file_extension, $allowedExtensions)) {
+					$filename = time() . '_' . $d . '_' . $document;
+					$targetPath = '../assets/uploads/' . $filename;
+					
+					if (move_uploaded_file($_FILES['files']['tmp_name'][$d], $targetPath)) {
+						$docx[] = "('" . $policy_id . "', '" . $filename . "')";
+					} else {
+						$upload_errors[] = "Failed to upload policy document: " . $document;
+					}
+				} else {
+					$upload_errors[] = "Invalid file type for policy document: " . $document;
+				}
+			}
+			
+			if (!empty($docx)) {
+				$docx_sql = "INSERT INTO files (policy_id, files) VALUES " . implode(',', $docx);
+				mysqli_query($con, $docx_sql);
+			}
+		}
+		
+		// Handle RC Documents (rc[])
+		if (isset($_FILES['rc']) && !empty($_FILES['rc']['name'][0])) {
+			$rcs = array();
+			foreach(array_filter($_FILES['rc']['name']) as $d => $rc_document) {
+				$allowedExtensions = array('pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx');
+				$file_extension = strtolower(pathinfo($rc_document, PATHINFO_EXTENSION));
+				
+				if (in_array($file_extension, $allowedExtensions)) {
+					$filename = time() . '_rc_' . $d . '_' . $rc_document;
+					$targetPath = '../assets/uploads/' . $filename;
+					
+					if (move_uploaded_file($_FILES['rc']['tmp_name'][$d], $targetPath)) {
+						$rcs[] = "('" . $policy_id . "', '" . $filename . "')";
+					} else {
+						$upload_errors[] = "Failed to upload RC document: " . $rc_document;
+					}
+				} else {
+					$upload_errors[] = "Invalid file type for RC document: " . $rc_document;
+				}
+			}
+			
+			if (!empty($rcs)) {
+				$rc_sql = "INSERT INTO rc (policy_id, files) VALUES " . implode(',', $rcs);
+				mysqli_query($con, $rc_sql);
+			}
+		}
+		
 		// ACCOUNT INTEGRATION: Only sync revenue for NEW policies added from today onwards
 		// Old policies (added before today) will NEVER sync to account software
 		if ($revenue > 0) {
@@ -161,7 +218,12 @@
 			$sync_message = " (No revenue to sync)";
 		}
 		
-		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue$sync_message')</script>";
+		$upload_message = "";
+		if (!empty($upload_errors)) {
+			$upload_message = " (File upload issues: " . implode(", ", $upload_errors) . ")";
+		}
+		
+		echo "<script>alert('Policy added successfully! Revenue: ₹$revenue$sync_message$upload_message')</script>";
 		echo "<script>window.location.href='../policies.php';</script>";
 	} else {
 		echo "<script>alert('Error adding policy: " . $con->error . "')</script>";

@@ -180,16 +180,25 @@
                             <div class="info-item">
                                 <label class="info-label">Policy Documents:</label>
                                 <div class="info-value">';
-                        	$sql1 = mysqli_query($con, "select * from files where policy_id='".$r['id']."'");
+                        	// Check both files table and any other document storage
+                        	$sql1 = mysqli_query($con, "SELECT * FROM files WHERE policy_id='".$r['id']."'");
                         	$doc_count = 0;
                             while ($r1=mysqli_fetch_array($sql1)) {
                                 $doc_count++;
-                        $data .='<a href="assets/uploads/'.$r1['files'].'" class="btn btn-primary btn-sm me-2 mb-2" download>
+                                $file_path = "assets/uploads/".$r1['files'];
+                                // Check if file actually exists
+                                if (file_exists("../".$file_path)) {
+                        $data .='<a href="'.$file_path.'" class="btn btn-primary btn-sm me-2 mb-2" download>
                                     <i class="bx bx-download me-1"></i>Policy Doc '.$doc_count.'
                                 </a>';
+                                } else {
+                        $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled>
+                                    <i class="bx bx-x me-1"></i>Doc '.$doc_count.' (Missing)
+                                </span>';
+                                }
                         	}
                         	if ($doc_count == 0) {
-                        	    $data .= '<span class="text-muted">No policy documents uploaded</span>';
+                        	    $data .= '<span class="text-muted"><i class="bx bx-info-circle me-1"></i>No policy documents uploaded</span>';
                         	}
                         $data .='</div>
                             </div>
@@ -198,16 +207,24 @@
                             <div class="info-item">
                                 <label class="info-label">RC Documents:</label>
                                 <div class="info-value">';
-                        	$sql1 = mysqli_query($con, "select * from rc where policy_id='".$r['id']."'");
+                        	$sql1 = mysqli_query($con, "SELECT * FROM rc WHERE policy_id='".$r['id']."'");
                         	$rc_count = 0;
                             while ($r1=mysqli_fetch_array($sql1)) {
                                 $rc_count++;
-                        $data .='<a href="assets/uploads/'.$r1['files'].'" class="btn btn-success btn-sm me-2 mb-2" download>
+                                $file_path = "assets/uploads/".$r1['files'];
+                                // Check if file actually exists
+                                if (file_exists("../".$file_path)) {
+                        $data .='<a href="'.$file_path.'" class="btn btn-success btn-sm me-2 mb-2" download>
                                     <i class="bx bx-download me-1"></i>RC Doc '.$rc_count.'
                                 </a>';
+                                } else {
+                        $data .='<span class="btn btn-outline-secondary btn-sm me-2 mb-2" disabled>
+                                    <i class="bx bx-x me-1"></i>RC '.$rc_count.' (Missing)
+                                </span>';
+                                }
                         	}
                         	if ($rc_count == 0) {
-                        	    $data .= '<span class="text-muted">No RC documents uploaded</span>';
+                        	    $data .= '<span class="text-muted"><i class="bx bx-info-circle me-1"></i>No RC documents uploaded</span>';
                         	}
                         $data .='</div>
                             </div>
