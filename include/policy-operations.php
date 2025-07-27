@@ -1,21 +1,40 @@
 <?php
-require 'session.php';
-require 'config.php';
-
-// Set JSON header
-header('Content-Type: application/json');
-
-// Enable error reporting for debugging
+// Enhanced error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors in JSON response
+ini_set('log_errors', 1);
 
-// Log all requests for debugging
-error_log("Policy operations request: " . print_r($_POST, true));
+// Log the request
+error_log("Policy operations request received: " . print_r($_POST, true));
 
 try {
+    // Check if files exist before including
+    if (!file_exists('session.php')) {
+        throw new Exception('session.php file not found');
+    }
+    if (!file_exists('config.php')) {
+        throw new Exception('config.php file not found');
+    }
+    
+    require 'session.php';
+    require 'config.php';
+    
+    // Set JSON header early
+    header('Content-Type: application/json');
+    header('Cache-Control: no-cache, must-revalidate');
+    
+    // Log session status
+    error_log("Session status: " . session_status());
+    error_log("Session ID: " . session_id());
+    
     // Check if database connection is available
     if (!isset($con) || !$con) {
         throw new Exception('Database connection not available');
+    }
+    
+    // Test database connection
+    if (!mysqli_ping($con)) {
+        throw new Exception('Database connection lost');
     }
     
     $action = $_POST['action'] ?? '';
@@ -24,12 +43,17 @@ try {
         throw new Exception('No action specified');
     }
     
+    error_log("Processing action: " . $action);
+    
     switch ($action) {
         case 'test_connection':
             echo json_encode([
                 'success' => true,
                 'message' => 'API endpoint is working',
-                'timestamp' => date('Y-m-d H:i:s')
+                'timestamp' => date('Y-m-d H:i:s'),
+                'session_active' => session_status() === PHP_SESSION_ACTIVE,
+                'session_id' => session_id(),
+                'database_connected' => isset($con) && mysqli_ping($con)
             ]);
             break;
             
@@ -53,6 +77,11 @@ try {
     error_log("Policy operations error: " . $e->getMessage());
     error_log("Stack trace: " . $e->getTraceAsString());
     
+    // Ensure we output JSON even on error
+    if (!headers_sent()) {
+        header('Content-Type: application/json');
+    }
+    
     echo json_encode([
         'success' => false,
         'message' => 'Operation failed: ' . $e->getMessage(),
@@ -60,11 +89,14 @@ try {
         'debug_info' => [
             'action' => $_POST['action'] ?? 'not_set',
             'policy_id' => $_POST['policy_id'] ?? 'not_set',
-            'timestamp' => date('Y-m-d H:i:s')
+            'timestamp' => date('Y-m-d H:i:s'),
+            'file' => __FILE__,
+            'line' => __LINE__
         ]
     ]);
 }
 
+// Close database connection if it exists
 if (isset($con)) {
     mysqli_close($con);
 }

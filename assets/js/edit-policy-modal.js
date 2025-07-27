@@ -6,10 +6,51 @@ console.log('Edit policy modal script loaded successfully');
 let currentEditPolicyId = null;
 
 function openEditModal(policyId) {
-    console.log('openEditModal called with policyId:', policyId);
+    console.log('=== EDIT MODAL REQUESTED ===');
+    console.log('Policy ID:', policyId);
+    
     currentEditPolicyId = policyId;
-    showEditModalLoading();
-    loadPolicyData(policyId);
+    
+    // First test basic connectivity
+    testBasicConnectivity(() => {
+        showEditModalLoading();
+        loadPolicyData(policyId);
+    });
+}
+
+function testBasicConnectivity(callback) {
+    console.log('=== TESTING BASIC CONNECTIVITY ===');
+    
+    fetch('include/test-endpoint.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: 'test=1',
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        console.log('Basic connectivity test response:', {
+            status: response.status,
+            statusText: response.statusText,
+            ok: response.ok
+        });
+        
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(`HTTP ${response.status}`);
+        }
+    })
+    .then(data => {
+        console.log('Basic connectivity SUCCESS:', data);
+        callback(); // Proceed with actual request
+    })
+    .catch(error => {
+        console.error('Basic connectivity FAILED:', error);
+        showEditModalError('Cannot connect to server. Please check your internet connection and try again.');
+    });
 }
 
 // Ensure the function is globally accessible
@@ -24,7 +65,69 @@ window.testEditModal = function(policyId = 1) {
     openEditModal(policyId);
 };
 
-console.log('Test function available: window.testEditModal(policyId)');
+// Add direct API test function
+window.testAPI = function(policyId = 1) {
+    console.log('=== DIRECT API TEST ===');
+    console.log('Testing API directly with policy ID:', policyId);
+    
+    const testUrl = 'include/policy-operations.php';
+    const formData = new FormData();
+    formData.append('action', 'get_policy_data');
+    formData.append('policy_id', policyId);
+    
+    fetch(testUrl, {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        console.log('Direct API response:', response);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Direct API raw response:', text);
+        try {
+            const json = JSON.parse(text);
+            console.log('Direct API JSON:', json);
+        } catch (e) {
+            console.error('Direct API not JSON:', e);
+        }
+    })
+    .catch(error => {
+        console.error('Direct API error:', error);
+    });
+};
+
+// Add basic connectivity test function
+window.testConnectivity = function() {
+    console.log('=== TESTING BASIC CONNECTIVITY ===');
+    
+    fetch('include/test-endpoint.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'test=1'
+    })
+    .then(response => response.text())
+    .then(text => {
+        console.log('Connectivity test response:', text);
+        try {
+            const json = JSON.parse(text);
+            console.log('Connectivity test JSON:', json);
+        } catch (e) {
+            console.error('Connectivity test not JSON:', e);
+        }
+    })
+    .catch(error => {
+        console.error('Connectivity test error:', error);
+    });
+};
+
+console.log('Test functions available:');
+console.log('- window.testEditModal(policyId)');
+console.log('- window.testAPI(policyId)');
+console.log('- window.testConnectivity()');
 
 function showEditModalLoading() {
     console.log('Showing edit modal with loading state');
@@ -154,7 +257,9 @@ function retryLoadPolicy() {
 }
 
 function loadPolicyData(policyId) {
-    console.log('Loading policy data for ID:', policyId);
+    console.log('=== STARTING POLICY DATA LOAD ===');
+    console.log('Policy ID:', policyId);
+    console.log('Current URL:', window.location.href);
     
     // Test multiple URL patterns to find the working one
     const urlsToTry = [
@@ -164,23 +269,42 @@ function loadPolicyData(policyId) {
         window.location.pathname.replace(/\/[^\/]*$/, '') + '/include/policy-operations.php'
     ];
     
-    console.log('Current URL:', window.location.href);
     console.log('Testing URLs:', urlsToTry);
     
     let urlIndex = 0;
+    let requestTimeout;
     
     function tryNextUrl() {
         if (urlIndex >= urlsToTry.length) {
+            console.error('=== ALL URLS FAILED ===');
             showEditModalError('Unable to connect to server. All connection attempts failed.');
             return;
         }
         
         const apiUrl = urlsToTry[urlIndex];
-        console.log(`Trying URL ${urlIndex + 1}/${urlsToTry.length}:`, apiUrl);
+        console.log(`=== TRYING URL ${urlIndex + 1}/${urlsToTry.length} ===`);
+        console.log('URL:', apiUrl);
         
         const formData = new FormData();
         formData.append('action', 'get_policy_data');
         formData.append('policy_id', policyId);
+        
+        console.log('FormData contents:', {
+            action: 'get_policy_data',
+            policy_id: policyId
+        });
+        
+        // Clear any existing timeout
+        if (requestTimeout) {
+            clearTimeout(requestTimeout);
+        }
+        
+        // Set a manual timeout
+        requestTimeout = setTimeout(() => {
+            console.error(`URL ${urlIndex + 1} TIMEOUT after 15 seconds`);
+            urlIndex++;
+            tryNextUrl();
+        }, 15000);
         
         fetch(apiUrl, {
             method: 'POST',
@@ -191,18 +315,24 @@ function loadPolicyData(policyId) {
             }
         })
         .then(response => {
-            console.log(`URL ${urlIndex + 1} response status:`, response.status);
+            clearTimeout(requestTimeout);
+            console.log(`URL ${urlIndex + 1} Response:`, {
+                status: response.status,
+                statusText: response.statusText,
+                ok: response.ok,
+                headers: Object.fromEntries(response.headers.entries())
+            });
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             
             const contentType = response.headers.get('content-type');
-            console.log(`URL ${urlIndex + 1} content type:`, contentType);
+            console.log(`URL ${urlIndex + 1} Content-Type:`, contentType);
             
             if (!contentType || !contentType.includes('application/json')) {
                 return response.text().then(text => {
-                    console.log(`URL ${urlIndex + 1} non-JSON response:`, text.substring(0, 200));
+                    console.log(`URL ${urlIndex + 1} Raw Response (first 500 chars):`, text.substring(0, 500));
                     throw new Error('Server returned non-JSON response');
                 });
             }
@@ -210,35 +340,47 @@ function loadPolicyData(policyId) {
             return response.json();
         })
         .then(data => {
-            console.log(`URL ${urlIndex + 1} SUCCESS - Policy data:`, data);
+            clearTimeout(requestTimeout);
+            console.log(`URL ${urlIndex + 1} SUCCESS - JSON Data:`, data);
             
             if (data.success) {
                 // Backend returns 'policy' but we expect 'data', so handle both
                 const policyData = data.policy || data.data;
+                console.log('Policy data extracted:', policyData);
+                
                 if (policyData) {
                     populateEditModal(policyData);
                 } else {
+                    console.error('No policy data found in response');
                     showEditModalError('No policy data received from server');
                 }
             } else {
+                console.error('API returned error:', data.message);
                 showEditModalError(data.message || 'Failed to load policy data');
             }
         })
         .catch(error => {
-            console.error(`URL ${urlIndex + 1} FAILED:`, error);
+            clearTimeout(requestTimeout);
+            console.error(`URL ${urlIndex + 1} FAILED:`, {
+                error: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            
             urlIndex++;
             
             if (urlIndex < urlsToTry.length) {
-                console.log('Trying next URL...');
-                setTimeout(tryNextUrl, 500); // Small delay before trying next URL
+                console.log('Trying next URL in 1 second...');
+                setTimeout(tryNextUrl, 1000); // 1 second delay before trying next URL
             } else {
-                console.error('All URLs failed');
+                console.error('=== ALL URLS EXHAUSTED ===');
                 showEditModalError(`Connection failed: ${error.message}`);
             }
         });
     }
     
     // Start trying URLs
+    console.log('=== STARTING URL TESTS ===');
     tryNextUrl();
 }
 
