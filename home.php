@@ -1085,18 +1085,78 @@
     <script>
         // Enhanced function to open edit modal with better error handling
         function loadPolicyForEdit(policyId) {
+            console.log('=== HOME.PHP EDIT FUNCTION CALLED ===');
             console.log('loadPolicyForEdit called with policyId:', policyId);
+            console.log('Available functions check:', {
+                openEditModal: typeof window.openEditModal,
+                testEditModal: typeof window.testEditModal,
+                testAPI: typeof window.testAPI,
+                testConnectivity: typeof window.testConnectivity
+            });
             
             // Check if the global openEditModal function is available
             if (typeof window.openEditModal === 'function') {
                 console.log('Using global openEditModal function');
                 window.openEditModal(policyId);
             } else {
-                // Fallback: redirect to edit page
-                console.warn('Edit modal function not available, redirecting to edit page');
-                window.location.href = 'edit.php?id=' + policyId;
+                console.error('Edit modal function not available!');
+                console.log('Available window functions:', Object.keys(window).filter(k => k.includes('edit') || k.includes('modal') || k.includes('test')));
+                
+                // Try to load the script again
+                console.log('Attempting to reload edit modal script...');
+                const script = document.createElement('script');
+                script.src = 'assets/js/edit-policy-modal.js';
+                script.onload = function() {
+                    console.log('Script reloaded, trying again...');
+                    if (typeof window.openEditModal === 'function') {
+                        window.openEditModal(policyId);
+                    } else {
+                        console.error('Still no openEditModal function after reload');
+                        // Fallback: redirect to edit page
+                        window.location.href = 'edit.php?id=' + policyId;
+                    }
+                };
+                script.onerror = function() {
+                    console.error('Failed to reload script, redirecting to edit page');
+                    window.location.href = 'edit.php?id=' + policyId;
+                };
+                document.head.appendChild(script);
             }
         }
+        
+        // Add debug functions for home.php
+        window.debugHomeEdit = function(policyId = 1) {
+            console.log('=== HOME.PHP DEBUG ===');
+            console.log('Testing edit functionality from home.php');
+            loadPolicyForEdit(policyId);
+        };
+        
+        // Test connectivity from home.php
+        window.homeTestConnectivity = function() {
+            console.log('=== HOME.PHP CONNECTIVITY TEST ===');
+            if (typeof window.testConnectivity === 'function') {
+                window.testConnectivity();
+            } else {
+                console.log('testConnectivity not available, testing manually...');
+                fetch('include/test-endpoint.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'test=1'
+                })
+                .then(response => response.text())
+                .then(text => {
+                    console.log('Home connectivity test result:', text);
+                })
+                .catch(error => {
+                    console.error('Home connectivity test error:', error);
+                });
+            }
+        };
+        
+        console.log('=== HOME.PHP DEBUG FUNCTIONS LOADED ===');
+        console.log('Available functions:');
+        console.log('- window.debugHomeEdit(policyId)');
+        console.log('- window.homeTestConnectivity()');
     </script>
 </body>
 
