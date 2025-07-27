@@ -1,5 +1,13 @@
 <?php  
-	include 'session.php';
+	include 's	$data = 
+		'<div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title d-flex align-items-center" id="transaction-detailModalLabel">
+                <i class="bx bx-file-blank me-2"></i>
+                <span>Policy Details - <strong>'.$r['vehicle_number'].'</strong></span>
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4" style="background: #ffffff; color: #1f2937;">'p';
 	include 'config.php';
 
 	$sql = mysqli_query($con, "select * from policy where id='".$_POST['id']."'");
@@ -296,21 +304,18 @@
         }
         .info-label {
             font-weight: 600;
-            color: #6c757d;
+            color: #6b7280;
             font-size: 0.9rem;
             margin-bottom: 0.25rem;
             display: block;
         }
         .info-value {
             font-weight: 500;
-            color: #333;
-            background: #f8f9fa;
+            color: #1f2937;
+            background: #f9fafb;
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
-            border: 1px solid #e9ecef;
-        }
-        .bg-gradient-primary {
-            background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%) !important;
+            border: 1px solid #e5e7eb;
         }
         .card {
             transition: transform 0.2s ease;

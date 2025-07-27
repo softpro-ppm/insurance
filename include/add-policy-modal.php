@@ -2,7 +2,7 @@
 <div class="modal fade" id="addPolicyModal" tabindex="-1" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-gradient-primary text-white border-0">
+            <div class="modal-header bg-primary text-white border-0">
                 <h5 class="modal-title" id="addPolicyModalLabel">
                     <i class="bx bx-plus-circle me-2"></i>Add New Policy
                 </h5>
@@ -165,33 +165,37 @@
 </div>
 
 <style>
-.bg-gradient-primary {
-    background: #6f42c1 !important;
-}
-
+/* Professional modal styling - using new color scheme */
 .modal-content {
     border-radius: 15px;
     overflow: hidden;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .modal-header {
     border-radius: 15px 15px 0 0;
+    border-bottom: none;
 }
 
 .form-control, .form-select {
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #e5e7eb;
     transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #1f2937;
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #6f42c1;
-    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    background-color: #ffffff;
+    color: #1f2937;
 }
 
 .custom-outline-card {
     border-radius: 12px;
-    border: 2px solid #e9ecef !important;
+    border: 2px solid #e5e7eb !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     background: #ffffff;

@@ -14,6 +14,8 @@
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 	<!-- Autofill override styles -->
 	<link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
+	<!-- Custom color scheme for professional appearance -->
+	<link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">

@@ -1,0 +1,305 @@
+/* 
+ * Custom Color Scheme for Insurance Management System
+ * Professional Blue Theme with High Contrast
+ */
+
+/* Primary Color Variables */
+:root {
+    --primary-color: #2563eb;           /* Professional Blue */
+    --primary-hover: #1d4ed8;          /* Darker Blue on Hover */
+    --primary-light: #dbeafe;          /* Light Blue Background */
+    --primary-text: #1e40af;           /* Blue Text */
+    
+    --secondary-color: #64748b;        /* Professional Gray */
+    --success-color: #10b981;          /* Green for Success */
+    --warning-color: #f59e0b;          /* Amber for Warning */
+    --danger-color: #ef4444;           /* Red for Danger */
+    --info-color: #06b6d4;            /* Cyan for Info */
+    
+    --text-primary: #1f2937;           /* Dark Gray Text */
+    --text-secondary: #6b7280;         /* Medium Gray Text */
+    --text-muted: #9ca3af;             /* Light Gray Text */
+    
+    --background-primary: #ffffff;     /* White Background */
+    --background-secondary: #f9fafb;   /* Light Gray Background */
+    --background-tertiary: #f3f4f6;    /* Slightly Darker Gray Background */
+    
+    --border-color: #e5e7eb;           /* Light Border */
+    --border-hover: #d1d5db;           /* Darker Border on Hover */
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Override Bootstrap Primary Colors */
+.btn-primary, .bg-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    color: white !important;
+}
+
+.text-primary {
+    color: var(--primary-text) !important;
+}
+
+/* Modal Styling */
+.modal-header.bg-gradient-primary,
+.modal-header.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%) !important;
+    border-bottom: none !important;
+    color: white !important;
+}
+
+.modal-header.bg-gradient-primary .modal-title,
+.modal-header.bg-primary .modal-title {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.modal-header.bg-gradient-primary .btn-close,
+.modal-header.bg-primary .btn-close {
+    filter: brightness(0) invert(1) !important;
+}
+
+.modal-content {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.modal-body {
+    background-color: var(--background-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Form Elements */
+.form-control, .form-select {
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--background-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25) !important;
+    background-color: var(--background-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.form-label {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Card Styling */
+.card {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    background-color: var(--background-primary) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.card-header {
+    background-color: var(--background-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.card-body {
+    background-color: var(--background-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.card-title {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Table Styling */
+.table {
+    color: var(--text-primary) !important;
+    background-color: var(--background-primary) !important;
+}
+
+.table thead th {
+    background-color: var(--background-secondary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 2px solid var(--border-color) !important;
+    font-weight: 600 !important;
+}
+
+.table tbody td {
+    color: var(--text-primary) !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--background-secondary) !important;
+}
+
+/* Badge Styling */
+.badge.bg-primary {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.badge.bg-success {
+    background-color: var(--success-color) !important;
+    color: white !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--warning-color) !important;
+    color: white !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--danger-color) !important;
+    color: white !important;
+}
+
+/* Alert Styling */
+.alert-primary {
+    background-color: var(--primary-light) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+.alert-success {
+    background-color: #dcfdf7 !important;
+    border-color: var(--success-color) !important;
+    color: #065f46 !important;
+}
+
+.alert-warning {
+    background-color: #fef3c7 !important;
+    border-color: var(--warning-color) !important;
+    color: #92400e !important;
+}
+
+.alert-danger {
+    background-color: #fef2f2 !important;
+    border-color: var(--danger-color) !important;
+    color: #991b1b !important;
+}
+
+/* Loading Spinner Colors */
+.spinner-border-primary {
+    color: var(--primary-color) !important;
+}
+
+/* DataTable Styling */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    color: var(--text-primary) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: var(--text-primary) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Navigation & Sidebar */
+.navbar-brand {
+    color: var(--text-primary) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Dropdown Styling */
+.dropdown-menu {
+    background-color: var(--background-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.dropdown-item {
+    color: var(--text-primary) !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: var(--background-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Custom Loading Overlay */
+.loading-overlay {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text-primary) !important;
+}
+
+.loading-overlay .loading-text {
+    color: var(--text-secondary) !important;
+}
+
+/* Fix Purple Background Issues */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%) !important;
+    color: white !important;
+}
+
+/* Ensure proper text contrast in modals */
+.modal .text-white {
+    color: white !important;
+}
+
+.modal .modal-body h1,
+.modal .modal-body h2,
+.modal .modal-body h3,
+.modal .modal-body h4,
+.modal .modal-body h5,
+.modal .modal-body h6,
+.modal .modal-body p,
+.modal .modal-body div,
+.modal .modal-body span,
+.modal .modal-body label {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure form inputs are visible */
+.modal .form-control::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Fix any remaining purple references */
+.purple, .bg-purple, [style*="purple"] {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 1rem !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    * {
+        color: black !important;
+        background: white !important;
+    }
+}

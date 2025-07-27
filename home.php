@@ -19,6 +19,8 @@
     <link href="assets/css/modern-theme.css" rel="stylesheet" type="text/css" />
     <!-- Autofill override styles -->
     <link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
+    <!-- Custom color scheme for professional appearance -->
+    <link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
