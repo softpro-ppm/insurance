@@ -17,6 +17,8 @@
     <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <!-- Modern theme -->
     <link href="assets/css/modern-theme.css" rel="stylesheet" type="text/css" />
+    <!-- Autofill override styles -->
+    <link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>

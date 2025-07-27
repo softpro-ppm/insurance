@@ -1,0 +1,130 @@
+/* Chrome Autofill Override Styles - Global */
+/* This file provides consistent autofill styling across all forms in the application */
+
+/* Webkit browsers (Chrome, Safari, Edge) autofill override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #f2f4f8 inset !important;
+    -webkit-text-fill-color: #333 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: #f2f4f8 !important;
+    color: #333 !important;
+    border-radius: 6px;
+}
+
+/* Firefox autofill override */
+input:-moz-autofill,
+input:-moz-autofill:hover,
+input:-moz-autofill:focus,
+select:-moz-autofill,
+select:-moz-autofill:hover,
+select:-moz-autofill:focus,
+textarea:-moz-autofill,
+textarea:-moz-autofill:hover,
+textarea:-moz-autofill:focus {
+    background-color: #f2f4f8 !important;
+    color: #333 !important;
+    box-shadow: none !important;
+    border-radius: 6px;
+}
+
+/* Generic autofill override */
+input:autofill,
+select:autofill,
+textarea:autofill {
+    background-color: #f2f4f8 !important;
+    color: #333 !important;
+    border-radius: 6px;
+}
+
+/* Bootstrap form controls autofill override */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #333 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: #ffffff !important;
+    color: #333 !important;
+}
+
+.form-control:-moz-autofill,
+.form-control:-moz-autofill:hover,
+.form-control:-moz-autofill:focus {
+    background-color: #ffffff !important;
+    color: #333 !important;
+    box-shadow: none !important;
+}
+
+/* Enhanced input styling for modern look */
+.form-control {
+    border-radius: 8px !important;
+    border: 1px solid #e3e6f0 !important;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    border-color: #4e73df !important;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25) !important;
+    background-color: #ffffff !important;
+    color: #333 !important;
+}
+
+.form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* Login page specific autofill styling */
+.wrapper .form-field input:-webkit-autofill,
+.wrapper .form-field input:-webkit-autofill:hover,
+.wrapper .form-field input:-webkit-autofill:focus,
+.wrapper .form-field input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #f2f4f8 inset !important;
+    -webkit-text-fill-color: #333 !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: #f2f4f8 !important;
+    color: #333 !important;
+}
+
+.wrapper .form-field input:-moz-autofill,
+.wrapper .form-field input:-moz-autofill:hover,
+.wrapper .form-field input:-moz-autofill:focus {
+    background-color: #f2f4f8 !important;
+    color: #333 !important;
+    box-shadow: none !important;
+}
+
+/* Dark theme autofill override (if needed) */
+.dark-theme input:-webkit-autofill,
+.dark-theme input:-webkit-autofill:hover,
+.dark-theme input:-webkit-autofill:focus,
+.dark-theme input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #2c2c2c inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+}
+
+/* Animation to prevent flash of unstyled autofill */
+@keyframes autofill {
+    to {
+        color: #333;
+        background: #f2f4f8;
+    }
+}
+
+input:-webkit-autofill {
+    animation-name: autofill;
+    animation-fill-mode: both;
+}
