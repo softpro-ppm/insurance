@@ -1,11 +1,16 @@
 <?php
+// Clean start - ensure no output before JSON
+ob_start();
+
 // Enhanced error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors in JSON response
 ini_set('log_errors', 1);
 
 // Log the request
-error_log("Policy operations request received: " . print_r($_POST, true));
+error_log("=== POLICY OPERATIONS REQUEST START ===");
+error_log("POST data: " . print_r($_POST, true));
+error_log("Session ID: " . session_id());
 
 try {
     // Check if files exist before including
@@ -19,13 +24,19 @@ try {
     require 'session.php';
     require 'config.php';
     
-    // Set JSON header early
+    // Clear any output that might have been generated
+    $unwantedOutput = ob_get_clean();
+    if (!empty($unwantedOutput)) {
+        error_log("Unwanted output cleared: " . $unwantedOutput);
+    }
+    
+    // Set JSON header early and ensure clean output
     header('Content-Type: application/json');
     header('Cache-Control: no-cache, must-revalidate');
     
     // Log session status
     error_log("Session status: " . session_status());
-    error_log("Session ID: " . session_id());
+    error_log("Session ID after include: " . session_id());
     
     // Check if database connection is available
     if (!isset($con) || !$con) {
@@ -47,6 +58,7 @@ try {
     
     switch ($action) {
         case 'test_connection':
+            error_log("Test connection requested");
             echo json_encode([
                 'success' => true,
                 'message' => 'API endpoint is working',
@@ -58,6 +70,7 @@ try {
             break;
             
         case 'get_policy_data':
+            error_log("Get policy data requested");
             getPolicyData();
             break;
             
@@ -74,8 +87,14 @@ try {
     }
     
 } catch (Exception $e) {
-    error_log("Policy operations error: " . $e->getMessage());
+    error_log("=== POLICY OPERATIONS ERROR ===");
+    error_log("Error: " . $e->getMessage());
     error_log("Stack trace: " . $e->getTraceAsString());
+    
+    // Clear any output that might have been generated
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
     
     // Ensure we output JSON even on error
     if (!headers_sent()) {
@@ -91,7 +110,7 @@ try {
             'policy_id' => $_POST['policy_id'] ?? 'not_set',
             'timestamp' => date('Y-m-d H:i:s'),
             'file' => __FILE__,
-            'line' => __LINE__
+            'line' => $e->getLine()
         ]
     ]);
 }
@@ -100,6 +119,8 @@ try {
 if (isset($con)) {
     mysqli_close($con);
 }
+
+error_log("=== POLICY OPERATIONS REQUEST END ===");
 
 function getPolicyData() {
     global $con;

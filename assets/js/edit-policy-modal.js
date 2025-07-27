@@ -75,26 +75,59 @@ window.testAPI = function(policyId = 1) {
     formData.append('action', 'get_policy_data');
     formData.append('policy_id', policyId);
     
+    console.log('Making direct request to:', testUrl);
+    console.log('With data:', { action: 'get_policy_data', policy_id: policyId });
+    
     fetch(testUrl, {
         method: 'POST',
         body: formData,
         credentials: 'same-origin'
     })
     .then(response => {
-        console.log('Direct API response:', response);
+        console.log('Direct API response status:', response.status);
+        console.log('Direct API response headers:', Object.fromEntries(response.headers.entries()));
         return response.text();
     })
     .then(text => {
-        console.log('Direct API raw response:', text);
+        console.log('Direct API raw response length:', text.length);
+        console.log('Direct API raw response (first 1000 chars):', text.substring(0, 1000));
+        
         try {
             const json = JSON.parse(text);
             console.log('Direct API JSON:', json);
+            return json;
         } catch (e) {
             console.error('Direct API not JSON:', e);
+            console.log('Raw response:', text);
+            return null;
         }
     })
     .catch(error => {
         console.error('Direct API error:', error);
+    });
+};
+
+// Add ultra-simple test function
+window.testSimple = function() {
+    console.log('=== ULTRA SIMPLE TEST ===');
+    
+    // Test if we can even reach the server
+    fetch('include/policy-operations.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=test_connection'
+    })
+    .then(response => {
+        console.log('Simple test response:', response.status);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Simple test result:', text);
+    })
+    .catch(error => {
+        console.error('Simple test failed:', error);
     });
 };
 
@@ -127,6 +160,7 @@ window.testConnectivity = function() {
 console.log('Test functions available:');
 console.log('- window.testEditModal(policyId)');
 console.log('- window.testAPI(policyId)');
+console.log('- window.testSimple()');
 console.log('- window.testConnectivity()');
 
 function showEditModalLoading() {
@@ -261,87 +295,66 @@ function loadPolicyData(policyId) {
     console.log('Policy ID:', policyId);
     console.log('Current URL:', window.location.href);
     
-    // Test multiple URL patterns to find the working one
-    const urlsToTry = [
-        'include/policy-operations.php',
-        './include/policy-operations.php',
-        '/insurance/include/policy-operations.php',
-        window.location.pathname.replace(/\/[^\/]*$/, '') + '/include/policy-operations.php'
-    ];
+    // DIRECT TEST - Skip all URL testing and go straight to the most likely working URL
+    const apiUrl = 'include/policy-operations.php';
+    console.log('Using direct URL:', apiUrl);
     
-    console.log('Testing URLs:', urlsToTry);
+    const formData = new FormData();
+    formData.append('action', 'get_policy_data');
+    formData.append('policy_id', policyId);
     
-    let urlIndex = 0;
-    let requestTimeout;
+    console.log('FormData contents:', {
+        action: 'get_policy_data',
+        policy_id: policyId
+    });
     
-    function tryNextUrl() {
-        if (urlIndex >= urlsToTry.length) {
-            console.error('=== ALL URLS FAILED ===');
-            showEditModalError('Unable to connect to server. All connection attempts failed.');
-            return;
+    // Set aggressive timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+        console.error('=== REQUEST TIMEOUT AFTER 10 SECONDS ===');
+        controller.abort();
+        showEditModalError('Request timed out. The server may be overloaded or the endpoint is not responding.');
+    }, 10000);
+    
+    fetch(apiUrl, {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        signal: controller.signal
+    })
+    .then(response => {
+        clearTimeout(timeoutId);
+        console.log('=== RESPONSE RECEIVED ===');
+        console.log('Status:', response.status);
+        console.log('Status Text:', response.statusText);
+        console.log('Headers:', Object.fromEntries(response.headers.entries()));
+        console.log('OK:', response.ok);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
-        const apiUrl = urlsToTry[urlIndex];
-        console.log(`=== TRYING URL ${urlIndex + 1}/${urlsToTry.length} ===`);
-        console.log('URL:', apiUrl);
+        const contentType = response.headers.get('content-type');
+        console.log('Content-Type:', contentType);
         
-        const formData = new FormData();
-        formData.append('action', 'get_policy_data');
-        formData.append('policy_id', policyId);
+        // Get the raw response first
+        return response.text();
+    })
+    .then(text => {
+        clearTimeout(timeoutId);
+        console.log('=== RAW RESPONSE ===');
+        console.log('Response length:', text.length);
+        console.log('First 1000 characters:', text.substring(0, 1000));
+        console.log('Last 500 characters:', text.substring(Math.max(0, text.length - 500)));
         
-        console.log('FormData contents:', {
-            action: 'get_policy_data',
-            policy_id: policyId
-        });
-        
-        // Clear any existing timeout
-        if (requestTimeout) {
-            clearTimeout(requestTimeout);
-        }
-        
-        // Set a manual timeout
-        requestTimeout = setTimeout(() => {
-            console.error(`URL ${urlIndex + 1} TIMEOUT after 15 seconds`);
-            urlIndex++;
-            tryNextUrl();
-        }, 15000);
-        
-        fetch(apiUrl, {
-            method: 'POST',
-            body: formData,
-            credentials: 'same-origin',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            clearTimeout(requestTimeout);
-            console.log(`URL ${urlIndex + 1} Response:`, {
-                status: response.status,
-                statusText: response.statusText,
-                ok: response.ok,
-                headers: Object.fromEntries(response.headers.entries())
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            
-            const contentType = response.headers.get('content-type');
-            console.log(`URL ${urlIndex + 1} Content-Type:`, contentType);
-            
-            if (!contentType || !contentType.includes('application/json')) {
-                return response.text().then(text => {
-                    console.log(`URL ${urlIndex + 1} Raw Response (first 500 chars):`, text.substring(0, 500));
-                    throw new Error('Server returned non-JSON response');
-                });
-            }
-            
-            return response.json();
-        })
-        .then(data => {
-            clearTimeout(requestTimeout);
-            console.log(`URL ${urlIndex + 1} SUCCESS - JSON Data:`, data);
+        // Try to parse as JSON
+        try {
+            const data = JSON.parse(text);
+            console.log('=== PARSED JSON ===');
+            console.log('JSON Data:', data);
             
             if (data.success) {
                 // Backend returns 'policy' but we expect 'data', so handle both
@@ -358,30 +371,28 @@ function loadPolicyData(policyId) {
                 console.error('API returned error:', data.message);
                 showEditModalError(data.message || 'Failed to load policy data');
             }
-        })
-        .catch(error => {
-            clearTimeout(requestTimeout);
-            console.error(`URL ${urlIndex + 1} FAILED:`, {
-                error: error.message,
-                stack: error.stack,
-                name: error.name
-            });
-            
-            urlIndex++;
-            
-            if (urlIndex < urlsToTry.length) {
-                console.log('Trying next URL in 1 second...');
-                setTimeout(tryNextUrl, 1000); // 1 second delay before trying next URL
-            } else {
-                console.error('=== ALL URLS EXHAUSTED ===');
-                showEditModalError(`Connection failed: ${error.message}`);
-            }
-        });
-    }
-    
-    // Start trying URLs
-    console.log('=== STARTING URL TESTS ===');
-    tryNextUrl();
+        } catch (parseError) {
+            console.error('=== JSON PARSE ERROR ===');
+            console.error('Parse error:', parseError);
+            console.error('Response was not valid JSON');
+            showEditModalError('Server returned invalid response format. Check server logs for errors.');
+        }
+    })
+    .catch(error => {
+        clearTimeout(timeoutId);
+        console.error('=== FETCH ERROR ===');
+        console.error('Error:', error);
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+        
+        if (error.name === 'AbortError') {
+            showEditModalError('Request was cancelled due to timeout');
+        } else if (error.message.includes('Failed to fetch')) {
+            showEditModalError('Network error: Unable to connect to server');
+        } else {
+            showEditModalError(`Connection failed: ${error.message}`);
+        }
+    });
 }
 
 function populateEditModal(policy) {
