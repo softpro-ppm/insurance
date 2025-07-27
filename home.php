@@ -422,7 +422,9 @@
                                                     <td class="text-center" ><?=$renewalr['vehicle_type'];?></td>
                                                     <td class="text-center" ><?=date('d-m-Y', strtotime($renewalr['policy_end_date']));?></td>
                                                     <td class="text-center" >
-                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal(<?=$renewalr['id'];?>)"><i class="fas fa-pencil-alt" ></i></button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$renewalr['id'];?>)" title="Edit Policy">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </button>
                                                         <!-- <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a> -->
                                                     </td>
                                                 </tr>
@@ -566,6 +568,8 @@
     <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
+    <!-- Edit modal functionality -->
+    <script src="assets/js/edit-policy-modal.js"></script>
     <!-- Modern functionality scripts -->
     <script src="assets/js/global-search.js"></script>
     
@@ -1079,10 +1083,19 @@
     <?php include 'include/edit-policy-modal.php'; ?>
 
     <script>
-        // Function to open edit modal
-        function openEditModal(policyId) {
-            loadPolicyData(policyId);
-            $('#editPolicyModal').modal('show');
+        // Enhanced function to open edit modal with better error handling
+        function loadPolicyForEdit(policyId) {
+            console.log('loadPolicyForEdit called with policyId:', policyId);
+            
+            // Check if the global openEditModal function is available
+            if (typeof window.openEditModal === 'function') {
+                console.log('Using global openEditModal function');
+                window.openEditModal(policyId);
+            } else {
+                // Fallback: redirect to edit page
+                console.warn('Edit modal function not available, redirecting to edit page');
+                window.location.href = 'edit.php?id=' + policyId;
+            }
         }
     </script>
 </body>
