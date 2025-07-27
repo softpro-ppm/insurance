@@ -131,10 +131,10 @@ include 'include/config.php';
 													                <td>₹'.$premium.'</td>
 													                <td>'.date('d-m-Y',strtotime($r['policy_start_date'])).'</td>
 													                <td>
-													                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy">
+													                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit('.$r['id'].')" title="Edit Policy">
 													                        <i class="bx bx-edit"></i>
 													                    </button>
-													                    <button type="button" class="btn btn-outline-danger btn-sm ms-1" onclick="deletePolicy(<?=$r['id'];?>)" title="Delete Policy">
+													                    <button type="button" class="btn btn-outline-danger btn-sm ms-1" onclick="deletePolicy('.$r['id'].')" title="Delete Policy">
 													                        <i class="bx bx-trash"></i>
 													                    </button>
 													                </td>
