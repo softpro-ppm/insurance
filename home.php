@@ -706,10 +706,30 @@
     
     <script type="text/javascript">
         function viewpolicy(identifier) {
-            var id= $(identifier).data("id");
+            console.log('=== VIEW POLICY FUNCTION CALLED ===');
+            var id = $(identifier).data("id");
+            console.log('Policy ID:', id);
+            
+            // Check if modal exists
+            if ($('#renewalpolicyview').length === 0) {
+                console.error('Modal #renewalpolicyview not found!');
+                return;
+            }
+            
+            // Show modal
+            console.log('Showing modal...');
             $('#renewalpolicyview').modal("show");
-            $.post("include/view-policy.php",{ id:id }, function(data) {
+            
+            // Make AJAX call
+            console.log('Making AJAX call to view-policy.php...');
+            $.post("include/view-policy.php", { id: id }, function(data) {
+                console.log('AJAX response received:', data.substring(0, 100));
                 $('#viewpolicydata').html(data);
+            }).fail(function(xhr, status, error) {
+                console.error('AJAX call failed:', error);
+                console.error('Status:', status);
+                console.error('Response:', xhr.responseText);
+                $('#viewpolicydata').html('<div class="alert alert-danger">Error loading policy details. Please try again.</div>');
             });
         }
     </script>
@@ -1155,10 +1175,31 @@
             }
         };
         
+        // Test view policy modal
+        window.testViewPolicy = function(policyId = 1) {
+            console.log('=== TESTING VIEW POLICY MODAL ===');
+            console.log('Policy ID:', policyId);
+            
+            // Test direct AJAX call
+            $.post("include/view-policy.php", { id: policyId }, function(data) {
+                console.log('AJAX Success - Data length:', data.length);
+                console.log('First 200 chars:', data.substring(0, 200));
+                
+                // Show modal
+                $('#viewpolicydata').html(data);
+                $('#renewalpolicyview').modal('show');
+            }).fail(function(xhr, status, error) {
+                console.error('AJAX Failed:', error);
+                console.error('Status:', status);
+                console.error('Response Text:', xhr.responseText);
+            });
+        };
+        
         console.log('=== HOME.PHP DEBUG FUNCTIONS LOADED ===');
         console.log('Available functions:');
         console.log('- window.debugHomeEdit(policyId)');
         console.log('- window.homeTestConnectivity()');
+        console.log('- window.testViewPolicy(policyId)');
     </script>
 </body>
 

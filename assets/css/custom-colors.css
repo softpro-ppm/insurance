@@ -72,11 +72,35 @@
     border-radius: 12px !important;
     border: none !important;
     box-shadow: var(--shadow-lg) !important;
+    background-color: var(--background-primary) !important;
 }
 
 .modal-body {
     background-color: var(--background-primary) !important;
     color: var(--text-primary) !important;
+}
+
+/* Ensure modal shows properly */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+}
+
+.modal.show .modal-dialog {
+    transform: none !important;
+}
+
+/* Fix modal backdrop */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure modal is visible */
+.modal {
+    z-index: 1050 !important;
+}
+
+.modal.show {
+    display: block !important;
 }
 
 /* Form Elements */
