@@ -18,20 +18,139 @@ window.openEditModal = openEditModal;
 // Debug: Log that the function has been assigned to window
 console.log('openEditModal assigned to window:', typeof window.openEditModal);
 
+// Add a test function for debugging
+window.testEditModal = function(policyId = 1) {
+    console.log('Testing edit modal with policy ID:', policyId);
+    openEditModal(policyId);
+};
+
+console.log('Test function available: window.testEditModal(policyId)');
+
 function showEditModalLoading() {
-    const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+    console.log('Showing edit modal with loading state');
     
-    // Show modal with loading state
+    // Just show the modal without changing content
+    const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+    modal.show();
+    
+    // Add loading overlay to the modal body
     const modalBody = document.querySelector('#editPolicyModal .modal-body');
-    modalBody.innerHTML = `
-        <div class="text-center py-5">
-            <div class="loading-spinner mb-3"></div>
+    
+    // Create loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'loading-overlay';
+    loadingOverlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        border-radius: 0.375rem;
+    `;
+    
+    loadingOverlay.innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
             <h5 class="text-muted">Loading policy data...</h5>
             <p class="text-muted">Please wait while we fetch the policy details.</p>
         </div>
     `;
     
+    // Remove any existing loading overlay
+    const existingOverlay = document.getElementById('loading-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
+    // Make modal body relative positioned
+    modalBody.style.position = 'relative';
+    modalBody.appendChild(loadingOverlay);
+}
+
+function hideLoadingInModal() {
+    console.log('Hiding loading overlay');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.remove();
+    }
+}
+
+function showEditModalError(message) {
+    console.log('Showing error in modal:', message);
+    
+    // Remove loading overlay
+    hideLoadingInModal();
+    
+    // Show the modal if not already shown
+    const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
     modal.show();
+    
+    // Add error message to modal body
+    const modalBody = document.querySelector('#editPolicyModal .modal-body');
+    
+    // Create error overlay
+    const errorOverlay = document.createElement('div');
+    errorOverlay.id = 'error-overlay';
+    errorOverlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        border-radius: 0.375rem;
+    `;
+    
+    errorOverlay.innerHTML = `
+        <div class="text-center p-4">
+            <div class="text-danger mb-3">
+                <i class="bx bx-error-circle" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="text-danger">Error Loading Policy</h5>
+            <p class="text-muted mb-3">${message}</p>
+            <button type="button" class="btn btn-primary me-2" onclick="retryLoadPolicy()">
+                <i class="bx bx-refresh me-1"></i>Try Again
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+            </button>
+        </div>
+    `;
+    
+    // Remove any existing overlays
+    const existingOverlay = document.getElementById('error-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
+    // Make modal body relative positioned
+    modalBody.style.position = 'relative';
+    modalBody.appendChild(errorOverlay);
+}
+
+function retryLoadPolicy() {
+    console.log('Retrying to load policy data for ID:', currentEditPolicyId);
+    if (currentEditPolicyId) {
+        // Remove error overlay
+        const errorOverlay = document.getElementById('error-overlay');
+        if (errorOverlay) {
+            errorOverlay.remove();
+        }
+        // Retry loading
+        showEditModalLoading();
+        loadPolicyData(currentEditPolicyId);
+    }
 }
 
 function loadPolicyData(policyId) {
@@ -94,7 +213,13 @@ function loadPolicyData(policyId) {
             console.log(`URL ${urlIndex + 1} SUCCESS - Policy data:`, data);
             
             if (data.success) {
-                populateEditModal(data.policy);
+                // Backend returns 'policy' but we expect 'data', so handle both
+                const policyData = data.policy || data.data;
+                if (policyData) {
+                    populateEditModal(policyData);
+                } else {
+                    showEditModalError('No policy data received from server');
+                }
             } else {
                 showEditModalError(data.message || 'Failed to load policy data');
             }
@@ -118,9 +243,11 @@ function loadPolicyData(policyId) {
 }
 
 function populateEditModal(policy) {
-    // Restore the modal body with the form
-    const modalBody = document.querySelector('#editPolicyModal .modal-body');
-    modalBody.innerHTML = document.getElementById('editPolicyModalTemplate').innerHTML;
+    console.log('Populating modal with policy data:', policy);
+    
+    // Show the modal first
+    const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+    modal.show();
     
     try {
         // Populate form fields
@@ -178,20 +305,27 @@ function populateEditModal(policy) {
         document.getElementById('edit_premium').value = policy.premium || '';
         
         // Financial fields (if they exist)
-        if (document.getElementById('edit_payout')) {
-            document.getElementById('edit_payout').value = policy.payout || '';
+        const payoutField = document.getElementById('edit_payout');
+        if (payoutField) {
+            payoutField.value = policy.payout || '';
         }
-        if (document.getElementById('edit_customer_paid')) {
-            document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
+        const customerPaidField = document.getElementById('edit_customer_paid');
+        if (customerPaidField) {
+            customerPaidField.value = policy.customer_paid || '';
         }
-        if (document.getElementById('edit_discount')) {
-            document.getElementById('edit_discount').value = policy.discount || '';
+        const discountField = document.getElementById('edit_discount');
+        if (discountField) {
+            discountField.value = policy.discount || '';
         }
-        if (document.getElementById('edit_calculated_revenue')) {
-            document.getElementById('edit_calculated_revenue').value = policy.calculated_revenue || '';
+        const calculatedRevenueField = document.getElementById('edit_calculated_revenue');
+        if (calculatedRevenueField) {
+            calculatedRevenueField.value = policy.calculated_revenue || '';
         }
         
-        document.getElementById('edit_comments').value = policy.comments || '';
+        const commentsField = document.getElementById('edit_comments');
+        if (commentsField) {
+            commentsField.value = policy.comments || '';
+        }
         
         // Update modal title with vehicle number
         document.getElementById('editPolicyModalLabel').innerHTML = 
@@ -202,12 +336,11 @@ function populateEditModal(policy) {
             initializeFinancialCalculations('edit');
         }
         
-        // Apply fade-in animation
-        modalBody.classList.add('fade-in');
+        console.log('Modal populated successfully');
         
     } catch (error) {
         console.error('Error populating modal:', error);
-        showEditModalError('Error displaying policy data');
+        showEditModalError('Error displaying policy data: ' + error.message);
     }
 }
 
