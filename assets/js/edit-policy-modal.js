@@ -35,31 +35,86 @@ function showEditModalLoading() {
 }
 
 function loadPolicyData(policyId) {
-    const formData = new FormData();
-    formData.append('action', 'get_policy_data');
-    formData.append('policy_id', policyId);
+    console.log('Loading policy data for ID:', policyId);
     
-    fetch('include/policy-operations.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    // Test multiple URL patterns to find the working one
+    const urlsToTry = [
+        'include/policy-operations.php',
+        './include/policy-operations.php',
+        '/insurance/include/policy-operations.php',
+        window.location.pathname.replace(/\/[^\/]*$/, '') + '/include/policy-operations.php'
+    ];
+    
+    console.log('Current URL:', window.location.href);
+    console.log('Testing URLs:', urlsToTry);
+    
+    let urlIndex = 0;
+    
+    function tryNextUrl() {
+        if (urlIndex >= urlsToTry.length) {
+            showEditModalError('Unable to connect to server. All connection attempts failed.');
+            return;
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            populateEditModal(data.policy);
-        } else {
-            showEditModalError(data.message || 'Failed to load policy data');
-        }
-    })
-    .catch(error => {
-        console.error('Error loading policy data:', error);
-        showEditModalError('Network error occurred while loading policy data');
-    });
+        
+        const apiUrl = urlsToTry[urlIndex];
+        console.log(`Trying URL ${urlIndex + 1}/${urlsToTry.length}:`, apiUrl);
+        
+        const formData = new FormData();
+        formData.append('action', 'get_policy_data');
+        formData.append('policy_id', policyId);
+        
+        fetch(apiUrl, {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            console.log(`URL ${urlIndex + 1} response status:`, response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const contentType = response.headers.get('content-type');
+            console.log(`URL ${urlIndex + 1} content type:`, contentType);
+            
+            if (!contentType || !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                    console.log(`URL ${urlIndex + 1} non-JSON response:`, text.substring(0, 200));
+                    throw new Error('Server returned non-JSON response');
+                });
+            }
+            
+            return response.json();
+        })
+        .then(data => {
+            console.log(`URL ${urlIndex + 1} SUCCESS - Policy data:`, data);
+            
+            if (data.success) {
+                populateEditModal(data.policy);
+            } else {
+                showEditModalError(data.message || 'Failed to load policy data');
+            }
+        })
+        .catch(error => {
+            console.error(`URL ${urlIndex + 1} FAILED:`, error);
+            urlIndex++;
+            
+            if (urlIndex < urlsToTry.length) {
+                console.log('Trying next URL...');
+                setTimeout(tryNextUrl, 500); // Small delay before trying next URL
+            } else {
+                console.error('All URLs failed');
+                showEditModalError(`Connection failed: ${error.message}`);
+            }
+        });
+    }
+    
+    // Start trying URLs
+    tryNextUrl();
 }
 
 function populateEditModal(policy) {

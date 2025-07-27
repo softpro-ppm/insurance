@@ -9,10 +9,30 @@ header('Content-Type: application/json');
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors in JSON response
 
+// Log all requests for debugging
+error_log("Policy operations request: " . print_r($_POST, true));
+
 try {
+    // Check if database connection is available
+    if (!isset($con) || !$con) {
+        throw new Exception('Database connection not available');
+    }
+    
     $action = $_POST['action'] ?? '';
     
+    if (empty($action)) {
+        throw new Exception('No action specified');
+    }
+    
     switch ($action) {
+        case 'test_connection':
+            echo json_encode([
+                'success' => true,
+                'message' => 'API endpoint is working',
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+            break;
+            
         case 'get_policy_data':
             getPolicyData();
             break;
@@ -26,20 +46,28 @@ try {
             break;
             
         default:
-            throw new Exception('Invalid action specified');
+            throw new Exception('Invalid action specified: ' . $action);
     }
     
 } catch (Exception $e) {
     error_log("Policy operations error: " . $e->getMessage());
+    error_log("Stack trace: " . $e->getTraceAsString());
     
     echo json_encode([
         'success' => false,
         'message' => 'Operation failed: ' . $e->getMessage(),
-        'error_code' => 'OPERATION_ERROR'
+        'error_code' => 'OPERATION_ERROR',
+        'debug_info' => [
+            'action' => $_POST['action'] ?? 'not_set',
+            'policy_id' => $_POST['policy_id'] ?? 'not_set',
+            'timestamp' => date('Y-m-d H:i:s')
+        ]
     ]);
 }
 
-mysqli_close($con);
+if (isset($con)) {
+    mysqli_close($con);
+}
 
 function getPolicyData() {
     global $con;

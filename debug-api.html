@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy API Diagnostics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Policy API Diagnostics</h1>
+    
+    <div class="test-section info">
+        <h3>Environment Information</h3>
+        <div id="envInfo">
+            <p><strong>Current URL:</strong> <span id="currentUrl"></span></p>
+            <p><strong>Base Path:</strong> <span id="basePath"></span></p>
+            <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h3>API Connection Tests</h3>
+        <button onclick="testConnectivity()">Test API Connectivity</button>
+        <button onclick="testGetPolicy()">Test Get Policy Data</button>
+        <button onclick="clearResults()">Clear Results</button>
+        
+        <div id="testResults"></div>
+    </div>
+    
+    <script>
+        // Display environment info
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('basePath').textContent = window.location.pathname;
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        
+        function logResult(title, result, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-section ${type}`;
+            resultDiv.innerHTML = `
+                <h4>${title} (${timestamp})</h4>
+                <pre>${JSON.stringify(result, null, 2)}</pre>
+            `;
+            
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+        }
+        
+        async function testConnectivity() {
+            const urlsToTest = [
+                'include/policy-operations.php',
+                './include/policy-operations.php',
+                '/insurance/include/policy-operations.php',
+                window.location.pathname.replace(/\/[^\/]*$/, '') + '/include/policy-operations.php'
+            ];
+            
+            logResult('Testing URLs', urlsToTest);
+            
+            for (let i = 0; i < urlsToTest.length; i++) {
+                const url = urlsToTest[i];
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'test_connection');
+                    
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    });
+                    
+                    const text = await response.text();
+                    
+                    try {
+                        const json = JSON.parse(text);
+                        logResult(`URL ${i + 1}: ${url}`, {
+                            status: response.status,
+                            success: true,
+                            response: json
+                        }, 'success');
+                        return; // Stop on first success
+                    } catch (e) {
+                        logResult(`URL ${i + 1}: ${url}`, {
+                            status: response.status,
+                            success: false,
+                            error: 'Invalid JSON response',
+                            response: text.substring(0, 500)
+                        }, 'error');
+                    }
+                    
+                } catch (error) {
+                    logResult(`URL ${i + 1}: ${url}`, {
+                        success: false,
+                        error: error.message,
+                        type: error.name
+                    }, 'error');
+                }
+            }
+        }
+        
+        async function testGetPolicy() {
+            const url = 'include/policy-operations.php';
+            
+            try {
+                const formData = new FormData();
+                formData.append('action', 'get_policy_data');
+                formData.append('policy_id', '1'); // Test with ID 1
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+                
+                const text = await response.text();
+                
+                try {
+                    const json = JSON.parse(text);
+                    logResult('Get Policy Test', {
+                        status: response.status,
+                        success: true,
+                        response: json
+                    }, json.success ? 'success' : 'error');
+                } catch (e) {
+                    logResult('Get Policy Test', {
+                        status: response.status,
+                        success: false,
+                        error: 'Invalid JSON response',
+                        response: text.substring(0, 500)
+                    }, 'error');
+                }
+                
+            } catch (error) {
+                logResult('Get Policy Test', {
+                    success: false,
+                    error: error.message,
+                    type: error.name
+                }, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
