@@ -20,6 +20,8 @@
     <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
     <!-- Medium Size Modal Enhancement -->
     <link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
+    <!-- Modal Button Fix -->
+    <link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
 </head><body data-sidebar="dark">
 	<div id="layout-wrapper">
 		<header id="page-topbar">
@@ -174,5 +176,7 @@
 	<script src="assets/js/modal-fix-enhanced.js"></script>
 	<!-- Enhanced Modal Layout System -->
 	<script src="assets/js/modal-layout-enhanced.js"></script>
+	<!-- Modal Button Fix JavaScript -->
+	<script src="assets/js/modal-button-fix.js"></script>
 </body>
 </html>

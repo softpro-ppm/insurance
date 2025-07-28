@@ -157,7 +157,7 @@
 
                 </form>
             </div>
-            <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
+            <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
                     <i class="bx bx-x me-2"></i>Cancel
                 </button>
