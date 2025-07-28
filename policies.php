@@ -454,7 +454,7 @@
             showToaster('Loading policy data...', 'info');
             
             $.ajax({
-                url: "include/get-policy-data-debug.php",
+                url: "include/get-policy-data-ultra-clean.php",
                 type: "POST",
                 data: { policy_id: policyId },
                 dataType: 'json',
@@ -462,6 +462,8 @@
                 timeout: 10000,
                 beforeSend: function() {
                     console.log("Sending request to get policy data for ID:", policyId);
+                    console.log("Request URL: include/get-policy-data-ultra-clean.php");
+                    console.log("Request data:", { policy_id: policyId });
                 },
                 success: function(response) {
                     console.log("Received response:", response);
@@ -491,8 +493,19 @@
                         error: error,
                         responseText: xhr.responseText,
                         statusCode: xhr.status,
-                        statusText: xhr.statusText
+                        statusText: xhr.statusText,
+                        url: "include/get-policy-data-ultra-clean.php",
+                        requestData: { policy_id: policyId }
                     });
+                    
+                    // Try to parse the response as JSON first
+                    let responseData = null;
+                    try {
+                        responseData = JSON.parse(xhr.responseText);
+                        console.log("Parsed error response:", responseData);
+                    } catch (e) {
+                        console.log("Response is not JSON:", xhr.responseText.substring(0, 200));
+                    }
                     
                     let errorMessage = 'Failed to load policy data';
                     

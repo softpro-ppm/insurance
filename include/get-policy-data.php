@@ -1,7 +1,5 @@
 <?php
 // get-policy-data.php - Fetch policy data for editing
-session_start();
-
 // Clean all output first
 if (ob_get_level()) {
     ob_end_clean();
@@ -16,24 +14,10 @@ ini_set('log_errors', 1);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-cache, must-revalidate');
 
+// Start session cleanly
+session_start();
+
 try {
-    // Use the main config file for live environment
-    include 'config.php';
-
-    // Check database connection more thoroughly
-    if (!isset($con)) {
-        throw new Exception('Database connection not initialized');
-    }
-    
-    if ($con->connect_errno) {
-        throw new Exception('Database connection failed: ' . $con->connect_error);
-    }
-    
-    // Test the connection
-    if (!$con->ping()) {
-        throw new Exception('Database connection lost');
-    }
-
     // Check if user is logged in
     if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
         http_response_code(401);
@@ -41,16 +25,15 @@ try {
         exit;
     }
 
-    // Check if policy ID is provided (support both GET and POST)
-    $policy_id = null;
-
+    // Get policy ID from both POST and GET
+    $policy_id = 0;
+    
     if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
         $policy_id = intval($_POST['policy_id']);
     } elseif (isset($_GET['id']) && !empty($_GET['id'])) {
         $policy_id = intval($_GET['id']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Policy ID is required']);
-        exit;
+    } elseif (isset($_GET['policy_id']) && !empty($_GET['policy_id'])) {
+        $policy_id = intval($_GET['policy_id']);
     }
 
     if ($policy_id <= 0) {
@@ -58,7 +41,21 @@ try {
         exit;
     }
 
-try {
+    // Direct database connection to avoid config issues
+    $host = "localhost";
+    $username = "u820431346_newinsurance";
+    $password = "Softpro@123";
+    $database = "u820431346_newinsurance";
+
+    $con = new mysqli($host, $username, $password, $database);
+    
+    if ($con->connect_errno) {
+        echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+        exit;
+    }
+
+    $con->set_charset("utf8");
+
     // Prepare and execute query to fetch policy data
     $stmt = $con->prepare("SELECT * FROM policy WHERE id = ?");
     if (!$stmt) {
