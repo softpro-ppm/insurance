@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Dashboard | Softpro</title>
+    <title>ttt Dashboard | Softpro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="assets/logo.PNG">
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
