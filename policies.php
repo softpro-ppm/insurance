@@ -304,16 +304,69 @@
     </script>
 	<script type="text/javascript">
         function deletepolicy(identifier) {
-            var conf = confirm( " Are you sure you want to delete this ? ");
-            if(conf == true){
-                var id= $(identifier).data("id");
-                $.post("include/delete-policy.php",{ id:id }, function(data) {
-                    alert(data);
-                    location.reload();
+            var id = $(identifier).data("id");
+            
+            // Enhanced delete confirmation with Bootstrap modal
+            var confirmHtml = `
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    <i class="fas fa-trash-alt text-danger mb-3" style="font-size: 3rem;"></i>
+                                    <h6>Are you sure you want to delete this policy?</h6>
+                                    <p class="text-muted">This action cannot be undone. All policy data and associated files will be permanently removed.</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="confirmDeletePolicy(${id})" data-bs-dismiss="modal">
+                                    <i class="fas fa-trash-alt me-1"></i>Delete Policy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Remove existing modal if any
+            $('#confirmDeleteModal').remove();
+            
+            // Add modal to body and show
+            $('body').append(confirmHtml);
+            new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+        }
+        
+        function confirmDeletePolicy(id) {
+            showLoadingOverlay('Deleting policy...');
+            
+            $.post("include/delete-policy.php", { id: id })
+                .done(function(data) {
+                    hideLoadingOverlay();
+                    
+                    if (data.includes('successfully') || data.includes('deleted')) {
+                        showAlert('Policy deleted successfully!', 'success');
+                        // Reload the page after a short delay
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        showAlert('Error: ' + data, 'danger');
+                    }
+                })
+                .fail(function(xhr, status, error) {
+                    hideLoadingOverlay();
+                    showAlert('Network error occurred while deleting policy', 'danger');
+                    console.error('Delete error:', error);
                 });
-            }else{
-                return false;
-            }
         }
     </script>
     <script type="text/javascript">

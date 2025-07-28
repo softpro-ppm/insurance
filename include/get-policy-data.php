@@ -16,13 +16,17 @@ if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
     exit;
 }
 
-// Check if policy ID is provided
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+// Check if policy ID is provided (support both GET and POST)
+$policy_id = null;
+
+if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
+    $policy_id = intval($_POST['policy_id']);
+} elseif (isset($_GET['id']) && !empty($_GET['id'])) {
+    $policy_id = intval($_GET['id']);
+} else {
     echo json_encode(['success' => false, 'message' => 'Policy ID is required', 'debug' => 'No ID provided']);
     exit;
 }
-
-$policy_id = intval($_GET['id']);
 
 // Debug log
 error_log("Fetching policy data for ID: " . $policy_id);
@@ -87,7 +91,7 @@ try {
             }
         }
         
-        echo json_encode(['success' => true, 'policy' => $policy], JSON_NUMERIC_CHECK);
+        echo json_encode(['success' => true, 'data' => $policy], JSON_NUMERIC_CHECK);
     } else {
         echo json_encode(['success' => false, 'message' => 'Policy not found', 'debug' => 'No rows returned']);
     }

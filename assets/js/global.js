@@ -216,6 +216,22 @@ function deletePolicy(policyId) {
 function loadPolicyForEdit(policyId) {
     console.log('Loading policy data for edit, ID:', policyId);
     
+    if (!policyId) {
+        console.error('Policy ID is required');
+        showAlert('Error: Policy ID is missing', 'danger');
+        return;
+    }
+    
+    // Show the edit modal first
+    const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    modal.show();
+    
+    // Show loading state
+    showLoadingOverlay('#editPolicyModal .modal-content');
+    
     $.ajax({
         url: 'include/get-policy-data.php',
         type: 'POST',
@@ -247,35 +263,35 @@ function populateEditForm(data) {
         // Set hidden policy ID
         $('#edit_policy_id').val(data.id);
         
-        // Customer Information
-        $('#edit_customer_name').val(data.customer_name);
-        $('#edit_customer_mobile').val(data.customer_mobile);
-        $('#edit_customer_email').val(data.customer_email);
-        $('#edit_customer_address').val(data.customer_address);
-        
-        // Vehicle Information
+        // Customer & Vehicle Information
         $('#edit_vehicle_number').val(data.vehicle_number);
+        $('#edit_phone').val(data.phone);
+        $('#edit_name').val(data.name);
         $('#edit_vehicle_type').val(data.vehicle_type);
-        $('#edit_vehicle_model').val(data.vehicle_model);
-        $('#edit_vehicle_year').val(data.vehicle_year);
         
-        // Insurance Details
+        // Insurance Information
         $('#edit_insurance_company').val(data.insurance_company);
-        $('#edit_policy_number').val(data.policy_number);
+        $('#edit_policy_type').val(data.policy_type);
+        
+        // Date Fields
         $('#edit_policy_start_date').val(data.policy_start_date);
         $('#edit_policy_end_date').val(data.policy_end_date);
-        $('#edit_coverage_type').val(data.coverage_type);
+        $('#edit_policy_issue_date').val(data.policy_issue_date);
+        $('#edit_fc_expiry_date').val(data.fc_expiry_date);
+        $('#edit_permit_expiry_date').val(data.permit_expiry_date);
         
         // Financial Details
-        $('#edit_premium_amount').val(data.premium_amount);
-        $('#edit_sum_insured').val(data.sum_insured);
-        $('#edit_payment_status').val(data.payment_status);
-        $('#edit_payment_method').val(data.payment_method);
+        $('#edit_premium').val(data.premium);
+        $('#edit_payout').val(data.payout);
+        $('#edit_customer_paid').val(data.customer_paid);
+        $('#edit_discount').val(data.discount);
+        $('#edit_calculated_revenue').val(data.calculated_revenue);
         
         // Additional Information
-        $('#edit_notes').val(data.notes);
+        $('#edit_chassiss').val(data.chassiss);
+        $('#edit_comments').val(data.comments);
         
-        // Display existing documents
+        // Display existing documents (if any)
         displayExistingDocuments(data);
         
         console.log('Edit form populated successfully');
