@@ -352,12 +352,97 @@
                 return;
             }
             
-            // Use the global.js function
-            if (window.PolicyManagement && window.PolicyManagement.editPolicy) {
-                window.PolicyManagement.editPolicy(policyId);
-            } else {
-                // Fallback to direct function call
-                loadPolicyForEdit(policyId);
+            // Show loading toaster
+            showToaster('Loading policy data...', 'info');
+            
+            $.ajax({
+                url: "include/get-policy-data-fixed.php",
+                type: "POST",
+                data: { policy_id: policyId },
+                dataType: 'json',
+                beforeSend: function() {
+                    console.log("Loading policy data for edit, ID:", policyId);
+                },
+                success: function(response) {
+                    console.log("Policy data response:", response);
+                    
+                    if (response && response.success && response.data) {
+                        // Show edit modal
+                        const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+                        modal.show();
+                        
+                        // Populate form with data
+                        populateEditForm(response.data);
+                        showToaster('Policy data loaded successfully', 'success');
+                    } else {
+                        const errorMsg = response && response.message ? response.message : 'Failed to load policy data';
+                        showToaster('Error: ' + errorMsg, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText,
+                        statusCode: xhr.status
+                    });
+                    
+                    let errorMessage = 'Error loading policy data';
+                    if (xhr.status === 0) {
+                        errorMessage += ' - Network connection failed';
+                    } else if (xhr.status === 404) {
+                        errorMessage += ' - File not found';
+                    } else if (xhr.status === 500) {
+                        errorMessage += ' - Server error';
+                    } else {
+                        errorMessage += ' - ' + error;
+                    }
+                    
+                    showToaster(errorMessage, 'error');
+                }
+            });
+        }
+
+        function populateEditForm(data) {
+            console.log('Populating edit form with:', data);
+            
+            try {
+                // Set hidden policy ID
+                $('#edit_policy_id').val(data.id);
+                
+                // Customer & Vehicle Information
+                $('#edit_vehicle_number').val(data.vehicle_number || '');
+                $('#edit_phone').val(data.phone || '');
+                $('#edit_name').val(data.name || '');
+                $('#edit_vehicle_type').val(data.vehicle_type || '');
+                
+                // Insurance Information
+                $('#edit_insurance_company').val(data.insurance_company || '');
+                $('#edit_policy_type').val(data.policy_type || '');
+                
+                // Date Fields
+                $('#edit_policy_start_date').val(data.policy_start_date || '');
+                $('#edit_policy_end_date').val(data.policy_end_date || '');
+                $('#edit_policy_issue_date').val(data.policy_issue_date || '');
+                $('#edit_fc_expiry_date').val(data.fc_expiry_date || '');
+                $('#edit_permit_expiry_date').val(data.permit_expiry_date || '');
+                
+                // Financial Details
+                $('#edit_premium').val(data.premium || '');
+                $('#edit_payout').val(data.payout || '');
+                $('#edit_customer_paid').val(data.customer_paid || '');
+                $('#edit_discount').val(data.discount || '');
+                $('#edit_calculated_revenue').val(data.calculated_revenue || '');
+                
+                // Additional Information
+                $('#edit_chassiss').val(data.chassiss || '');
+                $('#edit_comments').val(data.comments || '');
+                
+                console.log('Edit form populated successfully');
+                
+            } catch (error) {
+                console.error('Error populating edit form:', error);
+                showToaster('Error displaying policy data', 'error');
             }
         }
 
