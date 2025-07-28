@@ -1,0 +1,348 @@
+/* Policies Table Display Fix - Enhanced + Anti-Bounce */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed; /* Fixed layout to prevent bouncing */
+    width: 100%;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: 0.75rem 0.5rem;
+    border: 1px solid #dee2e6;
+    position: relative;
+    transition: none !important; /* Disable all transitions to prevent bouncing */
+    animation: none !important; /* Disable all animations */
+}
+
+/* Specific column widths and handling */
+.table td:nth-child(1) { /* S.NO. */
+    width: 60px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table td:nth-child(2) { /* VEHICLE NUMBER */
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td:nth-child(3) { /* NAME */
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td:nth-child(4) { /* PHONE */
+    width: 120px;
+    white-space: nowrap;
+}
+
+.table td:nth-child(5) { /* VEHICLE TYPE */
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td:nth-child(6) { /* POLICY TYPE */
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td:nth-child(7) { /* INSURANCE COMPANY */
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td:nth-child(8) { /* PREMIUM */
+    width: 100px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table td:nth-child(9) { /* POLICY START DATE */
+    width: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table td:nth-child(10) { /* POLICY END DATE */
+    width: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table td:nth-child(11) { /* ACTIONS */
+    width: 130px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Action buttons styling */
+.table .action-buttons .btn-group {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+}
+
+.table .action-buttons .btn-sm {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Table header styling */
+.table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 0.5rem;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Responsive table improvements */
+@media (max-width: 1200px) {
+    .table td:nth-child(3), /* NAME */
+    .table td:nth-child(7) { /* INSURANCE COMPANY */
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 992px) {
+    .table td {
+        padding: 0.5rem 0.3rem;
+        font-size: 0.85rem;
+    }
+    
+    .table td:nth-child(3), /* NAME */
+    .table td:nth-child(7) { /* INSURANCE COMPANY */
+        max-width: 100px;
+    }
+    
+    .table .action-buttons .btn-sm {
+        padding: 0.25rem 0.35rem;
+        font-size: 0.7rem;
+        min-width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        border: none;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        min-width: 1000px; /* Ensure minimum width for horizontal scroll */
+    }
+    
+    .table td {
+        padding: 0.4rem 0.25rem;
+        font-size: 0.8rem;
+    }
+    
+    .table .action-buttons .btn-sm {
+        padding: 0.2rem 0.3rem;
+        font-size: 0.65rem;
+        min-width: 24px;
+        height: 24px;
+    }
+}
+
+/* DataTable wrapper improvements - Anti-Bounce */
+.dataTables_wrapper {
+    padding: 0;
+    position: relative;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 1rem;
+}
+
+.dataTables_wrapper .dataTables_info {
+    padding-top: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 0.75rem;
+}
+
+/* Disable all DataTables animations and transitions */
+.dataTables_wrapper .dataTable {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper .dataTables_processing {
+    position: absolute !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    z-index: 999 !important;
+}
+
+/* Prevent bouncing during sort/filter operations */
+.dataTables_wrapper .sorting,
+.dataTables_wrapper .sorting_asc,
+.dataTables_wrapper .sorting_desc {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper tbody tr {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper tbody td {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Action buttons hover effects */
+.action-buttons .btn {
+    transition: all 0.2s ease-in-out;
+    border-width: 1px;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-buttons .btn-outline-info:hover {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #fff;
+}
+
+.action-buttons .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+.action-buttons .btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+/* Premium amount styling */
+.table td.text-end {
+    font-weight: 600;
+    color: #28a745;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Vehicle number link styling */
+.table td a.text-body {
+    color: #495057 !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.table td a.text-body:hover {
+    color: #007bff !important;
+    text-decoration: underline;
+}
+
+/* Loading state for DataTables */
+.dataTables_processing {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    margin-top: -26px;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Fix for any overlapping issues */
+.table-responsive {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    margin-bottom: 0;
+    background-color: #fff;
+}
+
+/* Ensure proper spacing and no overlaps */
+.card-body {
+    padding: 1.5rem;
+}
+
+.table td, .table th {
+    border-top: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+}
+
+.table td:first-child, .table th:first-child {
+    border-left: 1px solid #dee2e6;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Anti-bounce animation disable class */
+.no-animate,
+.no-animate * {
+    transition: none !important;
+    animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+}
+
+/* Disable hover effects during no-animate state */
+.no-animate .action-buttons .btn:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure stable table layout */
+.table-responsive .no-animate {
+    overflow: hidden;
+}
+
+/* Disable DataTables animations globally */
+.dataTables_wrapper .dataTable.no-animate tbody tr {
+    transition: none !important;
+}
+
+.dataTables_wrapper .dataTable.no-animate tbody td {
+    transition: none !important;
+}

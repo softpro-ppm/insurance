@@ -1,7 +1,10 @@
 <?php 
 // Secure session configuration
 ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
+// Only set secure cookies if we're on HTTPS
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    ini_set('session.cookie_secure', 1);
+}
 ini_set('session.use_strict_mode', 1);
 
 session_start(); 
@@ -13,6 +16,14 @@ $timeout_duration = 1800;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
     session_unset();
     session_destroy();
+    
+    // For AJAX requests, return JSON response
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Session expired']);
+        exit();
+    }
+    
     echo "<script>alert('Session expired. Please login again.'); window.location.href='index.php';</script>";
     exit();
 }
@@ -20,8 +31,15 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
 // Update last activity time
 $_SESSION['last_activity'] = time();
 
-// Check if user is logged in
+// Check if user is logged in (but allow AJAX requests to handle this gracefully)
 if (empty($_SESSION['username'])) { 
+    // For AJAX requests, return JSON response instead of redirecting
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+        exit();
+    }
+    
     echo "<script>window.location.href='index.php';</script>"; 
     exit();
 }

@@ -1,26 +1,61 @@
 <?php
 // get-policy-data.php - Fetch policy data for editing
+// Clean all output first
+if (ob_get_level()) {
+    ob_end_clean();
+}
+
+// Disable all errors from being output
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
+// Set JSON header immediately
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-cache, must-revalidate');
+
+// Start session cleanly
 session_start();
-include 'config.php';
-
-// Set JSON header
-header('Content-Type: application/json');
-
-// Check if user is logged in
-if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
-    echo json_encode(['success' => false, 'message' => 'Not authenticated']);
-    exit;
-}
-
-// Check if policy ID is provided
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    echo json_encode(['success' => false, 'message' => 'Policy ID is required']);
-    exit;
-}
-
-$policy_id = intval($_GET['id']);
 
 try {
+    // Check if user is logged in
+    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+        exit;
+    }
+
+    // Get policy ID from both POST and GET
+    $policy_id = 0;
+    
+    if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
+        $policy_id = intval($_POST['policy_id']);
+    } elseif (isset($_GET['id']) && !empty($_GET['id'])) {
+        $policy_id = intval($_GET['id']);
+    } elseif (isset($_GET['policy_id']) && !empty($_GET['policy_id'])) {
+        $policy_id = intval($_GET['policy_id']);
+    }
+
+    if ($policy_id <= 0) {
+        echo json_encode(['success' => false, 'message' => 'Invalid policy ID']);
+        exit;
+    }
+
+    // Direct database connection to avoid config issues
+    $host = "localhost";
+    $username = "u820431346_newinsurance";
+    $password = "Softpro@123";
+    $database = "u820431346_newinsurance";
+
+    $con = new mysqli($host, $username, $password, $database);
+    
+    if ($con->connect_errno) {
+        echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+        exit;
+    }
+
+    $con->set_charset("utf8");
+
     // Prepare and execute query to fetch policy data
     $stmt = $con->prepare("SELECT * FROM policy WHERE id = ?");
     if (!$stmt) {
@@ -80,15 +115,22 @@ try {
             }
         }
         
-        echo json_encode(['success' => true, 'policy' => $policy], JSON_NUMERIC_CHECK);
+        echo json_encode(['success' => true, 'data' => $policy]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Policy not found']);
     }
     
     $stmt->close();
+} catch (mysqli_sql_exception $e) {
+    error_log("MySQL error in get-policy-data.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Database connection error']);
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    error_log("Policy data fetch error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Server error occurred']);
 }
 
-$con->close();
+// Close connection if it exists
+if (isset($con) && $con) {
+    $con->close();
+}
 ?>

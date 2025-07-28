@@ -12,12 +12,32 @@ include 'include/config.php';
 	<title>Manage Renewal | Softpro</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="assets/logo.PNG">
+<<<<<<< HEAD
 	<link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 	<!-- Custom color scheme for professional appearance -->
 	<link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
+=======
+	<link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="assets/libs/%40chenfengyuan/datepicker/datepicker.min.css">
+	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+	<!-- Modal Fix for Bootstrap 5 Compatibility -->
+	<link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced Modal Fix for Interaction Issues -->
+	<link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced Modal Layout System -->
+	<link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+	<!-- Medium Size Modal Enhancement -->
+	<link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
+	<!-- Modal Button Fix -->
+	<link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 </head>
 
 <body data-sidebar="dark">
@@ -159,7 +179,15 @@ include 'include/config.php';
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
 
+=======
+			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                    <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
+                </div>
+            </div>
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 			<footer class="footer">
 				<div class="container-fluid">
 					<div class="row">
@@ -176,6 +204,7 @@ include 'include/config.php';
 	</div>
 
 	<script src="assets/libs/jquery/jquery.min.js"></script>
+<<<<<<< HEAD
 	<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="assets/libs/metismenu/metisMenu.min.js"></script>
 	<script src="assets/libs/simplebar/simplebar.min.js"></script>
@@ -184,6 +213,31 @@ include 'include/config.php';
 	<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="assets/js/app.js"></script>
 
+=======
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/node-waves/waves.min.js"></script>
+    <script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="assets/libs/spectrum-colorpicker2/spectrum.min.js"></script>
+    <script src="assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="assets/libs/%40chenfengyuan/datepicker/datepicker.min.js"></script>
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+	<script src="assets/libs/jszip/jszip.min.js"></script>
+	<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
+	<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="assets/js/app.js"></script>
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 	<script type="text/javascript">
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -192,6 +246,7 @@ include 'include/config.php';
                 "order": []
             });
         });
+<<<<<<< HEAD
 
         // Function to load policy for editing using modal
         function loadPolicyForEdit(policyId) {
@@ -252,13 +307,133 @@ include 'include/config.php';
                     alert('Network error occurred while deleting policy');
                 });
             }
+=======
+    </script>
+    
+    <script type="text/javascript">
+        // Function to open edit modal with enhanced validation
+        function openEditModal(policyId) {
+            console.log('openEditModal called with ID:', policyId);
+            
+            // Use the enhanced validation function
+            if (typeof editPolicyWithValidation === 'function') {
+                return editPolicyWithValidation(policyId);
+            }
+            
+            // Fallback to original implementation with better error handling
+            try {
+                // Validate policy ID
+                if (!policyId || isNaN(policyId) || policyId <= 0) {
+                    console.error('Invalid policy ID in openEditModal:', policyId);
+                    alert('Error: Invalid policy ID');
+                    return false;
+                }
+                
+                // Show the modal
+                $('#editPolicyModal').modal('show');
+                
+                // Show loading state
+                const form = document.getElementById('editPolicyForm');
+                if (!form) {
+                    console.error('Edit form not found');
+                    alert('Error: Form not available');
+                    return false;
+                }
+                
+                form.style.opacity = '0.5';
+            
+            // Fetch policy data using safe method
+            safeFetch(`include/get-policy-data-ultra-clean.php?id=${policyId}`)
+                .then(data => {
+                    console.log('Policy data loaded successfully:', data);
+                    
+                    if (data.success === false) {
+                        alert('Error: ' + data.message);
+                        $('#editPolicyModal').modal('hide');
+                        return;
+                    }
+                    
+                    // Extract policy object from response (ultra-clean version uses 'data' property)
+                    const policy = data.data;
+                    
+                    // Validate policy data
+                    if (!policy || !policy.id) {
+                        console.error('Invalid policy data received:', policy);
+                        alert('Error: Invalid policy data received');
+                        $('#editPolicyModal').modal('hide');
+                        return;
+                    }
+                    
+                    console.log('Populating form with policy:', policy);
+                    
+                    // Safely populate form fields with error handling
+                    try {
+                        document.getElementById('edit_policy_id').value = policy.id || '';
+                        document.getElementById('edit_vehicle_number').value = policy.vehicle_number || '';
+                        document.getElementById('edit_phone').value = policy.phone || '';
+                        document.getElementById('edit_name').value = policy.name || '';
+                        document.getElementById('edit_vehicle_type').value = policy.vehicle_type || '';
+                        document.getElementById('edit_insurance_company').value = policy.insurance_company || '';
+                        document.getElementById('edit_policy_type').value = policy.policy_type || '';
+                        document.getElementById('edit_policy_start_date').value = policy.policy_start_date || '';
+                        document.getElementById('edit_policy_end_date').value = policy.policy_end_date || '';
+                        document.getElementById('edit_premium').value = policy.premium || '';
+                        document.getElementById('edit_payout').value = policy.payout || '';
+                        document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
+                        document.getElementById('edit_comments').value = policy.comments || '';
+                        
+                        // Calculate and update financial fields
+                        if (typeof calculateEditFinancials === 'function') {
+                            calculateEditFinancials();
+                        }
+                        
+                        console.log('Form populated successfully');
+                        
+                    } catch (error) {
+                        console.error('Error populating form fields:', error);
+                        alert('Error displaying policy data');
+                    }
+                    
+                    // Remove loading state
+                    form.style.opacity = '1';
+                })
+                .catch(error => {
+                    console.error('Error fetching policy data:', error);
+                    form.style.opacity = '1';
+                    alert('Error loading policy data. Please try again.');
+                    $('#editPolicyModal').modal('hide');
+                });
+                
+            } catch (error) {
+                console.error('Error in openEditModal:', error);
+                alert('Error opening edit form');
+                return false;
+            }
+            
+            return true;
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
         }
     </script>
 
     <!-- Include the edit modal HTML -->
     <?php include 'include/edit-policy-modal.php'; ?>
     
+<<<<<<< HEAD
     <!-- Load edit modal functionality -->
     <script src="assets/js/edit-policy-modal.js"></script>
+=======
+    <!-- Modal Fix JavaScript for Bootstrap 5 -->
+    <script src="assets/js/modal-fix.js"></script>
+    <!-- Enhanced Modal Fix JavaScript -->
+    <script src="assets/js/modal-fix-enhanced.js"></script>
+    <!-- Enhanced Modal Layout System -->
+    <script src="assets/js/modal-layout-enhanced.js"></script>
+    <!-- Modal Button Fix JavaScript -->
+    <script src="assets/js/modal-button-fix.js"></script>
+    <!-- Console Error Fixes -->
+    <script src="assets/js/console-fixes.js"></script>
+    <!-- Edit Policy Validation Fixes -->
+    <script src="assets/js/edit-policy-fixes.js"></script>
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 </body>
 </html>
