@@ -1,16 +1,33 @@
 /* Enhanced Modal Button Fixes for All Modals */
 
-/* Modal Footer Enhancements */
+/* Modal Footer Enhancements - Perfect Center Alignment */
 .modal-footer {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 1070 !important;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
     border-top: 1px solid #dee2e6 !important;
-    padding: 1rem 2rem !important;
+    padding: 1.25rem 2rem !important;
     border-radius: 0 0 15px 15px !important;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
     margin-top: auto !important;
+    
+    /* Perfect center alignment */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: wrap !important;
+    text-align: center !important;
+}
+
+/* Override any external alignment styles */
+.modal-footer.text-end,
+.modal-footer.text-start,
+.modal-footer.text-left,
+.modal-footer.text-right {
+    text-align: center !important;
+    justify-content: center !important;
 }
 
 /* Button Styling and Positioning */
@@ -87,12 +104,29 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Button Container Flexbox */
+/* Button Container Flexbox - Simplified Center Alignment */
 .modal-footer {
     display: flex !important;
-    justify-content: flex-end !important;
+    justify-content: center !important;
     align-items: center !important;
-    gap: 0.5rem !important;
+    gap: 1rem !important;
+    padding: 1.25rem 2rem !important;
+    flex-wrap: wrap !important;
+}
+
+/* Center buttons horizontally - Remove any margin auto conflicts */
+.modal-footer .btn {
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+}
+
+/* Ensure button group is also centered */
+.modal-footer .btn-group,
+.modal-footer .d-flex {
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    margin: 0 auto !important;
 }
 
 /* Responsive Button Styling */
@@ -101,12 +135,15 @@
         padding: 1rem !important;
         flex-direction: column !important;
         gap: 0.75rem !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
     
     .modal-footer .btn {
         width: 100% !important;
         margin: 0 !important;
         min-width: auto !important;
+        max-width: 300px !important;
     }
 }
 
@@ -185,27 +222,34 @@
     box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4) !important;
 }
 
-/* Ensure proper z-index hierarchy */
-.modal {
-    z-index: 1050 !important;
-}
-
-.modal-backdrop {
-    z-index: 1040 !important;
-}
-
-.modal-dialog {
-    z-index: 1060 !important;
-}
-
-.modal-content {
-    z-index: 1061 !important;
-}
-
+/* Modal Footer z-index and Priority Overrides */
 .modal-footer {
     z-index: 1070 !important;
 }
 
 .modal-footer .btn {
     z-index: 1071 !important;
+}
+
+/* Additional Center Alignment Overrides */
+.modal .modal-footer,
+div.modal-footer,
+.modal-content .modal-footer {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+/* Override Bootstrap default justify-content */
+.modal-footer.justify-content-end,
+.modal-footer.justify-content-start,
+.modal-footer.justify-content-between,
+.modal-footer.d-flex.justify-content-end {
+    justify-content: center !important;
+}
+
+/* Ensure consistent button spacing */
+.modal-footer .btn + .btn {
+    margin-left: 1rem !important;
 }

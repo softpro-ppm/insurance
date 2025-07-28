@@ -194,8 +194,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Force center alignment for all modal footers
+    function forceCenterAlignment() {
+        const modalFooters = document.querySelectorAll('.modal-footer');
+        
+        modalFooters.forEach(footer => {
+            // Add center alignment classes
+            footer.classList.add('d-flex', 'justify-content-center', 'align-items-center');
+            footer.style.justifyContent = 'center';
+            footer.style.alignItems = 'center';
+            footer.style.textAlign = 'center';
+            footer.style.display = 'flex';
+            footer.style.gap = '1rem';
+            
+            // Remove any conflicting classes
+            footer.classList.remove('justify-content-end', 'justify-content-start', 'text-end', 'text-start');
+        });
+    }
+    
     // Initialize all enhancements
     function initializeModalButtonEnhancements() {
+        forceCenterAlignment();
         addButtonClickFeedback();
         enhanceSubmissionButtons();
         addKeyboardNavigation();
@@ -215,7 +234,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (mutation.addedNodes.length) {
                 mutation.addedNodes.forEach(function(node) {
                     if (node.nodeType === 1 && (node.classList.contains('modal') || node.querySelector('.modal'))) {
-                        setTimeout(initializeModalButtonEnhancements, 100);
+                        setTimeout(() => {
+                            initializeModalButtonEnhancements();
+                            forceCenterAlignment();
+                        }, 100);
                     }
                 });
             }
@@ -225,6 +247,11 @@ document.addEventListener('DOMContentLoaded', function() {
     observer.observe(document.body, {
         childList: true,
         subtree: true
+    });
+    
+    // Also fix alignment when modals are shown
+    document.addEventListener('shown.bs.modal', function(e) {
+        setTimeout(forceCenterAlignment, 50);
     });
 });
 

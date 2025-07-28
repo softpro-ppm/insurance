@@ -157,7 +157,7 @@
 
                 </form>
             </div>
-            <div class="modal-footer border-0">
+            <div class="modal-footer border-0 d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
                     <i class="bx bx-x me-2"></i>Cancel
                 </button>
