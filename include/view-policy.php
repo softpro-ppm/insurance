@@ -168,19 +168,26 @@
                                 <label class="info-label">Policy Issue Date:</label>
                                 <div class="info-value">'.date('d-m-Y',strtotime($r['policy_issue_date'])).'</div>
                             </div>
-                        </div>';
-                        
-        if ($fc_expiry_date || $permit_expiry_date) {
-            $data .= '<div class="col-md-6 mb-3">
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">FC Expiry Date:</label>
-                                <div class="info-value">'.$fc_expiry_date.'</div>
+                                <div class="info-value">'.($fc_expiry_date ? $fc_expiry_date : '<span class="text-muted">Not set</span>').'</div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Permit Expiry Date:</label>
-                                <div class="info-value">'.$permit_expiry_date.'</div>
+                                <div class="info-value">'.($permit_expiry_date ? $permit_expiry_date : '<span class="text-muted">Not set</span>').'</div>
+                            </div>
+                        </div>';
+                        
+        // Show chassis number if available
+        if (!empty($r['chassiss'])) {
+            $data .= '<div class="col-md-6 mb-3">
+                            <div class="info-item">
+                                <label class="info-label">Chassis Number:</label>
+                                <div class="info-value">'.htmlspecialchars($r['chassiss']).'</div>
                             </div>
                         </div>';
         }
@@ -344,20 +351,7 @@
                     </div>';
         }
         
-        // Additional info if chassis number exists
-        if (!empty($r['chassiss'])) {
-            $data .= '<div class="card border-0 shadow-sm mb-4">
-                        <div class="card-header bg-dark text-white">
-                            <h6 class="mb-0"><i class="bx bx-cog me-2"></i>Additional Information</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="info-item">
-                                <label class="info-label">Chassis Number:</label>
-                                <div class="info-value">'.htmlspecialchars($r['chassiss']).'</div>
-                            </div>
-                        </div>
-                    </div>';
-        }
+        // Additional info section removed - chassis number moved to policy information section
         
         // Show creation date and last update if available
         $data .= '<div class="card border-0 shadow-sm mb-4">

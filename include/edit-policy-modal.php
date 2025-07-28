@@ -104,6 +104,18 @@
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_end_date" id="edit_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Policy Issue Date</label>
+                                    <input type="date" name="policy_issue_date" id="edit_policy_issue_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" id="edit_fc_expiry_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" id="edit_permit_expiry_date" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,6 +154,10 @@
                                     <label class="form-label">RC Files</label>
                                     <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     <div id="existing_rc_files" class="mt-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Chassis Number</label>
+                                    <input type="text" name="chassiss" id="edit_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
@@ -401,6 +417,13 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = this.value.toUpperCase();
         });
     }
+    
+    // Chassis number formatting for edit modal
+    if (document.getElementById('edit_chassiss')) {
+        document.getElementById('edit_chassiss').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
+    }
 
     // Form validation and submission for edit modal
     if (document.getElementById('editPolicyForm')) {
@@ -479,6 +502,12 @@ function loadPolicyForEdit(policyId) {
                 document.getElementById('edit_policy_end_date').value = policy.policy_end_date;
                 document.getElementById('edit_premium').value = policy.premium;
                 document.getElementById('edit_comments').value = policy.comments;
+                
+                // Populate additional fields (if available)
+                if (policy.policy_issue_date) document.getElementById('edit_policy_issue_date').value = policy.policy_issue_date;
+                if (policy.fc_expiry_date) document.getElementById('edit_fc_expiry_date').value = policy.fc_expiry_date;
+                if (policy.permit_expiry_date) document.getElementById('edit_permit_expiry_date').value = policy.permit_expiry_date;
+                if (policy.chassiss) document.getElementById('edit_chassiss').value = policy.chassiss;
                 
                 // Populate new financial fields (if available)
                 if (policy.payout !== null) document.getElementById('edit_payout').value = policy.payout;

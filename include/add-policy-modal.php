@@ -103,6 +103,18 @@
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_end_date" id="modal_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Policy Issue Date</label>
+                                    <input type="date" name="policy_issue_date" id="modal_policy_issue_date" class="form-control" title="Leave blank to use start date">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" id="modal_fc_expiry_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" id="modal_permit_expiry_date" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,6 +153,10 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">RC Files</label>
                                     <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Chassis Number</label>
+                                    <input type="text" name="chassiss" id="modal_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
@@ -343,6 +359,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener for policy date calculation
     document.getElementById('modal_policy_start_date').addEventListener('change', calculatePolicyEndDate);
+    
+    // Auto-populate policy issue date when start date changes (if not manually set)
+    document.getElementById('modal_policy_start_date').addEventListener('change', function() {
+        const issueDateInput = document.getElementById('modal_policy_issue_date');
+        if (!issueDateInput.value) {
+            issueDateInput.value = this.value;
+        }
+    });
 
     // Phone number validation
     document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
@@ -354,6 +378,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Vehicle number formatting
     document.getElementById('modal_vehicle_number').addEventListener('input', function(e) {
+        this.value = this.value.toUpperCase();
+    });
+    
+    // Chassis number formatting
+    document.getElementById('modal_chassiss').addEventListener('input', function(e) {
         this.value = this.value.toUpperCase();
     });
 

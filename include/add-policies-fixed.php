@@ -14,11 +14,11 @@
 	$policy_start_date = $_POST['policy_start_date'];
 	$policy_end_date = $_POST['policy_end_date'];
 	
-	// Removed fields - set defaults for backward compatibility
-	$chassiss = ''; // No longer collected from frontend
-	$policy_issue_date = $policy_start_date; // Use start date as issue date
-	$fc_expiry_date = null; // No longer collected from frontend
-	$permit_expiry_date = null; // No longer collected from frontend
+	// Handle optional fields that are now collected from frontend
+	$chassiss = !empty($_POST['chassiss']) ? mysqli_real_escape_string($con, trim($_POST['chassiss'])) : '';
+	$policy_issue_date = !empty($_POST['policy_issue_date']) ? $_POST['policy_issue_date'] : $policy_start_date;
+	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : null;
+	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : null;
 	
 	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
 	
