@@ -584,6 +584,42 @@
             console.log('jQuery loaded:', typeof $ !== 'undefined');
             console.log('Bootstrap modal plugin:', typeof $.fn.modal !== 'undefined');
             
+            // Add modal focus fix event handlers
+            $('#addPolicyModal').on('shown.bs.modal', function () {
+                console.log('Modal shown event triggered - fixing input focus');
+                
+                // Remove any tabindex restrictions and fix CSS
+                $(this).find('input, select, textarea').each(function() {
+                    const element = $(this);
+                    element.removeAttr('tabindex');
+                    element.removeAttr('readonly');
+                    element.removeAttr('disabled');
+                    element.css({
+                        'pointer-events': 'auto !important',
+                        'user-select': 'text !important',
+                        'background-color': '#ffffff !important',
+                        'position': 'relative',
+                        'z-index': '1060'
+                    });
+                });
+                
+                // Focus on first input
+                setTimeout(function() {
+                    const firstInput = $('#modal_vehicle_number');
+                    if (firstInput.length) {
+                        firstInput.focus();
+                        console.log('Focus set to vehicle number input');
+                    }
+                }, 300);
+            });
+            
+            // Ensure inputs are clickable
+            $('#addPolicyModal').on('click', 'input, select, textarea', function(e) {
+                console.log('Input clicked:', this.name || this.id);
+                $(this).focus();
+                e.stopPropagation();
+            });
+            
             // Check if modal exists after DOM is ready
             setTimeout(function() {
                 const modal = document.getElementById('addPolicyModal');
@@ -1376,6 +1412,35 @@
                         $('#addPolicyModal').modal('show');
                         console.log('Modal show command executed successfully');
                         
+                        // Fix input focus issues immediately
+                        setTimeout(() => {
+                            console.log('Fixing input focus issues...');
+                            
+                            // Remove any interfering attributes and fix styles
+                            $('#addPolicyModal').find('input, select, textarea').each(function() {
+                                const element = $(this);
+                                element.removeAttr('readonly');
+                                element.removeAttr('disabled');
+                                element.removeAttr('tabindex');
+                                element.css({
+                                    'pointer-events': 'auto',
+                                    'user-select': 'text',
+                                    'background-color': '#ffffff',
+                                    'opacity': '1',
+                                    'position': 'relative',
+                                    'z-index': '10'
+                                });
+                                console.log('Fixed element:', this.name || this.id);
+                            });
+                            
+                            // Set focus to first input
+                            const firstInput = $('#modal_vehicle_number');
+                            if (firstInput.length) {
+                                firstInput.focus();
+                                console.log('Focus set to vehicle number input');
+                            }
+                        }, 300);
+                        
                         // Check if modal is visible after 1 second
                         setTimeout(() => {
                             const isVisible = $('#addPolicyModal').hasClass('show');
@@ -1395,6 +1460,19 @@
                                 backdrop.className = 'modal-backdrop fade show';
                                 backdrop.id = 'manual-backdrop';
                                 document.body.appendChild(backdrop);
+                                
+                                // Fix inputs for manual display too
+                                setTimeout(() => {
+                                    $('#addPolicyModal').find('input, select, textarea').each(function() {
+                                        $(this).css({
+                                            'pointer-events': 'auto',
+                                            'user-select': 'text',
+                                            'background-color': '#ffffff',
+                                            'z-index': '1060'
+                                        });
+                                    });
+                                    $('#modal_vehicle_number').focus();
+                                }, 100);
                             }
                         }, 1000);
                         
