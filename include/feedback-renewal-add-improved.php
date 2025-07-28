@@ -115,9 +115,9 @@ try {
                 echo "<p class='mb-2'><strong>Comment #{$comment_count}:</strong> {$comment_text}</p>";
                 echo "<div class='comment-meta'>";
                 echo "<small class='text-muted'>";
-                echo "<i class='bx bx-time me-1'></i>Posted on: {$created_at}";
+                echo "<i class='bx bx-time mr-1'></i>Posted on: {$created_at}";
                 if (!empty($created_by) && $created_by !== 'Unknown') {
-                    echo " | <i class='bx bx-user me-1'></i>By: {$created_by}";
+                    echo " | <i class='bx bx-user mr-1'></i>By: {$created_by}";
                 }
                 echo "</small>";
                 echo "</div>";
@@ -133,7 +133,7 @@ try {
             
             if ($result->num_rows >= $limit) {
                 echo "<div class='alert alert-info mt-3'>";
-                echo "<i class='bx bx-info-circle me-2'></i>Showing latest {$limit} comments. ";
+                echo "<i class='bx bx-info-circle mr-2'></i>Showing latest {$limit} comments. ";
                 echo "There may be more comments in the system.";
                 echo "</div>";
             }

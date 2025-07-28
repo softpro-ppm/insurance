@@ -104,7 +104,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="info-item">
                                 <label class="info-label">End Date:</label>
-                                <div class="info-value text-danger fw-bold">'.date('d-m-Y', strtotime($r['policy_end_date'])).'</div>
+                                <div class="info-value text-danger font-weight-bold">'.date('d-m-Y', strtotime($r['policy_end_date'])).'</div>
                             </div>
                         </div>
                     </div>
@@ -121,13 +121,13 @@
                         <div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Premium:</label>
-                                <div class="info-value text-success fw-bold">₹ '.number_format($r['premium'], 2).'</div>
+                                <div class="info-value text-success font-weight-bold">₹ '.number_format($r['premium'], 2).'</div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Revenue:</label>
-                                <div class="info-value text-primary fw-bold">₹ '.number_format($r['revenue'], 2).'</div>
+                                <div class="info-value text-primary font-weight-bold">₹ '.number_format($r['revenue'], 2).'</div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">

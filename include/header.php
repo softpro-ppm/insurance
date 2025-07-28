@@ -5,24 +5,24 @@
             <a href="home.php" class="logo logo-dark"> 
                 <span class="logo-sm">
                     <h3 style="color:#fff; margin-top: 15px; font-weight: bold; font-family: 'Arial', sans-serif;" height="22">
-                        <i class="bx bx-shield-check me-2"></i>SOFTPRO
+                        <i class="bx bx-shield-check mr-2"></i>SOFTPRO
                     </h3>
                 </span>
                 <span class="logo-lg">
                     <h3 style="color:#fff; margin-top: 15px; font-weight: bold; font-family: 'Arial', sans-serif;" height="17">
-                        <i class="bx bx-shield-check me-2"></i>SOFTPRO INSURANCE
+                        <i class="bx bx-shield-check mr-2"></i>SOFTPRO INSURANCE
                     </h3>
                 </span>
             </a>
             <a href="home.php" class="logo logo-light"> 
                 <span class="logo-sm">
                     <h3 style="color:#fff; margin-top: 20px; font-weight: bold; font-family: 'Arial', sans-serif;" height="22">
-                        <i class="bx bx-shield-check me-2"></i>SOFTPRO
+                        <i class="bx bx-shield-check mr-2"></i>SOFTPRO
                     </h3>
                 </span>
                 <span class="logo-lg">
                     <h3 style="color:#fff; margin-top: 20px; font-weight: bold; font-family: 'Arial', sans-serif;" height="19">
-                        <i class="bx bx-shield-check me-2"></i>SOFTPRO INSURANCE
+                        <i class="bx bx-shield-check mr-2"></i>SOFTPRO INSURANCE
                     </h3>
                 </span>
             </a>
@@ -32,7 +32,7 @@
         </button>
         
         <!-- Enhanced Search Box with Loading State -->
-        <div class="app-search d-none d-lg-block ms-3">
+        <div class="app-search d-none d-lg-block ml-3">
             <div class="position-relative">
                 <input type="text" class="form-control" placeholder="Search policies, renewals, clients..." id="global-search" onkeyup="performGlobalSearch()" autocomplete="off">
                 <span class="bx bx-search-alt"></span>
@@ -78,7 +78,7 @@
                     <?php if($pending['count'] > 0) { ?>
                     <a href="manage-renewal.php?pending=pending" class="text-reset notification-item">
                         <div class="d-flex">
-                            <div class="avatar-xs me-3">
+                            <div class="avatar-xs mr-3">
                                 <span class="avatar-title bg-warning rounded-circle font-size-16">
                                     <i class="bx bx-error-circle"></i>
                                 </span>
@@ -103,7 +103,7 @@
         </div>
 
         <!-- Full Screen -->
-        <div class="dropdown d-none d-lg-inline-block ms-1">
+        <div class="dropdown d-none d-lg-inline-block ml-1">
             <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen"> 
                 <i class="bx bx-fullscreen"></i>
             </button>
@@ -123,7 +123,7 @@
                     $displayName = !empty($profiler['name']) ? $profiler['name'] : $_SESSION['username'];
                 ?>
                 <img class="rounded-circle header-profile-user" src="assets/profile/<?=$photo;?>" alt="Header Avatar"> 
-                <span class="d-none d-xl-inline-block ms-1" key="t-henry"><?=$displayName;?></span>
+                <span class="d-none d-xl-inline-block ml-1" key="t-henry"><?=$displayName;?></span>
                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-end">
@@ -131,20 +131,20 @@
                     <h6 class="text-overflow m-0">Welcome <?=$displayName;?>!</h6>
                 </div>
                 <a class="dropdown-item" href="profile.php">
-                    <i class="bx bx-user font-size-16 align-middle me-1"></i> 
+                    <i class="bx bx-user font-size-16 align-middle mr-1"></i> 
                     <span key="t-profile">Profile</span>
                 </a>
                 <a class="dropdown-item" href="change-password.php">
-                    <i class="bx bx-lock font-size-16 align-middle me-1"></i> 
+                    <i class="bx bx-lock font-size-16 align-middle mr-1"></i> 
                     <span key="t-settings">Change Password</span>
                 </a>
                 <a class="dropdown-item" href="home.php">
-                    <i class="bx bx-home font-size-16 align-middle me-1"></i> 
+                    <i class="bx bx-home font-size-16 align-middle mr-1"></i> 
                     <span key="t-dashboard">Dashboard</span>
                 </a>
                 <div class="dropdown-divider"></div> 
                 <a class="dropdown-item text-danger" href="include/logout.php">
-                    <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> 
+                    <i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> 
                     <span key="t-logout">Logout</span>
                 </a>
             </div>

@@ -523,8 +523,8 @@ function loadExistingFiles(policyId) {
                     let policyFilesHtml = '<small class="text-muted">Existing Policy Files:</small><br>';
                     data.policy_files.forEach(file => {
                         policyFilesHtml += `
-                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-primary btn-sm me-1 mb-1">
-                                <i class="bx bx-download me-1"></i>${file.filename}
+                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-primary btn-sm mr-1 mb-1">
+                                <i class="bx bx-download mr-1"></i>${file.filename}
                             </a>
                         `;
                     });
@@ -539,8 +539,8 @@ function loadExistingFiles(policyId) {
                     let rcFilesHtml = '<small class="text-muted">Existing RC Files:</small><br>';
                     data.rc_files.forEach(file => {
                         rcFilesHtml += `
-                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-success btn-sm me-1 mb-1">
-                                <i class="bx bx-download me-1"></i>${file.filename}
+                            <a href="include/file-download.php?file=${file.filename}" target="_blank" class="btn btn-outline-success btn-sm mr-1 mb-1">
+                                <i class="bx bx-download mr-1"></i>${file.filename}
                             </a>
                         `;
                     });
