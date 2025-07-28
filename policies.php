@@ -868,6 +868,8 @@
     <script src="assets/js/modal-button-fix.js"></script>
     <!-- Critical Modal Fix - Emergency Override -->
     <script src="assets/js/modal-fix-critical.js"></script>
+    <!-- Console Error Fixes -->
+    <script src="assets/js/console-fixes.js"></script>
     <!-- User Management JavaScript for Helper Functions -->
     <script src="assets/js/user-management.js"></script>
     <!-- View Policy Modal Complete Data Display Fix -->

@@ -343,54 +343,106 @@
     </script>
     
     <script type="text/javascript">
-        // Function to open edit modal
+        // Function to open edit modal with enhanced validation
         function openEditModal(policyId) {
-            // Show the modal
-            $('#editPolicyModal').modal('show');
+            console.log('openEditModal called with ID:', policyId);
             
-            // Show loading state
-            const form = document.getElementById('editPolicyForm');
-            form.style.opacity = '0.5';
+            // Use the enhanced validation function
+            if (typeof editPolicyWithValidation === 'function') {
+                return editPolicyWithValidation(policyId);
+            }
             
-            // Fetch policy data
-            fetch(`include/get-policy-data.php?id=${policyId}`)
-                .then(response => response.json())
+            // Fallback to original implementation with better error handling
+            try {
+                // Validate policy ID
+                if (!policyId || isNaN(policyId) || policyId <= 0) {
+                    console.error('Invalid policy ID in openEditModal:', policyId);
+                    alert('Error: Invalid policy ID');
+                    return false;
+                }
+                
+                // Show the modal
+                $('#editPolicyModal').modal('show');
+                
+                // Show loading state
+                const form = document.getElementById('editPolicyForm');
+                if (!form) {
+                    console.error('Edit form not found');
+                    alert('Error: Form not available');
+                    return false;
+                }
+                
+                form.style.opacity = '0.5';
+            
+            // Fetch policy data using safe method
+            safeFetch(`include/get-policy-data-ultra-clean.php?id=${policyId}`)
                 .then(data => {
+                    console.log('Policy data loaded successfully:', data);
+                    
                     if (data.success === false) {
                         alert('Error: ' + data.message);
                         $('#editPolicyModal').modal('hide');
                         return;
                     }
                     
-                    // Extract policy object from response
-                    const policy = data.policy;
+                    // Extract policy object from response (ultra-clean version uses 'data' property)
+                    const policy = data.data;
                     
-                    // Populate form fields
-                    document.getElementById('edit_policy_id').value = policy.id;
-                    document.getElementById('edit_vehicle_number').value = policy.vehicle_number || '';
-                    document.getElementById('edit_phone').value = policy.phone || '';
-                    document.getElementById('edit_name').value = policy.name || '';
-                    document.getElementById('edit_vehicle_type').value = policy.vehicle_type || '';
-                    document.getElementById('edit_insurance_company').value = policy.insurance_company || '';
-                    document.getElementById('edit_policy_type').value = policy.policy_type || '';
-                    document.getElementById('edit_policy_start_date').value = policy.policy_start_date || '';
-                    document.getElementById('edit_policy_end_date').value = policy.policy_end_date || '';
-                    document.getElementById('edit_premium').value = policy.premium || '';
-                    document.getElementById('edit_payout').value = policy.payout || '';
-                    document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
-                    document.getElementById('edit_comments').value = policy.comments || '';
+                    // Validate policy data
+                    if (!policy || !policy.id) {
+                        console.error('Invalid policy data received:', policy);
+                        alert('Error: Invalid policy data received');
+                        $('#editPolicyModal').modal('hide');
+                        return;
+                    }
                     
-                    // Calculate and update financial fields
-                    calculateEditFinancials();
+                    console.log('Populating form with policy:', policy);
+                    
+                    // Safely populate form fields with error handling
+                    try {
+                        document.getElementById('edit_policy_id').value = policy.id || '';
+                        document.getElementById('edit_vehicle_number').value = policy.vehicle_number || '';
+                        document.getElementById('edit_phone').value = policy.phone || '';
+                        document.getElementById('edit_name').value = policy.name || '';
+                        document.getElementById('edit_vehicle_type').value = policy.vehicle_type || '';
+                        document.getElementById('edit_insurance_company').value = policy.insurance_company || '';
+                        document.getElementById('edit_policy_type').value = policy.policy_type || '';
+                        document.getElementById('edit_policy_start_date').value = policy.policy_start_date || '';
+                        document.getElementById('edit_policy_end_date').value = policy.policy_end_date || '';
+                        document.getElementById('edit_premium').value = policy.premium || '';
+                        document.getElementById('edit_payout').value = policy.payout || '';
+                        document.getElementById('edit_customer_paid').value = policy.customer_paid || '';
+                        document.getElementById('edit_comments').value = policy.comments || '';
+                        
+                        // Calculate and update financial fields
+                        if (typeof calculateEditFinancials === 'function') {
+                            calculateEditFinancials();
+                        }
+                        
+                        console.log('Form populated successfully');
+                        
+                    } catch (error) {
+                        console.error('Error populating form fields:', error);
+                        alert('Error displaying policy data');
+                    }
                     
                     // Remove loading state
                     form.style.opacity = '1';
                 })
                 .catch(error => {
                     console.error('Error fetching policy data:', error);
+                    form.style.opacity = '1';
                     alert('Error loading policy data. Please try again.');
                     $('#editPolicyModal').modal('hide');
                 });
+                
+            } catch (error) {
+                console.error('Error in openEditModal:', error);
+                alert('Error opening edit form');
+                return false;
+            }
+            
+            return true;
         }
     </script>
 
@@ -405,5 +457,9 @@
     <script src="assets/js/modal-layout-enhanced.js"></script>
     <!-- Modal Button Fix JavaScript -->
     <script src="assets/js/modal-button-fix.js"></script>
+    <!-- Console Error Fixes -->
+    <script src="assets/js/console-fixes.js"></script>
+    <!-- Edit Policy Validation Fixes -->
+    <script src="assets/js/edit-policy-fixes.js"></script>
 </body>
 </html>
