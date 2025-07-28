@@ -5,17 +5,20 @@ session_start();
 // Disable all output and errors
 ini_set('display_errors', 0);
 error_reporting(0);
-ob_start();
 
-// Include config
-require_once 'config.php';
-
-// Clear buffer and set JSON headers
-ob_end_clean();
-header('Content-Type: application/json');
-header('Cache-Control: no-cache');
+// Clean output buffer
+if (ob_get_level()) {
+    ob_end_clean();
+}
 
 try {
+    // Include config
+    require_once 'config.php';
+
+    // Set JSON headers after config (in case config has issues)
+    header('Content-Type: application/json');
+    header('Cache-Control: no-cache');
+
     // Check session
     if (!isset($_SESSION['username'])) {
         echo json_encode(['success' => false, 'message' => 'Authentication required']);
@@ -31,8 +34,13 @@ try {
     }
 
     // Check database connection
-    if (!$con) {
+    if (!isset($con) || !$con) {
         echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+        exit;
+    }
+    
+    if ($con->connect_errno) {
+        echo json_encode(['success' => false, 'message' => 'Database connection error']);
         exit;
     }
 

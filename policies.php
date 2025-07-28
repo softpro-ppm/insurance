@@ -454,7 +454,7 @@
             showToaster('Loading policy data...', 'info');
             
             $.ajax({
-                url: "include/get-policy-data-clean.php",
+                url: "include/get-policy-data-debug.php",
                 type: "POST",
                 data: { policy_id: policyId },
                 dataType: 'json',

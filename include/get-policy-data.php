@@ -20,6 +20,20 @@ try {
     // Use the main config file for live environment
     include 'config.php';
 
+    // Check database connection more thoroughly
+    if (!isset($con)) {
+        throw new Exception('Database connection not initialized');
+    }
+    
+    if ($con->connect_errno) {
+        throw new Exception('Database connection failed: ' . $con->connect_error);
+    }
+    
+    // Test the connection
+    if (!$con->ping()) {
+        throw new Exception('Database connection lost');
+    }
+
     // Check if user is logged in
     if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
         http_response_code(401);
@@ -39,9 +53,8 @@ try {
         exit;
     }
 
-    // Check database connection
-    if (!isset($con) || !$con || $con->connect_errno) {
-        echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+    if ($policy_id <= 0) {
+        echo json_encode(['success' => false, 'message' => 'Invalid policy ID']);
         exit;
     }
 
@@ -111,10 +124,16 @@ try {
     }
     
     $stmt->close();
+} catch (mysqli_sql_exception $e) {
+    error_log("MySQL error in get-policy-data.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Database connection error']);
 } catch (Exception $e) {
     error_log("Policy data fetch error: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+    echo json_encode(['success' => false, 'message' => 'Server error occurred']);
 }
 
-$con->close();
+// Close connection if it exists
+if (isset($con) && $con) {
+    $con->close();
+}
 ?>
