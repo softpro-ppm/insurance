@@ -7,10 +7,20 @@
 let globalDataTable = null;
 let currentDeleteId = null;
 let currentDeleteData = null;
+let initializationTimeout = null;
+let isInitializing = false;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    initializePolicyManagement();
+    // Prevent page bouncing during initialization
+    document.body.style.overflow = 'hidden';
+    
+    // Initialize after a brief delay to ensure DOM is fully ready
+    setTimeout(() => {
+        initializePolicyManagement();
+        // Re-enable scrolling after initialization
+        document.body.style.overflow = '';
+    }, 100);
 });
 
 /* ====================
@@ -18,10 +28,20 @@ document.addEventListener('DOMContentLoaded', function() {
    ==================== */
 
 function initializePolicyManagement() {
-    initializeDataTable();
-    initializeModals();
-    initializeFileUploads();
-    console.log('Policy Management System Initialized');
+    // Prevent multiple simultaneous initializations
+    if (isInitializing) return;
+    isInitializing = true;
+    
+    try {
+        initializeDataTable();
+        initializeModals();
+        initializeFileUploads();
+        console.log('Policy Management System Initialized');
+    } catch (error) {
+        console.error('Error initializing policy management:', error);
+    } finally {
+        isInitializing = false;
+    }
 }
 
 function initializeDataTable() {
@@ -32,6 +52,8 @@ function initializeDataTable() {
     
     // Initialize DataTable with enhanced configuration
     globalDataTable = $('#datatable').DataTable({
+        "processing": true,
+        "deferRender": true,
         "order": [], // No initial sorting to maintain ORDER BY DESC from SQL
         "pageLength": 30, // Default to 30 as requested
         "lengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, "All"]],
@@ -41,6 +63,7 @@ function initializeDataTable() {
         "info": true,
         "autoWidth": false,
         "stateSave": true,
+        "scrollCollapse": true,
         "dom": 'Bfrtip',
         "buttons": [
             {
@@ -101,6 +124,10 @@ function initializeDataTable() {
             
             // Re-initialize tooltips for new buttons
             initializeTooltips();
+        },
+        "initComplete": function(settings, json) {
+            // Add initialized class to prevent FOUC
+            $(this).closest('.dataTables_wrapper').addClass('initialized');
         },
         "language": {
             "search": "Search policies:",
