@@ -21,7 +21,7 @@
     <!-- Enhanced Modal Fix for Interaction Issues -->
     <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
     <!-- Enhanced Modal Layout System -->
-    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" /> -->
     
     <!-- Modern Dashboard Card Styles -->
     <style>
