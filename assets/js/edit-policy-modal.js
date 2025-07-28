@@ -11,46 +11,164 @@ function openEditModal(policyId) {
     
     currentEditPolicyId = policyId;
     
-    // First test basic connectivity
-    testBasicConnectivity(() => {
-        showEditModalLoading();
-        loadPolicyData(policyId);
+    // Show modal with loading state immediately
+    showEditModalLoading();
+    
+    // Load policy data
+    loadPolicyData(policyId);
+}
+
+function showEditModalLoading() {
+    console.log('Showing edit modal with loading state');
+    
+    // Ensure modal exists
+    const modal = document.getElementById('editPolicyModal');
+    if (!modal) {
+        console.error('Edit modal not found in DOM!');
+        alert('Edit modal is not available. Please refresh the page and try again.');
+        return;
+    }
+    
+    // Show the modal
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+    
+    // Set loading content
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+        modalBody.innerHTML = `
+            <div class="text-center p-5">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5 class="mt-3">Loading Policy Data...</h5>
+                <p class="text-muted">Please wait while we fetch the policy information.</p>
+            </div>
+        `;
+    }
+}
+
+function loadPolicyData(policyId) {
+    console.log('=== LOADING POLICY DATA ===');
+    console.log('Policy ID:', policyId);
+    
+    // Use jQuery AJAX for better compatibility
+    $.ajax({
+        url: 'include/policy-operations.php',
+        type: 'POST',
+        data: {
+            action: 'get_policy_data',
+            policy_id: policyId
+        },
+        timeout: 15000, // 15 second timeout
+        success: function(response) {
+            console.log('Policy data loaded successfully');
+            console.log('Response type:', typeof response);
+            console.log('Response length:', response ? response.length : 'null');
+            
+            try {
+                let data;
+                if (typeof response === 'string') {
+                    data = JSON.parse(response);
+                } else {
+                    data = response;
+                }
+                
+                if (data.success) {
+                    populateEditModal(data.policy);
+                } else {
+                    showEditModalError(data.message || 'Failed to load policy data');
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+                console.log('Raw response:', response);
+                showEditModalError('Invalid response format from server');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', {
+                status: status,
+                error: error,
+                responseText: xhr.responseText,
+                statusCode: xhr.status
+            });
+            
+            let errorMessage = 'Failed to load policy data.';
+            if (status === 'timeout') {
+                errorMessage = 'Request timed out. Please try again.';
+            } else if (status === 'error' && xhr.status === 0) {
+                errorMessage = 'Network error. Please check your connection.';
+            } else if (xhr.status === 404) {
+                errorMessage = 'Policy data service not found.';
+            } else if (xhr.status === 500) {
+                errorMessage = 'Server error. Please contact support.';
+            }
+            
+            showEditModalError(errorMessage);
+        }
     });
 }
 
-function testBasicConnectivity(callback) {
-    console.log('=== TESTING BASIC CONNECTIVITY ===');
+function showEditModalError(message) {
+    console.log('Showing edit modal error:', message);
     
-    fetch('include/test-endpoint.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: 'test=1',
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        console.log('Basic connectivity test response:', {
-            status: response.status,
-            statusText: response.statusText,
-            ok: response.ok
-        });
+    const modal = document.getElementById('editPolicyModal');
+    if (!modal) {
+        alert('Error: ' + message);
+        return;
+    }
+    
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+        modalBody.innerHTML = `
+            <div class="text-center p-5">
+                <div class="text-danger mb-3">
+                    <i class="bx bx-error-circle" style="font-size: 3rem;"></i>
+                </div>
+                <h5 class="text-danger">Error Loading Policy</h5>
+                <p class="text-muted">${message}</p>
+                <div class="mt-4">
+                    <button type="button" class="btn btn-primary me-2" onclick="loadPolicyData(${currentEditPolicyId})">
+                        <i class="bx bx-refresh me-1"></i>Try Again
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-1"></i>Close
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function populateEditModal(policyData) {
+    console.log('Populating edit modal with policy data:', policyData);
+    
+    const modal = document.getElementById('editPolicyModal');
+    if (!modal) {
+        console.error('Edit modal not found');
+        return;
+    }
+    
+    // Restore the original form content
+    const modalBody = modal.querySelector('.modal-body');
+    if (modalBody) {
+        // Load the original form content back (this should be the form from edit-policy-modal.php)
+        // For now, we'll create a simple success message and reload the form
+        modalBody.innerHTML = `
+            <div class="text-center p-4">
+                <div class="text-success mb-3">
+                    <i class="bx bx-check-circle" style="font-size: 3rem;"></i>
+                </div>
+                <h5 class="text-success">Policy Data Loaded Successfully</h5>
+                <p class="text-muted">Please wait while we prepare the edit form...</p>
+            </div>
+        `;
         
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error(`HTTP ${response.status}`);
-        }
-    })
-    .then(data => {
-        console.log('Basic connectivity SUCCESS:', data);
-        callback(); // Proceed with actual request
-    })
-    .catch(error => {
-        console.error('Basic connectivity FAILED:', error);
-        showEditModalError('Cannot connect to server. Please check your internet connection and try again.');
-    });
+        // Reload the page to get fresh form (temporary solution)
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
+    }
 }
 
 // Ensure the function is globally accessible
@@ -65,29 +183,24 @@ window.testEditModal = function(policyId = 1) {
     openEditModal(policyId);
 };
 
-// Add direct API test function
-window.testAPI = function(policyId = 1) {
-    console.log('=== DIRECT API TEST ===');
-    console.log('Testing API directly with policy ID:', policyId);
+// Add connectivity test function
+window.testConnectivity = function() {
+    console.log('=== CONNECTIVITY TEST ===');
     
-    const testUrl = 'include/policy-operations.php';
-    const formData = new FormData();
-    formData.append('action', 'get_policy_data');
-    formData.append('policy_id', policyId);
-    
-    console.log('Making direct request to:', testUrl);
-    console.log('With data:', { action: 'get_policy_data', policy_id: policyId });
-    
-    fetch(testUrl, {
-        method: 'POST',
-        body: formData,
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        console.log('Direct API response status:', response.status);
-        console.log('Direct API response headers:', Object.fromEntries(response.headers.entries()));
-        return response.text();
-    })
+    $.ajax({
+        url: 'include/policy-operations.php',
+        type: 'POST',
+        data: { action: 'test' },
+        success: function(response) {
+            console.log('Connectivity test SUCCESS:', response);
+            alert('Connection successful!');
+        },
+        error: function(xhr, status, error) {
+            console.error('Connectivity test FAILED:', error);
+            alert('Connection failed: ' + error);
+        }
+    });
+};
     .then(text => {
         console.log('Direct API raw response length:', text.length);
         console.log('Direct API raw response (first 1000 chars):', text.substring(0, 1000));

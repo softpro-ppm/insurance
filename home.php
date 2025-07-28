@@ -21,6 +21,8 @@
     <link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
     <!-- Custom color scheme for professional appearance -->
     <link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
+    <!-- Modal fixes -->
+    <link href="assets/css/modal-fixes.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -571,7 +573,7 @@
     <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
     <!-- Edit modal functionality -->
-    <script src="assets/js/edit-policy-modal.js"></script>
+    <script src="assets/js/edit-policy-modal-fixed.js"></script>
     <!-- Modern functionality scripts -->
     <script src="assets/js/global-search.js"></script>
     
@@ -716,20 +718,79 @@
                 return;
             }
             
+            // Show loading in modal content first
+            $('#viewpolicydata').html(`
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title">
+                        <i class="bx bx-file-blank me-2"></i>Loading Policy Details...
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Please wait while we fetch the policy details...</p>
+                </div>
+            `);
+            
             // Show modal
             console.log('Showing modal...');
             $('#renewalpolicyview').modal("show");
             
-            // Make AJAX call
+            // Make AJAX call with better error handling
             console.log('Making AJAX call to view-policy.php...');
-            $.post("include/view-policy.php", { id: id }, function(data) {
-                console.log('AJAX response received:', data.substring(0, 100));
-                $('#viewpolicydata').html(data);
-            }).fail(function(xhr, status, error) {
-                console.error('AJAX call failed:', error);
-                console.error('Status:', status);
-                console.error('Response:', xhr.responseText);
-                $('#viewpolicydata').html('<div class="alert alert-danger">Error loading policy details. Please try again.</div>');
+            $.ajax({
+                url: "include/view-policy.php",
+                type: "POST",
+                data: { id: id },
+                timeout: 10000, // 10 second timeout
+                success: function(data) {
+                    console.log('AJAX response received:', data.substring(0, 100));
+                    if (data && data.trim().length > 0) {
+                        $('#viewpolicydata').html(data);
+                    } else {
+                        $('#viewpolicydata').html(`
+                            <div class="modal-header bg-danger text-white border-0">
+                                <h5 class="modal-title">
+                                    <i class="bx bx-error me-2"></i>Error
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-danger">
+                                    <i class="bx bx-error-circle me-2"></i>
+                                    No data received from server. Please try again.
+                                </div>
+                            </div>
+                        `);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX call failed:', error);
+                    console.error('Status:', status);
+                    console.error('Response:', xhr.responseText);
+                    $('#viewpolicydata').html(`
+                        <div class="modal-header bg-danger text-white border-0">
+                            <h5 class="modal-title">
+                                <i class="bx bx-error me-2"></i>Connection Error
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger">
+                                <i class="bx bx-error-circle me-2"></i>
+                                <strong>Error loading policy details:</strong><br>
+                                ${error === 'timeout' ? 'Request timed out. Please try again.' : 'Connection error. Please check your internet connection and try again.'}
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" onclick="viewpolicy($(this).closest('.modal').data('trigger'))">
+                                    <i class="bx bx-refresh me-1"></i>Try Again
+                                </button>
+                            </div>
+                        </div>
+                    `);
+                }
             });
         }
     </script>
