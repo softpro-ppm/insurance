@@ -12,6 +12,8 @@
 	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+	<!-- Modal Fix for Bootstrap 5 Compatibility -->
+	<link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -161,5 +163,8 @@
 	<script src="assets/libs/simplebar/simplebar.min.js"></script>
 	<script src="assets/libs/node-waves/waves.min.js"></script>
 	<script src="assets/js/app.js"></script>
+	
+	<!-- Modal Fix JavaScript for Bootstrap 5 -->
+	<script src="assets/js/modal-fix.js"></script>
 </body>
 </html>

@@ -16,6 +16,9 @@
     <link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     
+    <!-- Modal Fix for Bootstrap 5 Compatibility -->
+    <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+    
     <!-- Modern Dashboard Card Styles -->
     <style>
         .modern-card-info {
@@ -1073,12 +1076,16 @@
     <?php include 'include/edit-policy-modal.php'; ?>
 
     <script>
-        // Function to open edit modal
+        // Function to open edit modal (Bootstrap 5 compatible)
         function openEditModal(policyId) {
             loadPolicyData(policyId);
-            $('#editPolicyModal').modal('show');
+            const editModal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
+            editModal.show();
         }
     </script>
+    
+    <!-- Modal Fix JavaScript for Bootstrap 5 -->
+    <script src="assets/js/modal-fix.js"></script>
 </body>
 
 </html>
