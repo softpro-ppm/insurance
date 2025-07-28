@@ -125,7 +125,7 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
-                    <div class="row text-end" >
+                    <div class="row text-right" >
                         <div class="col-xl-12 " >
                             <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-toggle="modal" data-target="#addPolicyModal" onclick="testAddPolicyModal()">
                                 <i class="bx bx-plus-circle"></i> Add New Policy
@@ -147,8 +147,8 @@
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="policies.php?latest=latest" class="text-decoration-none">     
-                                                        <p class="text-white fw-medium mb-2">Policies</p>
-                                                        <h4 class="mb-0 text-white fw-bold"><?=$totalpolicy?></h4>
+                                                        <p class="text-white font-weight-normal mb-2">Policies</p>
+                                                        <h4 class="mb-0 text-white font-weight-bold"><?=$totalpolicy?></h4>
                                                     </a>    
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
@@ -174,8 +174,8 @@
                                         <div class="card-body">
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
-                                                    <p class="text-white fw-medium mb-2">Premium</p>
-                                                    <h4 class="mb-0 text-white fw-bold">&#8377;<?=$totalpremium;?></h4>
+                                                    <p class="text-white font-weight-normal mb-2">Premium</p>
+                                                    <h4 class="mb-0 text-white font-weight-bold">&#8377;<?=$totalpremium;?></h4>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center ">
                                                     <div class="avatar-sm rounded-circle modern-icon-bg"> 
@@ -199,8 +199,8 @@
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="manage-renewal.php?renewal=renewal" class="text-decoration-none">
-                                                        <p class="text-white fw-medium mb-2">Total Renewal</p>
-                                                        <h4 class="mb-0 text-white fw-bold"><?=$renewaltotal;?></h4>
+                                                        <p class="text-white font-weight-normal mb-2">Total Renewal</p>
+                                                        <h4 class="mb-0 text-white font-weight-bold"><?=$renewaltotal;?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
@@ -226,8 +226,8 @@
                                             <div class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <a href="manage-renewal.php?pending=pending" class="text-decoration-none">
-                                                        <p class="text-white fw-medium mb-2">Pending Renewal</p>
-                                                        <h4 class="mb-0 text-white fw-bold"><?=$pendingrenewaltotal?></h4>
+                                                        <p class="text-white font-weight-normal mb-2">Pending Renewal</p>
+                                                        <h4 class="mb-0 text-white font-weight-bold"><?=$pendingrenewaltotal?></h4>
                                                     </a>
                                                 </div>
                                                 <div class="flex-shrink-0 align-self-center">
@@ -250,7 +250,7 @@
                               <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4 class="card-title mb-0">Monthly Analytics</h4>
-                                    <div class="ms-auto">
+                                    <div class="ml-auto">
                                         <select class="form-control" id="year" style="min-width: 120px;">
                                             <option>Select Year</option>
                                             <?php if($_GET['year'] == '2025'){ ?>
@@ -304,7 +304,7 @@
                                 <div class="card-body">
                                     <div class="d-sm-flex flex-wrap">
                                         <h4 class="card-title mb-4">Premium</h4>
-                                        <div class="ms-auto">
+                                        <div class="ml-auto">
                                             <ul class="nav nav-pills">
                                                 <li class="nav-item"> 
                                                     <select class="form-control" id="year" >
@@ -420,7 +420,7 @@
                                                 ?>
                                                 <tr>
                                                     <td class="text-center" ><?=$sn;?></td>
-                                                    <td class="text-center" ><a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$renewalr['id']?>" ><?=$renewalr['vehicle_number'];?></a></td>
+                                                    <td class="text-center" ><a href="javascript: void(0);" class="text-body font-weight-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$renewalr['id']?>" ><?=$renewalr['vehicle_number'];?></a></td>
                                                     <td class="text-center" ><?=$renewalr['name'];?></td>
                                                     <td class="text-center" ><?=$renewalr['phone'];?></td>
                                                     <td class="text-center" ><?=$renewalr['vehicle_type'];?></td>
@@ -457,7 +457,7 @@
                                 document.write(new Date().getFullYear())
                             </script>© Softpro.</div>
                         <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">Design & Develop by Softpro</div>
+                            <div class="text-sm-right d-none d-sm-block">Design & Develop by Softpro</div>
                         </div>
                     </div>
                 </div>
@@ -864,7 +864,7 @@
                             </div>
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" onclick="viewpolicy($(this).closest('.modal').data('trigger'))">
-                                    <i class="bx bx-refresh me-1"></i>Try Again
+                                    <i class="bx bx-refresh mr-1"></i>Try Again
                                 </button>
                             </div>
                         </div>
