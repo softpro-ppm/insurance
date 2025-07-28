@@ -38,6 +38,8 @@
 	<link href="assets/css/global.css" rel="stylesheet" type="text/css" />
 	<!-- Enhanced UI Components -->
 	<link href="assets/css/enhanced-ui.css" rel="stylesheet" type="text/css" />
+	<!-- Policies Table Display Fix -->
+	<link href="assets/css/policies-table-fix.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -122,26 +124,32 @@
 						                            }
 												?>
 												<tr>
-						                            <td><?=$sn;?></td>
-						                            <td><a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$r['id']?>" ><?=$r['vehicle_number'];?></a></td>
-													<td><?=$r['name'];?></td>
-						                            <td><?=$r['phone'];?></td>
-						                            <td><?=$r['vehicle_type'];?></td>
-						                            <td><?=$r['policy_type'];?></td>
-						                            <td><?=$r['insurance_company'];?></td>
-						                            <td><?=$r['premium'];?></td>
-						                            <td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
-						                            <td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
+						                            <td class="text-center"><?=$sn;?></td>
+						                            <td class="text-nowrap">
+						                                <a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$r['id']?>" >
+						                                    <?=htmlspecialchars($r['vehicle_number'], ENT_QUOTES, 'UTF-8');?>
+						                                </a>
+						                            </td>
+													<td class="text-nowrap"><?=htmlspecialchars($r['name'], ENT_QUOTES, 'UTF-8');?></td>
+						                            <td class="text-nowrap"><?=htmlspecialchars($r['phone'], ENT_QUOTES, 'UTF-8');?></td>
+						                            <td class="text-nowrap"><?=htmlspecialchars($r['vehicle_type'], ENT_QUOTES, 'UTF-8');?></td>
+						                            <td class="text-nowrap"><?=htmlspecialchars($r['policy_type'], ENT_QUOTES, 'UTF-8');?></td>
+						                            <td class="text-nowrap"><?=htmlspecialchars($r['insurance_company'], ENT_QUOTES, 'UTF-8');?></td>
+						                            <td class="text-end">₹<?=number_format($r['premium'], 2);?></td>
+						                            <td class="text-nowrap text-center"><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
+						                            <td class="text-nowrap text-center"><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
 						                            <td class="action-buttons">
-						                                <button type="button" class="btn btn-outline-info btn-sm btn-action" onclick="viewPolicy(<?=$r['id'];?>)" title="View Policy Details" data-bs-toggle="tooltip">
-						                                    <i class="bx bx-show"></i>
-						                                </button>
-						                                <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="editPolicy(<?=$r['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
-						                                    <i class="bx bx-edit"></i>
-						                                </button>
-						                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deletePolicy(<?=$r['id'];?>)" title="Delete Policy" data-bs-toggle="tooltip">
-						                                    <i class="bx bx-trash"></i>
-						                                </button>
+						                                <div class="btn-group" role="group">
+						                                    <button type="button" class="btn btn-outline-info btn-sm" onclick="viewPolicy(<?=$r['id'];?>)" title="View Policy Details" data-bs-toggle="tooltip">
+						                                        <i class="bx bx-show"></i>
+						                                    </button>
+						                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="editPolicyFixed(<?=$r['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
+						                                        <i class="bx bx-edit"></i>
+						                                    </button>
+						                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="deletePolicy(<?=$r['id'];?>)" title="Delete Policy" data-bs-toggle="tooltip">
+						                                        <i class="bx bx-trash"></i>
+						                                    </button>
+						                                </div>
 						                            </td>
 						                        </tr>
 						                        <?php $sn++; } }else{ ?> 
@@ -342,6 +350,124 @@
                     showToaster("Error loading policy data: " + error, 'error');
                 }
             });
+        }
+
+        // New fixed edit policy function
+        function editPolicyFixed(policyId) {
+            console.log("Edit policy (fixed) function called for ID:", policyId);
+            
+            if (!policyId || policyId <= 0) {
+                showToaster('Error: Invalid policy ID', 'error');
+                return;
+            }
+            
+            // Show loading toaster
+            showToaster('Loading policy data...', 'info');
+            
+            $.ajax({
+                url: "include/get-policy-data-clean.php",
+                type: "POST",
+                data: { policy_id: policyId },
+                dataType: 'json',
+                cache: false,
+                timeout: 10000,
+                beforeSend: function() {
+                    console.log("Sending request to get policy data for ID:", policyId);
+                },
+                success: function(response) {
+                    console.log("Received response:", response);
+                    
+                    if (response && response.success === true && response.data) {
+                        console.log("Policy data loaded successfully:", response.data);
+                        
+                        // Show edit modal
+                        const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'), {
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        modal.show();
+                        
+                        // Populate form with data
+                        populateEditFormFixed(response.data);
+                        showToaster('Policy data loaded successfully', 'success');
+                    } else {
+                        const errorMsg = response && response.message ? response.message : 'Failed to load policy data';
+                        console.error("Policy data load failed:", errorMsg);
+                        showToaster('Error: ' + errorMsg, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error Details:", {
+                        status: status,
+                        error: error,
+                        responseText: xhr.responseText,
+                        statusCode: xhr.status,
+                        statusText: xhr.statusText
+                    });
+                    
+                    let errorMessage = 'Failed to load policy data';
+                    
+                    if (xhr.status === 0) {
+                        errorMessage = 'Network connection failed. Please check your internet connection.';
+                    } else if (xhr.status === 404) {
+                        errorMessage = 'Policy data service not found. Please contact support.';
+                    } else if (xhr.status === 500) {
+                        errorMessage = 'Server error occurred. Please try again later.';
+                    } else if (status === 'timeout') {
+                        errorMessage = 'Request timed out. Please try again.';
+                    } else if (status === 'parsererror') {
+                        errorMessage = 'Data parsing error. Please try again.';
+                    } else {
+                        errorMessage = 'Error: ' + error;
+                    }
+                    
+                    showToaster(errorMessage, 'error');
+                }
+            });
+        }
+
+        // Enhanced form population function
+        function populateEditFormFixed(data) {
+            console.log('Populating edit form with data:', data);
+            
+            try {
+                // Set hidden policy ID
+                $('#edit_policy_id').val(data.id || '');
+                
+                // Customer & Vehicle Information
+                $('#edit_vehicle_number').val(data.vehicle_number || '');
+                $('#edit_phone').val(data.phone || '');
+                $('#edit_name').val(data.name || '');
+                $('#edit_vehicle_type').val(data.vehicle_type || '');
+                
+                // Insurance Information
+                $('#edit_insurance_company').val(data.insurance_company || '');
+                $('#edit_policy_type').val(data.policy_type || '');
+                
+                // Date Fields - handle empty dates properly
+                $('#edit_policy_start_date').val(data.policy_start_date || '');
+                $('#edit_policy_end_date').val(data.policy_end_date || '');
+                $('#edit_policy_issue_date').val(data.policy_issue_date || '');
+                $('#edit_fc_expiry_date').val(data.fc_expiry_date || '');
+                $('#edit_permit_expiry_date').val(data.permit_expiry_date || '');
+                
+                // Financial Details - handle numbers properly
+                $('#edit_premium').val(data.premium || 0);
+                $('#edit_payout').val(data.payout || 0);
+                $('#edit_customer_paid').val(data.customer_paid || 0);
+                $('#edit_discount').val(data.discount || 0);
+                $('#edit_calculated_revenue').val(data.calculated_revenue || 0);
+                
+                // Additional Information
+                $('#edit_chassiss').val(data.chassiss || '');
+                $('#edit_comments').val(data.comments || '');
+                
+                console.log('Edit form populated successfully');
+                
+            } catch (error) {
+                console.error('Error populating edit form:', error);
+                showToaster('Error displaying policy data: ' + error.message, 'error');
+            }
         }
 
         function editPolicy(policyId) {
