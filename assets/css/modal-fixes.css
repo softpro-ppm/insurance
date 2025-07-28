@@ -27,8 +27,8 @@
     }
 }
 
-/* Fix for Bootstrap 5 compatibility */
-.visually-hidden {
+/* Fix for Bootstrap 4 compatibility */
+.sr-only {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -46,8 +46,10 @@
     padding: 1rem 1.5rem;
 }
 
-.modal-header .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
+.modal-header .close {
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
+    text-shadow: none;
 }
 
 /* Modal body improvements */
@@ -58,15 +60,13 @@
 }
 
 /* Form improvements inside modals */
-.modal .form-control,
-.modal .form-select {
+.modal .form-control {
     border: 1px solid #ddd;
     border-radius: 6px;
     transition: all 0.3s ease;
 }
 
-.modal .form-control:focus,
-.modal .form-select:focus {
+.modal .form-control:focus {
     border-color: #007bff;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
@@ -108,11 +108,16 @@
     color: #495057;
     margin-bottom: 0.25rem;
     display: block;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .info-value {
     font-weight: 500;
     color: #212529;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
 }
 
 /* Badge improvements */
@@ -120,6 +125,7 @@
     font-size: 0.875rem;
     padding: 0.5rem 1rem;
     border-radius: 6px;
+    font-weight: 600;
 }
 
 /* Card improvements inside modals */
@@ -127,12 +133,24 @@
     border: 1px solid #e9ecef;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
 }
 
 .modal .card-header {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     border-bottom: none;
     border-radius: 8px 8px 0 0 !important;
+    padding: 1rem 1.25rem;
+}
+
+.modal .card-header h6 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.modal .card-body {
+    padding: 1.5rem 1.25rem;
 }
 
 /* Responsive improvements */
@@ -232,4 +250,62 @@
 
 .modal-body::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
+}
+
+/* Policy Details Modal Specific Styles */
+.modal .bg-primary h6 {
+    color: white !important;
+}
+
+.modal .bg-info h6 {
+    color: white !important;
+}
+
+.modal .bg-success h6 {
+    color: white !important;
+}
+
+.modal .bg-warning h6 {
+    color: #212529 !important;
+}
+
+/* Improve modal title styling */
+.modal-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.modal-title strong {
+    font-weight: 700;
+    color: #ffd700;
+}
+
+/* Fix close button positioning */
+.modal-header .close {
+    padding: 1rem;
+    margin: -1rem -1rem -1rem auto;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: none;
+    opacity: 1;
+}
+
+.modal-header .close:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Responsive modal improvements */
+@media (max-width: 768px) {
+    .modal .card-body {
+        padding: 1rem;
+    }
+    
+    .modal .info-value {
+        font-size: 0.875rem;
+    }
+    
+    .modal .info-label {
+        font-size: 0.75rem;
+    }
 }

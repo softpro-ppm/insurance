@@ -20,17 +20,19 @@
 	$data = 
 		'<div class="modal-header bg-primary text-white border-0">
             <h5 class="modal-title d-flex align-items-center" id="transaction-detailModalLabel">
-                <i class="bx bx-file-blank me-2"></i>
+                <i class="bx bx-file-blank mr-2"></i>
                 <span>Policy Details - <strong>'.$r['vehicle_number'].'</strong></span>
             </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body p-4" style="background: #ffffff; color: #1f2937;">
             
             <!-- Customer & Vehicle Info Card -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0"><i class="bx bx-user me-2"></i>Customer & Vehicle Information</h6>
+                    <h6 class="mb-0"><i class="bx bx-user mr-2"></i>Customer & Vehicle Information</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -65,7 +67,7 @@
             <!-- Policy Information Card -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-info text-white">
-                    <h6 class="mb-0"><i class="bx bx-file-blank me-2"></i>Policy Information</h6>
+                    <h6 class="mb-0"><i class="bx bx-file-blank mr-2"></i>Policy Information</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -112,7 +114,7 @@
             <!-- Financial Information Card -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-success text-white">
-                    <h6 class="mb-0"><i class="bx bx-money me-2"></i>Financial Information</h6>
+                    <h6 class="mb-0"><i class="bx bx-money mr-2"></i>Financial Information</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -141,7 +143,7 @@
             <!-- Additional Information Card -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-warning text-dark">
-                    <h6 class="mb-0"><i class="bx bx-info-circle me-2"></i>Additional Information</h6>
+                    <h6 class="mb-0"><i class="bx bx-info-circle mr-2"></i>Additional Information</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
