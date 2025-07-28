@@ -8,11 +8,16 @@
 	<meta charset="utf-8" />
 	<title>Policies | Softpro</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
 	<link rel="shortcut icon" href="assets/logo.PNG">
-	<link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+	<!-- Bootstrap 5 DataTables CSS -->
+	<link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css?v=bootstrap5-<?=time()?>" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css?v=bootstrap5-<?=time()?>" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css?v=bootstrap5-<?=time()?>" rel="stylesheet" type="text/css" />
+	<!-- Bootstrap 5.1.3 CSS -->
+	<link href="assets/css/bootstrap.min.css?v=<?=time()?>" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 </head>
@@ -157,10 +162,11 @@
 	<script src="assets/libs/metismenu/metisMenu.min.js"></script>
 	<script src="assets/libs/simplebar/simplebar.min.js"></script>
 	<script src="assets/libs/node-waves/waves.min.js"></script>
+	<!-- Bootstrap 5 DataTables JavaScript -->
 	<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+	<script src="assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js?v=bootstrap5-<?=time()?>"></script>
 	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js?v=bootstrap5-<?=time()?>"></script>
 	<script src="assets/libs/jszip/jszip.min.js"></script>
 	<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
 	<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
@@ -168,7 +174,7 @@
 	<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 	<!-- <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script> -->
-	<script src="assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js?v=bootstrap5-<?=time()?>"></script>
 	<script src="assets/js/app.js"></script>
 	<script src="assets/js/table2excel.js" type="text/javascript"></script>
 	
