@@ -8,11 +8,7 @@ error_reporting(0);
 ini_set('display_errors', 0);
 
 // Include config
-if (file_exists('config-local.php')) {
-    include 'config-local.php';
-} else {
-    include 'config.php';
-}
+include 'config.php';
 
 // Clear any accidental output and set JSON header
 ob_clean();

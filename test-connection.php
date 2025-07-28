@@ -1,66 +1,65 @@
 <?php
-// Test database connection
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Test database connection and policy data
+session_start();
 
-// Local database configuration for development
-$host = "localhost";
-$username = "root";  // Default MySQL username for local development
-$password = "";      // Default empty password for local development
-$database = "insurance_local";  // Local database name
+// Set proper headers
+header('Content-Type: application/json');
 
-// Try to connect
-$con = new mysqli($host, $username, $password, $database);
+// Include config
+require_once 'include/config.php';
 
-if ($con->connect_errno) {
-    echo "Failed to connect to MySQL: " . $con->connect_error . "<br>";
-    
-    // Try without database first to see if MySQL is running
-    $con_test = new mysqli($host, $username, $password);
-    if ($con_test->connect_errno) {
-        echo "MySQL server is not running or credentials are wrong.<br>";
-        echo "Error: " . $con_test->connect_error . "<br>";
-    } else {
-        echo "MySQL server is running, but database '$database' doesn't exist.<br>";
-        echo "We need to create the database or check the configuration.<br>";
-        $con_test->close();
-    }
-} else {
-    echo "✅ Successfully connected to database '$database'<br>";
-    
-    // Check if policy table exists
-    $result = $con->query("SHOW TABLES LIKE 'policy'");
-    if ($result && $result->num_rows > 0) {
-        echo "✅ Policy table exists<br>";
-        
-        // Check table structure
-        $result = $con->query("DESCRIBE policy");
-        if ($result) {
-            echo "<h3>Policy Table Structure:</h3>";
-            echo "<table border='1'>";
-            echo "<tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th></tr>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row['Field'] . "</td>";
-                echo "<td>" . $row['Type'] . "</td>";
-                echo "<td>" . $row['Null'] . "</td>";
-                echo "<td>" . $row['Key'] . "</td>";
-                echo "<td>" . $row['Default'] . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        }
-        
-        // Count total policies
-        $result = $con->query("SELECT COUNT(*) as total FROM policy");
-        if ($result) {
-            $row = $result->fetch_assoc();
-            echo "<br>Total policies in database: " . $row['total'] . "<br>";
-        }
-    } else {
-        echo "❌ Policy table doesn't exist<br>";
+try {
+    // Test 1: Check if database connection exists
+    if (!$con) {
+        echo json_encode(['success' => false, 'error' => 'No database connection']);
+        exit;
     }
     
-    $con->close();
+    // Test 2: Check if connection is valid
+    if ($con->connect_errno) {
+        echo json_encode(['success' => false, 'error' => 'Connection error: ' . $con->connect_error]);
+        exit;
+    }
+    
+    // Test 3: Try to fetch a sample policy
+    $test_id = 1015; // Using the ID from the screenshot
+    $stmt = $con->prepare("SELECT id, vehicle_number, name FROM policy WHERE id = ? LIMIT 1");
+    
+    if (!$stmt) {
+        echo json_encode(['success' => false, 'error' => 'Prepare failed: ' . $con->error]);
+        exit;
+    }
+    
+    $stmt->bind_param("i", $test_id);
+    
+    if (!$stmt->execute()) {
+        echo json_encode(['success' => false, 'error' => 'Execute failed: ' . $stmt->error]);
+        exit;
+    }
+    
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $policy = $result->fetch_assoc();
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Connection and query successful',
+            'sample_policy' => $policy,
+            'session_user' => $_SESSION['username'] ?? 'Not logged in'
+        ]);
+    } else {
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Connection successful but no policy found with ID ' . $test_id,
+            'session_user' => $_SESSION['username'] ?? 'Not logged in'
+        ]);
+    }
+    
+    $stmt->close();
+    
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => 'Exception: ' . $e->getMessage()]);
 }
+
+$con->close();
 ?>

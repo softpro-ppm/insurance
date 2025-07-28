@@ -2,46 +2,48 @@
 // get-policy-data.php - Fetch policy data for editing
 session_start();
 
-// Disable all output buffering and error display to ensure clean JSON
-ob_clean();
-error_reporting(E_ALL);
+// Clean all output first
+if (ob_get_level()) {
+    ob_end_clean();
+}
+
+// Disable all errors from being output
+error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
 // Set JSON header immediately
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-cache, must-revalidate');
 
-// Try local config first, fallback to original
-if (file_exists('config-local.php')) {
-    include 'config-local.php';
-} else {
+try {
+    // Use the main config file for live environment
     include 'config.php';
-}
 
-// Check if user is logged in
-if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Not authenticated']);
-    exit;
-}
+    // Check if user is logged in
+    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+        exit;
+    }
 
-// Check if policy ID is provided (support both GET and POST)
-$policy_id = null;
+    // Check if policy ID is provided (support both GET and POST)
+    $policy_id = null;
 
-if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
-    $policy_id = intval($_POST['policy_id']);
-} elseif (isset($_GET['id']) && !empty($_GET['id'])) {
-    $policy_id = intval($_GET['id']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Policy ID is required']);
-    exit;
-}
+    if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
+        $policy_id = intval($_POST['policy_id']);
+    } elseif (isset($_GET['id']) && !empty($_GET['id'])) {
+        $policy_id = intval($_GET['id']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Policy ID is required']);
+        exit;
+    }
 
-// Check database connection
-if (!isset($con) || !$con) {
-    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
-    exit;
-}
+    // Check database connection
+    if (!isset($con) || !$con || $con->connect_errno) {
+        echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+        exit;
+    }
 
 try {
     // Prepare and execute query to fetch policy data

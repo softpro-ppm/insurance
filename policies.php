@@ -126,7 +126,7 @@
 												<tr>
 						                            <td class="text-center"><?=$sn;?></td>
 						                            <td class="text-nowrap">
-						                                <a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewpolicy(this)" data-id="<?=$r['id']?>" >
+						                                <a href="javascript: void(0);" class="text-body fw-bold waves-effect waves-light" onclick="viewPolicy(<?=$r['id']?>)" data-id="<?=$r['id']?>" >
 						                                    <?=htmlspecialchars($r['vehicle_number'], ENT_QUOTES, 'UTF-8');?>
 						                                </a>
 						                            </td>
@@ -171,6 +171,12 @@
                     <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
+            
+            <!-- Edit Policy Modal -->
+            <?php include 'include/modals/edit-policy-modal.php'; ?>
+            
+            <!-- Add Policy Modal -->
+            <?php include 'include/modals/add-policy-modal.php'; ?>
 			<!-- <footer class="footer">
 				<div class="container-fluid">
 					<div class="row">
@@ -849,6 +855,8 @@
     <script src="assets/js/modal-button-fix.js"></script>
     <!-- Critical Modal Fix - Emergency Override -->
     <script src="assets/js/modal-fix-critical.js"></script>
+    <!-- User Management JavaScript for Helper Functions -->
+    <script src="assets/js/user-management.js"></script>
     <!-- View Policy Modal Complete Data Display Fix -->
     <script src="assets/js/view-policy-modal-fix.js"></script>
     <!-- Global Policy Management JavaScript -->
