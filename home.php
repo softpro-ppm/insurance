@@ -1195,11 +1195,57 @@
             });
         };
         
+        // Test dashboard functionality
+        window.testDashboard = function() {
+            console.log('=== TESTING DASHBOARD ===');
+            console.log('Checking dashboard elements...');
+            
+            // Check if cards are visible
+            const cards = document.querySelectorAll('.modern-card-info, .modern-card-success, .modern-card-warning, .modern-card-danger');
+            console.log('Found dashboard cards:', cards.length);
+            
+            cards.forEach((card, index) => {
+                const rect = card.getBoundingClientRect();
+                const computedStyle = window.getComputedStyle(card);
+                console.log(`Card ${index + 1}:`, {
+                    visible: rect.width > 0 && rect.height > 0,
+                    display: computedStyle.display,
+                    visibility: computedStyle.visibility,
+                    opacity: computedStyle.opacity,
+                    background: computedStyle.background
+                });
+            });
+            
+            // Test modal functionality
+            console.log('Testing modal functionality...');
+            const modal = document.getElementById('editPolicyModal');
+            if (modal) {
+                console.log('Edit modal found');
+                const bootstrapModal = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                console.log('Bootstrap modal instance:', bootstrapModal);
+            } else {
+                console.log('Edit modal not found');
+            }
+        };
+        
+        // Test Bootstrap and jQuery
+        window.testLibraries = function() {
+            console.log('=== TESTING LIBRARIES ===');
+            console.log('jQuery version:', typeof $ !== 'undefined' ? $.fn.jquery : 'Not loaded');
+            console.log('Bootstrap version:', typeof bootstrap !== 'undefined' ? 'Loaded' : 'Not loaded');
+            
+            if (typeof $ !== 'undefined') {
+                console.log('jQuery modal plugin:', typeof $.fn.modal !== 'undefined' ? 'Available' : 'Not available');
+            }
+        };
+        
         console.log('=== HOME.PHP DEBUG FUNCTIONS LOADED ===');
         console.log('Available functions:');
         console.log('- window.debugHomeEdit(policyId)');
         console.log('- window.homeTestConnectivity()');
         console.log('- window.testViewPolicy(policyId)');
+        console.log('- window.testDashboard()');
+        console.log('- window.testLibraries()');
     </script>
 </body>
 

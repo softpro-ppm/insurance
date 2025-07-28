@@ -3,33 +3,70 @@
  * Professional Blue Theme with High Contrast
  */
 
-/* Primary Color Variables */
+/* Professional Blue Color Scheme - MINIMAL VERSION FOR TESTING */
 :root {
-    --primary-color: #2563eb;           /* Professional Blue */
-    --primary-hover: #1d4ed8;          /* Darker Blue on Hover */
-    --primary-light: #dbeafe;          /* Light Blue Background */
-    --primary-text: #1e40af;           /* Blue Text */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --info-color: #0ea5e9;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --dark-color: #1e293b;
+    --light-color: #f8fafc;
     
-    --secondary-color: #64748b;        /* Professional Gray */
-    --success-color: #10b981;          /* Green for Success */
-    --warning-color: #f59e0b;          /* Amber for Warning */
-    --danger-color: #ef4444;           /* Red for Danger */
-    --info-color: #06b6d4;            /* Cyan for Info */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
     
-    --text-primary: #1f2937;           /* Dark Gray Text */
-    --text-secondary: #6b7280;         /* Medium Gray Text */
-    --text-muted: #9ca3af;             /* Light Gray Text */
+    --background-primary: #ffffff;
+    --background-secondary: #f8fafc;
+    --background-tertiary: #f1f5f9;
     
-    --background-primary: #ffffff;     /* White Background */
-    --background-secondary: #f9fafb;   /* Light Gray Background */
-    --background-tertiary: #f3f4f6;    /* Slightly Darker Gray Background */
-    
-    --border-color: #e5e7eb;           /* Light Border */
-    --border-hover: #d1d5db;           /* Darker Border on Hover */
+    --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
     
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ONLY ESSENTIAL OVERRIDES - NO !important */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-color) 100%);
+    border: none;
+    color: white;
+}
+
+/* Basic card styling for non-dashboard cards only */
+.card:not(.mini-stats-wid):not(.modern-card-info):not(.modern-card-success):not(.modern-card-warning):not(.modern-card-danger) {
+    border: 1px solid var(--border-color);
+    background-color: var(--background-primary);
+}
+
+/* Minimal modal styling */
+.modal-content {
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.modal-header.bg-gradient-primary,
+.modal-header.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    border-bottom: none;
+    color: white;
+}
+
+/* Test - simple visibility fix for modals without breaking Bootstrap */
+.modal.show {
+    display: block;
 }
 
 /* Override Bootstrap Primary Colors */
@@ -103,6 +140,36 @@
     display: block !important;
 }
 
+/* Fix Bootstrap JS modal functionality */
+.modal.fade:not(.show) {
+    opacity: 0 !important;
+}
+
+.modal.fade.show {
+    opacity: 1 !important;
+}
+
+/* Ensure modal dialog positioning */
+.modal-dialog {
+    margin: 1.75rem auto !important;
+    max-width: 500px !important;
+}
+
+.modal-dialog-centered {
+    display: flex !important;
+    align-items: center !important;
+    min-height: calc(100% - 3.5rem) !important;
+}
+
+/* Fix for any display issues */
+.modal-content {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    pointer-events: auto !important;
+}
+
 /* Form Elements */
 .form-control, .form-select {
     border: 1px solid var(--border-color) !important;
@@ -124,21 +191,21 @@
     margin-bottom: 0.5rem !important;
 }
 
-/* Card Styling */
-.card {
+/* Card Styling - Less aggressive approach */
+.card:not(.mini-stats-wid):not(.modern-card-info):not(.modern-card-success):not(.modern-card-warning):not(.modern-card-danger):not(.modern-chart-card) {
     border: 1px solid var(--border-color) !important;
     border-radius: 10px !important;
     background-color: var(--background-primary) !important;
     box-shadow: var(--shadow-sm) !important;
 }
 
-.card-header {
+.card-header:not(.mini-stats-wid .card-header) {
     background-color: var(--background-secondary) !important;
     border-bottom: 1px solid var(--border-color) !important;
     color: var(--text-primary) !important;
 }
 
-.card-body {
+.card-body:not(.mini-stats-wid .card-body):not(.modern-card-info .card-body):not(.modern-card-success .card-body):not(.modern-card-warning .card-body):not(.modern-card-danger .card-body) {
     background-color: var(--background-primary) !important;
     color: var(--text-primary) !important;
 }
