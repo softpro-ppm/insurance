@@ -159,6 +159,49 @@
                                     <label class="form-label">Chassis Number</label>
                                     <input type="text" name="chassiss" id="edit_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Upload Section -->
+                    <div class="card border mb-4 custom-outline-card">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3 text-warning"><i class="bx bx-file-blank me-2"></i>Document Verification</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Aadhar Card Image</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="aadhar_card" id="edit_aadhar_card" class="form-control" accept=".jpg,.jpeg,.png">
+                                        <label for="edit_aadhar_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload Aadhar Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div id="existing_aadhar_files" class="mt-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">PAN Card Image</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="pan_card" id="edit_pan_card" class="form-control" accept=".jpg,.jpeg,.png">
+                                        <label for="edit_pan_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload PAN Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div id="existing_pan_files" class="mt-2"></div>
+                                </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" id="edit_comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
@@ -582,6 +625,59 @@ function loadExistingFiles(policyId) {
             console.error('Error loading files:', error);
             document.getElementById('existing_policy_files').innerHTML = '<small class="text-danger">Error loading files</small>';
             document.getElementById('existing_rc_files').innerHTML = '<small class="text-danger">Error loading files</small>';
+        });
+    
+    // Load existing documents (Aadhar and PAN cards)
+    fetch(`include/get-policy-documents.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `policy_id=${policyId}`
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear previous document previews
+                const aadharPreview = document.getElementById('edit_aadhar_preview');
+                const panPreview = document.getElementById('edit_pan_preview');
+                
+                if (aadharPreview) aadharPreview.innerHTML = '';
+                if (panPreview) panPreview.innerHTML = '';
+                
+                // Display existing Aadhar card
+                if (data.documents.aadhar_card) {
+                    const aadharDoc = data.documents.aadhar_card;
+                    const aadharHtml = `
+                        <div class="existing-document-preview">
+                            <img src="../${aadharDoc.file_path}" alt="Existing Aadhar Card" class="document-preview-img">
+                            <div class="existing-document-info">
+                                <small class="text-muted">Current Aadhar Card</small><br>
+                                <small class="text-primary">${aadharDoc.file_name}</small>
+                            </div>
+                        </div>
+                    `;
+                    if (aadharPreview) aadharPreview.innerHTML = aadharHtml;
+                }
+                
+                // Display existing PAN card
+                if (data.documents.pan_card) {
+                    const panDoc = data.documents.pan_card;
+                    const panHtml = `
+                        <div class="existing-document-preview">
+                            <img src="../${panDoc.file_path}" alt="Existing PAN Card" class="document-preview-img">
+                            <div class="existing-document-info">
+                                <small class="text-muted">Current PAN Card</small><br>
+                                <small class="text-primary">${panDoc.file_name}</small>
+                            </div>
+                        </div>
+                    `;
+                    if (panPreview) panPreview.innerHTML = panHtml;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading documents:', error);
         });
 }
 </script>

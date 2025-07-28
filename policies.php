@@ -34,6 +34,8 @@
 	<link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
 	<!-- View Policy Modal Complete Data Display Fix -->
 	<link href="assets/css/view-policy-modal-fix.css" rel="stylesheet" type="text/css" />
+	<!-- Global Policy Management Styles -->
+	<link href="assets/css/global.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -128,13 +130,13 @@
 						                            <td><?=$r['premium'];?></td>
 						                            <td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 						                            <td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
-						                            <td>
-						                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy">
-						                                    <i class="fas fa-pencil-alt"></i>
+						                            <td class="action-buttons">
+						                                <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
+						                                    <i class="bx bx-edit"></i>
 						                                </button>
-						                                <a href="javascript:void(0);" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" class="btn btn-outline-danger btn-sm" title="Delete Policy">
-						                                    <i class="fas fa-trash-alt"></i>
-						                                </a>
+						                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" title="Delete Policy" data-bs-toggle="tooltip">
+						                                    <i class="bx bx-trash"></i>
+						                                </button>
 						                            </td>
 						                        </tr>
 						                        <?php $sn++; } }else{ ?> 
@@ -192,7 +194,7 @@
 	<script src="assets/js/app.js"></script>
 	<script src="assets/js/table2excel.js" type="text/javascript"></script>
 	
-	<!-- Custom script for serial numbering -->
+	<!-- Custom script for enhanced DataTables -->
 	<script type="text/javascript">
         $(document).ready(function() {
             // Check if DataTable is already initialized and destroy it
@@ -200,11 +202,11 @@
                 $('#datatable').DataTable().destroy();
             }
             
-            // Initialize DataTable with advanced features
+            // Initialize DataTable with enhanced features - matching global.js configuration
             var table = $('#datatable').DataTable({
                 "order": [], // No initial sorting to maintain our ORDER BY DESC from SQL
-                "pageLength": 25,
-                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "pageLength": 30, // Default to 30 as requested (10, 30, 50, 100, All)
+                "lengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, "All"]],
                 "responsive": true,
                 "searching": true,
                 "ordering": true,
@@ -215,58 +217,64 @@
                 "buttons": [
                     {
                         extend: 'copy',
-                        className: 'btn btn-primary btn-sm',
-                        text: '<i class="fas fa-copy"></i> Copy'
+                        className: 'btn btn-outline-secondary btn-sm me-1',
+                        text: '<i class="bx bx-copy"></i> Copy'
                     },
                     {
                         extend: 'csv',
-                        className: 'btn btn-success btn-sm',
-                        text: '<i class="fas fa-file-csv"></i> CSV'
+                        className: 'btn btn-outline-success btn-sm me-1',
+                        text: '<i class="bx bx-download"></i> CSV',
+                        title: 'Insurance Policies - ' + new Date().toLocaleDateString()
                     },
                     {
                         extend: 'excel',
-                        className: 'btn btn-success btn-sm',
-                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        className: 'btn btn-outline-success btn-sm me-1',
+                        text: '<i class="bx bx-file-blank"></i> Excel',
                         title: 'Insurance Policies - ' + new Date().toLocaleDateString()
                     },
                     {
                         extend: 'pdf',
-                        className: 'btn btn-danger btn-sm',
-                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        className: 'btn btn-outline-danger btn-sm me-1',
+                        text: '<i class="bx bx-file-blank"></i> PDF',
                         title: 'Insurance Policies - ' + new Date().toLocaleDateString(),
                         orientation: 'landscape',
                         pageSize: 'A3'
                     },
                     {
                         extend: 'print',
-                        className: 'btn btn-info btn-sm',
-                        text: '<i class="fas fa-print"></i> Print',
+                        className: 'btn btn-outline-primary btn-sm me-1',
+                        text: '<i class="bx bx-printer"></i> Print',
                         title: 'Insurance Policies'
-                    },
-                    {
-                        extend: 'colvis',
-                        className: 'btn btn-secondary btn-sm',
-                        text: '<i class="fas fa-columns"></i> Columns'
                     }
                 ],
                 "columnDefs": [
                     {
                         "targets": 0, // First column (S.NO.)
                         "searchable": false,
-                        "orderable": false
+                        "orderable": false,
+                        "className": "text-center"
                     },
                     {
                         "targets": -1, // Last column (Actions)
                         "searchable": false,
-                        "orderable": false
+                        "orderable": false,
+                        "className": "text-center action-buttons"
                     }
                 ],
                 "drawCallback": function(settings) {
-                    // Recalculate serial numbers on every redraw (search, sort, pagination)
+                    // Recalculate GLOBAL serial numbers on every redraw (search, sort, pagination)
                     var api = this.api();
-                    var startIndex = api.page.info().start;
+                    var pageInfo = api.page.info();
+                    var startIndex = pageInfo.start; // This gives us the global start index
+                    
                     api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
                         cell.innerHTML = startIndex + i + 1;
+                    });
+                    
+                    // Re-initialize tooltips for action buttons
+                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function(tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
                     });
                 },
                 "language": {
@@ -276,7 +284,13 @@
                     "infoEmpty": "No policies found",
                     "infoFiltered": "(filtered from _MAX_ total policies)",
                     "zeroRecords": "No matching policies found",
-                    "emptyTable": "No policies available"
+                    "emptyTable": "No policies available",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last", 
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
                 }
             });
         });
@@ -337,5 +351,7 @@
     <script src="assets/js/modal-fix-critical.js"></script>
     <!-- View Policy Modal Complete Data Display Fix -->
     <script src="assets/js/view-policy-modal-fix.js"></script>
+    <!-- Global Policy Management JavaScript -->
+    <script src="assets/js/global.js"></script>
 </body>
 </html>

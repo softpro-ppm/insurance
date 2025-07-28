@@ -158,6 +158,49 @@
                                     <label class="form-label">Chassis Number</label>
                                     <input type="text" name="chassiss" id="modal_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Upload Section -->
+                    <div class="card border mb-4 custom-outline-card">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3 text-warning"><i class="bx bx-file-blank me-2"></i>Document Verification</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Aadhar Card Image <span class="text-danger">*</span></label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="aadhar_card" id="aadhar_card" class="form-control" accept=".jpg,.jpeg,.png" required>
+                                        <label for="aadhar_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload Aadhar Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="invalid-feedback">Please upload a valid Aadhar card image</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">PAN Card Image <span class="text-danger">*</span></label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="pan_card" id="pan_card" class="form-control" accept=".jpg,.jpeg,.png" required>
+                                        <label for="pan_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload PAN Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="invalid-feedback">Please upload a valid PAN card image</div>
+                                </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
