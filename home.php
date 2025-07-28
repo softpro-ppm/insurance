@@ -21,7 +21,9 @@
     <!-- Enhanced Modal Fix for Interaction Issues -->
     <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
     <!-- Enhanced Modal Layout System -->
-    <!-- <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" /> -->
+    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Critical Modal Fix - Emergency Override -->
+    <link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -1094,6 +1096,8 @@
     <script src="assets/js/modal-fix-enhanced.js"></script>
     <!-- Enhanced Modal Layout System -->
     <script src="assets/js/modal-layout-enhanced.js"></script>
+    <!-- Critical Modal Fix - Emergency Override -->
+    <script src="assets/js/modal-fix-critical.js"></script>
 </body>
 
 </html>
