@@ -28,6 +28,8 @@
     <link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
     <!-- Critical Modal Fix - Emergency Override -->
     <link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced UI Components -->
+    <link href="assets/css/enhanced-ui.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -431,8 +433,12 @@
                                                     <td class="text-center" ><?=$renewalr['vehicle_type'];?></td>
                                                     <td class="text-center" ><?=date('d-m-Y', strtotime($renewalr['policy_end_date']));?></td>
                                                     <td class="text-center" >
-                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="openEditModal(<?=$renewalr['id'];?>)"><i class="fas fa-pencil-alt" ></i></button>
-                                                        <!-- <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a> -->
+                                                        <button type="button" class="btn btn-outline-info btn-sm btn-action" onclick="viewPolicy(<?=$renewalr['id'];?>)" title="View Policy" data-bs-toggle="tooltip">
+                                                            <i class="bx bx-show"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="editPolicy(<?=$renewalr['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
+                                                            <i class="bx bx-edit"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                                 <?php $sn++; } }else{ ?>
@@ -1088,9 +1094,140 @@
     <script>
         // Function to open edit modal (Bootstrap 5 compatible)
         function openEditModal(policyId) {
-            loadPolicyData(policyId);
-            const editModal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
-            editModal.show();
+            editPolicy(policyId);
+        }
+
+        function viewPolicy(policyId) {
+            console.log("View policy function called for ID:", policyId);
+            
+            if (!policyId) {
+                showToaster('Error: Policy ID is missing', 'error');
+                return;
+            }
+            
+            // Show loading state
+            showLoadingOverlay('#renewalpolicyview .modal-content');
+            
+            // Open modal first
+            const modal = new bootstrap.Modal(document.getElementById('renewalpolicyview'));
+            modal.show();
+            
+            $.ajax({
+                url: "include/view-policy.php",
+                type: "POST",
+                data: { id: policyId },
+                beforeSend: function() {
+                    console.log("Loading policy view data for ID:", policyId);
+                },
+                success: function(data) {
+                    console.log("Policy view data loaded successfully");
+                    hideLoadingOverlay('#renewalpolicyview .modal-content');
+                    $('#viewpolicydata').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    hideLoadingOverlay('#renewalpolicyview .modal-content');
+                    showToaster("Error loading policy data: " + error, 'error');
+                }
+            });
+        }
+
+        function editPolicy(policyId) {
+            console.log("Edit policy function called for ID:", policyId);
+            
+            if (!policyId) {
+                showToaster('Error: Policy ID is missing', 'error');
+                return;
+            }
+            
+            // Use the global.js function
+            if (window.PolicyManagement && window.PolicyManagement.editPolicy) {
+                window.PolicyManagement.editPolicy(policyId);
+            } else {
+                // Fallback to direct function call
+                loadPolicyForEdit(policyId);
+            }
+        }
+
+        // Enhanced toaster function
+        function showToaster(message, type = 'info') {
+            console.log('Showing toaster:', { message, type });
+            
+            // Remove existing toasts
+            $('.toast').remove();
+            
+            // Map type to Bootstrap classes
+            const typeClasses = {
+                'success': 'bg-success text-white',
+                'error': 'bg-danger text-white',
+                'warning': 'bg-warning text-dark',
+                'info': 'bg-info text-white'
+            };
+            
+            const typeIcons = {
+                'success': 'bx-check-circle',
+                'error': 'bx-error',
+                'warning': 'bx-error-circle',
+                'info': 'bx-info-circle'
+            };
+            
+            const bgClass = typeClasses[type] || typeClasses.info;
+            const icon = typeIcons[type] || typeIcons.info;
+            
+            // Create toast element
+            const toastHtml = `
+                <div class="toast align-items-center ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bx ${icon} me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Find or create toast container
+            let $container = $('.toast-container');
+            if (!$container.length) {
+                $container = $('<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1070;"></div>');
+                $('body').append($container);
+            }
+            
+            // Add toast to container
+            const $toast = $(toastHtml);
+            $container.append($toast);
+            
+            // Initialize and show toast
+            const toast = new bootstrap.Toast($toast[0], {
+                autohide: true,
+                delay: type === 'error' ? 8000 : 5000
+            });
+            
+            toast.show();
+            
+            // Remove toast element after it's hidden
+            $toast[0].addEventListener('hidden.bs.toast', function() {
+                $(this).remove();
+            });
+        }
+
+        // Enhanced loading overlay functions
+        function showLoadingOverlay(selector) {
+            const loadingHtml = `
+                <div class="loading-overlay">
+                    <div class="loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="mt-2">Loading...</div>
+                    </div>
+                </div>
+            `;
+            $(selector).css('position', 'relative').append(loadingHtml);
+        }
+
+        function hideLoadingOverlay(selector) {
+            $(selector + ' .loading-overlay').remove();
         }
     </script>
     

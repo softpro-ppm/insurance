@@ -36,6 +36,8 @@
 	<link href="assets/css/view-policy-modal-fix.css" rel="stylesheet" type="text/css" />
 	<!-- Global Policy Management Styles -->
 	<link href="assets/css/global.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced UI Components -->
+	<link href="assets/css/enhanced-ui.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -131,10 +133,13 @@
 						                            <td><?=date('d-m-Y',strtotime($r['policy_start_date']));?></td>
 						                            <td><?=date('d-m-Y',strtotime($r['policy_end_date']));?></td>
 						                            <td class="action-buttons">
-						                                <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="loadPolicyForEdit(<?=$r['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
+						                                <button type="button" class="btn btn-outline-info btn-sm btn-action" onclick="viewPolicy(<?=$r['id'];?>)" title="View Policy Details" data-bs-toggle="tooltip">
+						                                    <i class="bx bx-show"></i>
+						                                </button>
+						                                <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="editPolicy(<?=$r['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
 						                                    <i class="bx bx-edit"></i>
 						                                </button>
-						                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deletepolicy(this)" data-id="<?=$r['id']?>" title="Delete Policy" data-bs-toggle="tooltip">
+						                                <button type="button" class="btn btn-outline-danger btn-sm btn-action" onclick="deletePolicy(<?=$r['id'];?>)" title="Delete Policy" data-bs-toggle="tooltip">
 						                                    <i class="bx bx-trash"></i>
 						                                </button>
 						                            </td>
@@ -303,33 +308,112 @@
         }
     </script>
 	<script type="text/javascript">
-        function deletepolicy(identifier) {
-            var id = $(identifier).data("id");
+        function viewPolicy(policyId) {
+            console.log("View policy function called for ID:", policyId);
             
-            // Enhanced delete confirmation with Bootstrap modal
-            var confirmHtml = `
+            if (!policyId) {
+                showToaster('Error: Policy ID is missing', 'error');
+                return;
+            }
+            
+            // Show loading state
+            showLoadingOverlay('#renewalpolicyview .modal-content');
+            
+            // Open modal first
+            const modal = new bootstrap.Modal(document.getElementById('renewalpolicyview'));
+            modal.show();
+            
+            $.ajax({
+                url: "include/view-policy.php",
+                type: "POST",
+                data: { id: policyId },
+                beforeSend: function() {
+                    console.log("Loading policy view data for ID:", policyId);
+                },
+                success: function(data) {
+                    console.log("Policy view data loaded successfully, length:", data.length);
+                    hideLoadingOverlay('#renewalpolicyview .modal-content');
+                    $('#viewpolicydata').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    console.error("Response:", xhr.responseText);
+                    hideLoadingOverlay('#renewalpolicyview .modal-content');
+                    showToaster("Error loading policy data: " + error, 'error');
+                }
+            });
+        }
+
+        function editPolicy(policyId) {
+            console.log("Edit policy function called for ID:", policyId);
+            
+            if (!policyId) {
+                showToaster('Error: Policy ID is missing', 'error');
+                return;
+            }
+            
+            // Use the global.js function
+            if (window.PolicyManagement && window.PolicyManagement.editPolicy) {
+                window.PolicyManagement.editPolicy(policyId);
+            } else {
+                // Fallback to direct function call
+                loadPolicyForEdit(policyId);
+            }
+        }
+
+        function deletePolicy(policyId) {
+            console.log("Delete policy function called for ID:", policyId);
+            
+            if (!policyId) {
+                showToaster('Error: Policy ID is missing', 'error');
+                return;
+            }
+            
+            // Use the global.js function
+            if (window.PolicyManagement && window.PolicyManagement.deletePolicy) {
+                window.PolicyManagement.deletePolicy(policyId);
+            } else {
+                // Fallback to enhanced delete confirmation
+                showEnhancedDeleteConfirmation(policyId);
+            }
+        }
+
+        function showEnhancedDeleteConfirmation(policyId) {
+            // Enhanced delete confirmation with Bootstrap modal and proper AJAX
+            const confirmHtml = `
                 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-danger text-white">
                                 <h5 class="modal-title">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete
+                                    <i class="bx bx-error-circle me-2"></i>Confirm Delete
                                 </h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="text-center">
-                                    <i class="fas fa-trash-alt text-danger mb-3" style="font-size: 3rem;"></i>
-                                    <h6>Are you sure you want to delete this policy?</h6>
-                                    <p class="text-muted">This action cannot be undone. All policy data and associated files will be permanently removed.</p>
+                                    <i class="bx bx-trash text-danger mb-3" style="font-size: 4rem;"></i>
+                                    <h5 class="mb-3">Are you sure you want to delete this policy?</h5>
+                                    <div class="alert alert-warning">
+                                        <i class="bx bx-info-circle me-2"></i>
+                                        <strong>This action will permanently delete:</strong>
+                                        <ul class="mt-2 mb-0 text-start">
+                                            <li>Policy record and all data</li>
+                                            <li>Uploaded documents (Aadhar, PAN, RC, etc.)</li>
+                                            <li>Financial records and history</li>
+                                        </ul>
+                                    </div>
+                                    <p class="text-danger fw-bold">
+                                        <i class="bx bx-error me-2"></i>This action cannot be undone!
+                                    </p>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <i class="fas fa-times me-1"></i>Cancel
+                                    <i class="bx bx-x me-1"></i>Cancel
                                 </button>
-                                <button type="button" class="btn btn-danger" onclick="confirmDeletePolicy(${id})" data-bs-dismiss="modal">
-                                    <i class="fas fa-trash-alt me-1"></i>Delete Policy
+                                <button type="button" class="btn btn-danger" onclick="confirmDeletePolicyEnhanced(${policyId})" data-bs-dismiss="modal">
+                                    <i class="bx bx-trash me-1"></i>Yes, Delete Policy
                                 </button>
                             </div>
                         </div>
@@ -345,47 +429,116 @@
             new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
         }
         
-        function confirmDeletePolicy(id) {
-            showLoadingOverlay('Deleting policy...');
+        function confirmDeletePolicyEnhanced(policyId) {
+            console.log("Confirming delete for policy ID:", policyId);
             
-            $.post("include/delete-policy.php", { id: id })
-                .done(function(data) {
-                    hideLoadingOverlay();
+            // Show loading toaster
+            showToaster('Deleting policy...', 'info');
+            
+            $.ajax({
+                url: "include/delete-policy.php",
+                type: "POST",
+                data: { id: policyId },
+                dataType: 'text', // Expect text response
+                success: function(data) {
+                    console.log("Delete response:", data);
                     
                     if (data.includes('successfully') || data.includes('deleted')) {
-                        showAlert('Policy deleted successfully!', 'success');
+                        showToaster('Policy deleted successfully!', 'success');
                         // Reload the page after a short delay
                         setTimeout(function() {
                             location.reload();
                         }, 1500);
                     } else {
-                        showAlert('Error: ' + data, 'danger');
+                        showToaster('Error: ' + data, 'error');
                     }
-                })
-                .fail(function(xhr, status, error) {
-                    hideLoadingOverlay();
-                    showAlert('Network error occurred while deleting policy', 'danger');
-                    console.error('Delete error:', error);
-                });
-        }
-    </script>
-    <script type="text/javascript">
-        function viewpolicy(identifier) {
-            console.log("viewpolicy function called");
-            var id= $(identifier).data("id");
-            console.log("Policy ID:", id);
-            
-            $('#renewalpolicyview').modal("show");
-            console.log("Modal show called");
-            
-            $.post("include/view-policy.php",{ id:id }, function(data) {
-                console.log("AJAX response received, length:", data.length);
-                $('#viewpolicydata').html(data);
-            }).fail(function(xhr, status, error) {
-                console.error("AJAX Error:", status, error);
-                console.error("Response:", xhr.responseText);
-                alert("Error loading policy data: " + error);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Delete error:', { xhr, status, error });
+                    showToaster('Network error occurred while deleting policy', 'error');
+                }
             });
+        }
+
+        // Enhanced toaster function
+        function showToaster(message, type = 'info') {
+            console.log('Showing toaster:', { message, type });
+            
+            // Remove existing toasts
+            $('.toast').remove();
+            
+            // Map type to Bootstrap classes
+            const typeClasses = {
+                'success': 'bg-success text-white',
+                'error': 'bg-danger text-white',
+                'warning': 'bg-warning text-dark',
+                'info': 'bg-info text-white'
+            };
+            
+            const typeIcons = {
+                'success': 'bx-check-circle',
+                'error': 'bx-error',
+                'warning': 'bx-error-circle',
+                'info': 'bx-info-circle'
+            };
+            
+            const bgClass = typeClasses[type] || typeClasses.info;
+            const icon = typeIcons[type] || typeIcons.info;
+            
+            // Create toast element
+            const toastHtml = `
+                <div class="toast align-items-center ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bx ${icon} me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Find or create toast container
+            let $container = $('.toast-container');
+            if (!$container.length) {
+                $container = $('<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1070;"></div>');
+                $('body').append($container);
+            }
+            
+            // Add toast to container
+            const $toast = $(toastHtml);
+            $container.append($toast);
+            
+            // Initialize and show toast
+            const toast = new bootstrap.Toast($toast[0], {
+                autohide: true,
+                delay: type === 'error' ? 8000 : 5000
+            });
+            
+            toast.show();
+            
+            // Remove toast element after it's hidden
+            $toast[0].addEventListener('hidden.bs.toast', function() {
+                $(this).remove();
+            });
+        }
+
+        // Enhanced loading overlay functions
+        function showLoadingOverlay(selector) {
+            const loadingHtml = `
+                <div class="loading-overlay">
+                    <div class="loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="mt-2">Loading...</div>
+                    </div>
+                </div>
+            `;
+            $(selector).css('position', 'relative').append(loadingHtml);
+        }
+
+        function hideLoadingOverlay(selector) {
+            $(selector + ' .loading-overlay').remove();
         }
     </script>
 
