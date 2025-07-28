@@ -29,9 +29,8 @@ function showEditModalLoading() {
         return;
     }
     
-    // Show the modal
-    const bootstrapModal = new bootstrap.Modal(modal);
-    bootstrapModal.show();
+    // Show the modal using Bootstrap 4 jQuery API
+    $('#editPolicyModal').modal('show');
     
     // Set loading content
     const modalBody = modal.querySelector('.modal-body');
@@ -39,7 +38,7 @@ function showEditModalLoading() {
         modalBody.innerHTML = `
             <div class="text-center p-5">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="sr-only">Loading...</span>
                 </div>
                 <h5 class="mt-3">Loading Policy Data...</h5>
                 <p class="text-muted">Please wait while we fetch the policy information.</p>
@@ -128,11 +127,11 @@ function showEditModalError(message) {
                 <h5 class="text-danger">Error Loading Policy</h5>
                 <p class="text-muted">${message}</p>
                 <div class="mt-4">
-                    <button type="button" class="btn btn-primary me-2" onclick="loadPolicyData(${currentEditPolicyId})">
-                        <i class="bx bx-refresh me-1"></i>Try Again
+                    <button type="button" class="btn btn-primary mr-2" onclick="loadPolicyData(${currentEditPolicyId})">
+                        <i class="bx bx-refresh mr-1"></i>Try Again
                     </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x me-1"></i>Close
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="bx bx-x mr-1"></i>Close
                     </button>
                 </div>
             </div>
@@ -162,7 +161,7 @@ function populateEditModal(policyData) {
                 <p class="text-muted">Redirecting to edit form...</p>
                 <div class="mt-3">
                     <div class="spinner-border spinner-border-sm text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
             </div>

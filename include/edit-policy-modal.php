@@ -4,9 +4,11 @@
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-primary text-white border-0">
                 <h5 class="modal-title" id="editPolicyModalLabel">
-                    <i class="bx bx-edit me-2"></i>Edit Policy
+                    <i class="bx bx-edit mr-2"></i>Edit Policy
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body p-4">
                 <form id="editPolicyForm" action="include/edit-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -15,7 +17,7 @@
                     <!-- Customer & Vehicle Information -->
                     <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3 text-primary"><i class="bx bx-user me-2"></i>Customer & Vehicle Information</h6>
+                            <h6 class="card-title mb-3 text-primary"><i class="bx bx-user mr-2"></i>Customer & Vehicle Information</h6>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Vehicle Number <span class="text-danger">*</span></label>
@@ -31,7 +33,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
-                                    <select name="vehicle_type" id="edit_vehicle_type" class="form-select" required>
+                                    <select name="vehicle_type" id="edit_vehicle_type" class="form-control" required>
                                         <option value="">Select Vehicle Type</option>
                                         <option value="Two Wheeler">Two Wheeler</option>
                                         <option value="Four Wheeler">Four Wheeler</option>
@@ -55,11 +57,11 @@
                     <!-- Insurance & Policy Details -->
                     <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3 text-success"><i class="bx bx-shield me-2"></i>Insurance & Policy Details</h6>
+                            <h6 class="card-title mb-3 text-success"><i class="bx bx-shield mr-2"></i>Insurance & Policy Details</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Insurance Company <span class="text-danger">*</span></label>
-                                    <select name="insurance_company" id="edit_insurance_company" class="form-select" required>
+                                    <select name="insurance_company" id="edit_insurance_company" class="form-control" required>
                                         <option value="">Select Insurance Company</option>
                                         <option value="HDFC ERGO General Insurance Company Ltd">HDFC ERGO</option>
                                         <option value="ICICI Lombard General Insurance Company Ltd">ICICI Lombard</option>
@@ -87,7 +89,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Policy Type <span class="text-danger">*</span></label>
-                                    <select name="policy_type" id="edit_policy_type" class="form-select" required>
+                                    <select name="policy_type" id="edit_policy_type" class="form-control" required>
                                         <option value="">Select Policy Type</option>
                                         <option value="Comprehensive">Comprehensive</option>
                                         <option value="Third Party">Third Party</option>
@@ -111,7 +113,7 @@
                     <!-- Financial & Additional Details -->
                     <div class="card border mb-4 custom-outline-card">
                         <div class="card-body">
-                            <h6 class="card-title mb-3 text-info"><i class="bx bx-money me-2"></i>Financial & Additional Details</h6>
+                            <h6 class="card-title mb-3 text-info"><i class="bx bx-money mr-2"></i>Financial & Additional Details</h6>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Premium Amount <span class="text-danger">*</span></label>
@@ -158,11 +160,11 @@
                 </form>
             </div>
             <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
-                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                    <i class="bx bx-x me-2"></i>Cancel
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">
+                    <i class="bx bx-x mr-2"></i>Cancel
                 </button>
                 <button type="submit" form="editPolicyForm" class="btn btn-primary btn-lg">
-                    <i class="bx bx-save me-2"></i>Update Policy
+                    <i class="bx bx-save mr-2"></i>Update Policy
                 </button>
             </div>
         </div>
@@ -183,7 +185,7 @@
     border-bottom: none;
 }
 
-.form-control, .form-select {
+.form-control {
     border-radius: 8px;
     border: 1px solid #e5e7eb;
     transition: all 0.3s ease;
@@ -191,7 +193,7 @@
     color: #1f2937;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus {
     border-color: #2563eb;
     box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
     background-color: #ffffff;
@@ -418,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading state
             const submitBtn = document.querySelector('#editPolicyModal button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Updating Policy...';
+            submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin mr-2"></i>Updating Policy...';
             submitBtn.disabled = true;
 
             // Reset after 10 seconds if form doesn't submit
@@ -431,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Reset modal on close
     if (document.getElementById('editPolicyModal')) {
-        document.getElementById('editPolicyModal').addEventListener('hidden.bs.modal', function() {
+        $('#editPolicyModal').on('hidden.bs.modal', function() {
             // Reset calculated fields
             document.getElementById('edit_discount').value = '';
             document.getElementById('edit_calculated_revenue').value = '';
@@ -451,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Reset submit button if it was in loading state
             const submitBtn = document.querySelector('#editPolicyModal button[type="submit"]');
-            submitBtn.innerHTML = '<i class="bx bx-save me-2"></i>Update Policy';
+            submitBtn.innerHTML = '<i class="bx bx-save mr-2"></i>Update Policy';
             submitBtn.disabled = false;
         });
     }

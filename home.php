@@ -127,7 +127,7 @@
                 <div class="container-fluid">
                     <div class="row text-end" >
                         <div class="col-xl-12 " >
-                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPolicyModal">
+                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-toggle="modal" data-target="#addPolicyModal">
                                 <i class="bx bx-plus-circle"></i> Add New Policy
                             </button>
                         </div>
@@ -722,13 +722,15 @@
             $('#viewpolicydata').html(`
                 <div class="modal-header bg-primary text-white border-0">
                     <h5 class="modal-title">
-                        <i class="bx bx-file-blank me-2"></i>Loading Policy Details...
+                        <i class="bx bx-file-blank mr-2"></i>Loading Policy Details...
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body text-center p-5">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="sr-only">Loading...</span>
                     </div>
                     <p class="mt-3">Please wait while we fetch the policy details...</p>
                 </div>
@@ -753,13 +755,15 @@
                         $('#viewpolicydata').html(`
                             <div class="modal-header bg-danger text-white border-0">
                                 <h5 class="modal-title">
-                                    <i class="bx bx-error me-2"></i>Error
+                                    <i class="bx bx-error mr-2"></i>Error
                                 </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <div class="alert alert-danger">
-                                    <i class="bx bx-error-circle me-2"></i>
+                                    <i class="bx bx-error-circle mr-2"></i>
                                     No data received from server. Please try again.
                                 </div>
                             </div>
@@ -773,13 +777,15 @@
                     $('#viewpolicydata').html(`
                         <div class="modal-header bg-danger text-white border-0">
                             <h5 class="modal-title">
-                                <i class="bx bx-error me-2"></i>Connection Error
+                                <i class="bx bx-error mr-2"></i>Connection Error
                             </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             <div class="alert alert-danger">
-                                <i class="bx bx-error-circle me-2"></i>
+                                <i class="bx bx-error-circle mr-2"></i>
                                 <strong>Error loading policy details:</strong><br>
                                 ${error === 'timeout' ? 'Request timed out. Please try again.' : 'Connection error. Please check your internet connection and try again.'}
                             </div>
@@ -1282,8 +1288,8 @@
             const modal = document.getElementById('editPolicyModal');
             if (modal) {
                 console.log('Edit modal found');
-                const bootstrapModal = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
-                console.log('Bootstrap modal instance:', bootstrapModal);
+                // Bootstrap 4 uses jQuery-based modal
+                console.log('Bootstrap modal instance via jQuery:', $('#editPolicyModal').data('bs.modal'));
             } else {
                 console.log('Edit modal not found');
             }
@@ -1293,10 +1299,11 @@
         window.testLibraries = function() {
             console.log('=== TESTING LIBRARIES ===');
             console.log('jQuery version:', typeof $ !== 'undefined' ? $.fn.jquery : 'Not loaded');
-            console.log('Bootstrap version:', typeof bootstrap !== 'undefined' ? 'Loaded' : 'Not loaded');
+            console.log('Bootstrap 4 loaded:', typeof $.fn.modal !== 'undefined' ? 'Yes' : 'No');
             
             if (typeof $ !== 'undefined') {
                 console.log('jQuery modal plugin:', typeof $.fn.modal !== 'undefined' ? 'Available' : 'Not available');
+                console.log('Bootstrap version check:', $().tooltip ? 'Bootstrap loaded' : 'Bootstrap not detected');
             }
         };
         
