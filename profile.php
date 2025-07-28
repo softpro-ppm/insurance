@@ -16,6 +16,8 @@
     <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
     <!-- Enhanced Modal Fix for Interaction Issues -->
     <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Layout System -->
+    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
 </head><body data-sidebar="dark">
 	<div id="layout-wrapper">
 		<header id="page-topbar">
@@ -168,5 +170,7 @@
 	<script src="assets/js/modal-fix.js"></script>
 	<!-- Enhanced Modal Fix JavaScript for Interaction Issues -->
 	<script src="assets/js/modal-fix-enhanced.js"></script>
+	<!-- Enhanced Modal Layout System -->
+	<script src="assets/js/modal-layout-enhanced.js"></script>
 </body>
 </html>

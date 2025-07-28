@@ -1,0 +1,462 @@
+/* Enhanced Modal Layout CSS - Modern Design System */
+
+/* ====================
+   MODAL FOUNDATION
+   ==================== */
+
+/* Modern Modal Sizing & Positioning */
+.modal-xl {
+    --bs-modal-width: 1200px;
+    max-width: 95vw;
+}
+
+.modal-dialog {
+    margin: 1rem auto;
+    max-height: calc(100vh - 2rem);
+}
+
+.modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 3.5rem);
+}
+
+/* Enhanced Modal Content Styling */
+.modal-content {
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    border: none;
+    background: #ffffff;
+}
+
+/* Modern Modal Header */
+.modal-header {
+    padding: 1.75rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: none;
+    position: relative;
+}
+
+.modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0.9;
+}
+
+.modal-header * {
+    position: relative;
+    z-index: 2;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.modal-title i {
+    font-size: 1.75rem;
+    opacity: 0.9;
+}
+
+.btn-close-white {
+    background: none;
+    border: none;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.btn-close-white:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+/* ====================
+   MODAL BODY LAYOUT
+   ==================== */
+
+.modal-body {
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 400px;
+}
+
+/* Enhanced Card System */
+.custom-outline-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.custom-outline-card:hover {
+    border-color: #cbd5e0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.custom-outline-card .card-body {
+    padding: 1.5rem;
+}
+
+.custom-outline-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #374151;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 0.75rem;
+}
+
+.custom-outline-card .card-title i {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+/* Color-coded card titles */
+.text-primary { color: #3b82f6 !important; }
+.text-success { color: #10b981 !important; }
+.text-info { color: #06b6d4 !important; }
+.text-warning { color: #f59e0b !important; }
+
+/* ====================
+   FORM ELEMENTS
+   ==================== */
+
+/* Enhanced Form Groups */
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.form-label .text-danger {
+    color: #ef4444 !important;
+    font-size: 1rem;
+}
+
+/* Modern Form Controls */
+.form-control, .form-select {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+    background-color: #ffffff;
+}
+
+.form-control:hover:not(:focus), .form-select:hover:not(:focus) {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Readonly Fields Styling */
+.form-control[readonly] {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+/* Select Styling */
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+}
+
+/* File Input Styling */
+input[type="file"] {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 1rem;
+    background: #f9fafb;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+/* ====================
+   FINANCIAL FIELDS
+   ==================== */
+
+/* Calculated Fields Special Styling */
+#modal_discount, #modal_calculated_revenue,
+#edit_discount, #edit_calculated_revenue {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: #10b981;
+    color: #059669;
+}
+
+/* Premium and financial input styling */
+input[name="premium"], input[name="payout"], input[name="customer_paid"],
+#modal_premium, #modal_payout, #modal_customer_paid,
+#edit_premium, #edit_payout, #edit_customer_paid {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: right;
+    background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+    border-color: #f59e0b;
+}
+
+input[name="premium"]:focus, input[name="payout"]:focus, input[name="customer_paid"]:focus,
+#modal_premium:focus, #modal_payout:focus, #modal_customer_paid:focus,
+#edit_premium:focus, #edit_payout:focus, #edit_customer_paid:focus {
+    background: #ffffff;
+    border-color: #3b82f6;
+}
+
+/* ====================
+   RESPONSIVE GRID
+   ==================== */
+
+/* Enhanced Grid System */
+.row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+.row > * {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+/* Responsive Form Layout */
+@media (max-width: 768px) {
+    .modal-xl {
+        --bs-modal-width: 100%;
+        margin: 0;
+    }
+    
+    .modal-dialog {
+        margin: 0;
+        max-height: 100vh;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .custom-outline-card .card-body {
+        padding: 1rem;
+    }
+    
+    .modal-header {
+        padding: 1.25rem 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1.25rem;
+    }
+    
+    /* Stack form fields on mobile */
+    .col-md-6, .col-md-4, .col-md-3 {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ====================
+   MODAL FOOTER
+   ==================== */
+
+.modal-footer {
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Enhanced Button Styling */
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    box-shadow: 0 10px 15px -3px rgba(107, 114, 128, 0.4);
+    transform: translateY(-2px);
+}
+
+/* ====================
+   LOADING STATES
+   ==================== */
+
+/* Loading animations */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.bx-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Button loading state */
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ====================
+   SPECIAL EFFECTS
+   ==================== */
+
+/* Smooth transitions for all interactive elements */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Focus visible improvements */
+.form-control:focus-visible,
+.form-select:focus-visible,
+.btn:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for modal */
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* ====================
+   ACCESSIBILITY
+   ==================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .custom-outline-card {
+        border-width: 3px;
+    }
+    
+    .form-control, .form-select {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ====================
+   UTILITY CLASSES
+   ==================== */
+
+.text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.border-gradient {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+}
+
+/* Field validation visual feedback */
+.field-success {
+    border-color: #10b981 !important;
+    background-color: #ecfdf5 !important;
+}
+
+.field-error {
+    border-color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+}
+
+.field-warning {
+    border-color: #f59e0b !important;
+    background-color: #fffbeb !important;
+}

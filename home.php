@@ -20,6 +20,8 @@
     <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
     <!-- Enhanced Modal Fix for Interaction Issues -->
     <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Layout System -->
+    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -1090,6 +1092,8 @@
     <script src="assets/js/modal-fix.js"></script>
     <!-- Enhanced Modal Fix JavaScript -->
     <script src="assets/js/modal-fix-enhanced.js"></script>
+    <!-- Enhanced Modal Layout System -->
+    <script src="assets/js/modal-layout-enhanced.js"></script>
 </body>
 
 </html>
