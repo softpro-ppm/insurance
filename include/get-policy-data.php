@@ -1,7 +1,13 @@
 <?php
 // get-policy-data.php - Fetch policy data for editing
 session_start();
-include 'config.php';
+
+// Try local config first, fallback to original
+if (file_exists('config-local.php')) {
+    include 'config-local.php';
+} else {
+    include 'config.php';
+}
 
 // Set JSON header
 header('Content-Type: application/json');
@@ -10,8 +16,14 @@ header('Content-Type: application/json');
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors in JSON response
 
+// Debug function to log errors
+function debugLog($message) {
+    error_log(date('[Y-m-d H:i:s] ') . $message . PHP_EOL, 3, '../debug.log');
+}
+
 // Check if user is logged in
 if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
+    debugLog('Authentication failed - no session');
     echo json_encode(['success' => false, 'message' => 'Not authenticated', 'debug' => 'Session check failed']);
     exit;
 }
@@ -21,15 +33,25 @@ $policy_id = null;
 
 if (isset($_POST['policy_id']) && !empty($_POST['policy_id'])) {
     $policy_id = intval($_POST['policy_id']);
+    debugLog('Policy ID from POST: ' . $policy_id);
 } elseif (isset($_GET['id']) && !empty($_GET['id'])) {
     $policy_id = intval($_GET['id']);
+    debugLog('Policy ID from GET: ' . $policy_id);
 } else {
+    debugLog('No policy ID provided - POST: ' . print_r($_POST, true) . ' GET: ' . print_r($_GET, true));
     echo json_encode(['success' => false, 'message' => 'Policy ID is required', 'debug' => 'No ID provided']);
     exit;
 }
 
 // Debug log
-error_log("Fetching policy data for ID: " . $policy_id);
+debugLog("Fetching policy data for ID: " . $policy_id);
+
+// Check database connection
+if (!$con || $con->connect_errno) {
+    debugLog('Database connection failed: ' . ($con ? $con->connect_error : 'No connection object'));
+    echo json_encode(['success' => false, 'message' => 'Database connection failed', 'debug' => 'Connection error']);
+    exit;
+}
 
 try {
     // Prepare and execute query to fetch policy data

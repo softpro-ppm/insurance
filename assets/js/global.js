@@ -237,21 +237,45 @@ function loadPolicyForEdit(policyId) {
         type: 'POST',
         data: { policy_id: policyId },
         dataType: 'json',
+        beforeSend: function() {
+            console.log('Sending AJAX request for policy ID:', policyId);
+        },
         success: function(response) {
-            console.log('Policy data loaded:', response);
+            console.log('AJAX Success - Raw response:', response);
             hideLoadingOverlay('#editPolicyModal .modal-content');
             
-            if (response.success) {
+            if (response && response.success) {
+                console.log('Policy data loaded successfully:', response.data);
                 populateEditForm(response.data);
             } else {
-                console.error('Failed to load policy data:', response.message);
-                showAlert('Failed to load policy data: ' + response.message, 'danger');
+                console.error('Failed to load policy data:', response);
+                const errorMsg = response && response.message ? response.message : 'Unknown error';
+                const debugInfo = response && response.debug ? response.debug : '';
+                showAlert('Failed to load policy data: ' + errorMsg + (debugInfo ? ' (' + debugInfo + ')' : ''), 'danger');
             }
         },
         error: function(xhr, status, error) {
-            console.error('AJAX error loading policy:', { xhr, status, error });
+            console.error('AJAX Error Details:', {
+                status: status,
+                error: error,
+                responseText: xhr.responseText,
+                statusCode: xhr.status,
+                statusText: xhr.statusText
+            });
             hideLoadingOverlay('#editPolicyModal .modal-content');
-            showAlert('Error loading policy data. Please try again.', 'danger');
+            
+            let errorMessage = 'Error loading policy data. ';
+            if (xhr.status === 0) {
+                errorMessage += 'Network connection failed.';
+            } else if (xhr.status === 404) {
+                errorMessage += 'File not found (404).';
+            } else if (xhr.status === 500) {
+                errorMessage += 'Server error (500).';
+            } else {
+                errorMessage += 'Status: ' + xhr.status + ' - ' + error;
+            }
+            
+            showAlert(errorMessage, 'danger');
         }
     });
 }
