@@ -171,7 +171,7 @@
                     <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
-			<footer class="footer">
+			<!-- <footer class="footer">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-sm-6">
@@ -183,7 +183,7 @@
 						</div>
 					</div>
 				</div>
-			</footer>
+			</footer> -->
 		</div>
 	</div>
 	<script src="assets/libs/jquery/jquery.min.js"></script>
