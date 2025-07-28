@@ -1,14 +1,14 @@
 <!-- Enhanced Edit Policy Modal -->
 <div class="modal fade" id="editPolicyModal" tabindex="-1" aria-labelledby="editPolicyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-gradient-primary text-white border-0">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="editPolicyModalLabel">
                     <i class="bx bx-edit me-2"></i>Edit Policy
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
                 <form id="editPolicyForm" action="include/edit-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
                     <input type="hidden" name="policy_id" id="edit_policy_id">
                     
@@ -157,12 +157,12 @@
 
                 </form>
             </div>
-            <div class="modal-footer border-0 d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                    <i class="bx bx-x me-2"></i>Cancel
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i> Cancel
                 </button>
-                <button type="submit" form="editPolicyForm" class="btn btn-primary btn-lg">
-                    <i class="bx bx-save me-2"></i>Update Policy
+                <button type="submit" form="editPolicyForm" class="btn btn-primary">
+                    <i class="bx bx-save"></i> Update Policy
                 </button>
             </div>
         </div>

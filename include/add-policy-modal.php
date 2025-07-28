@@ -1,14 +1,14 @@
 <!-- Enhanced Single-Step Add Policy Modal -->
 <div class="modal fade" id="addPolicyModal" tabindex="-1" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-gradient-primary text-white border-0">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="addPolicyModalLabel">
                     <i class="bx bx-plus-circle me-2"></i>Add New Policy
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
                 <form id="addPolicyForm" action="include/add-policies-fixed.php" method="post" enctype="multipart/form-data" autocomplete="off">
                     
                     <!-- Customer & Vehicle Information -->
@@ -152,12 +152,12 @@
 
                 </form>
             </div>
-            <div class="modal-footer border-0 d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                    <i class="bx bx-x me-2"></i>Cancel
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i> Cancel
                 </button>
-                <button type="submit" form="addPolicyForm" class="btn btn-primary btn-lg">
-                    <i class="bx bx-check me-2"></i>Add Policy
+                <button type="submit" form="addPolicyForm" class="btn btn-primary">
+                    <i class="bx bx-check"></i> Add Policy
                 </button>
             </div>
         </div>

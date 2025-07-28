@@ -194,27 +194,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Force center alignment for all modal footers
-    function forceCenterAlignment() {
+    // Enforce standard right alignment for all modal footers
+    function enforceStandardAlignment() {
         const modalFooters = document.querySelectorAll('.modal-footer');
         
         modalFooters.forEach(footer => {
-            // Add center alignment classes
-            footer.classList.add('d-flex', 'justify-content-center', 'align-items-center');
-            footer.style.justifyContent = 'center';
+            // Add standard alignment classes
+            footer.classList.add('d-flex');
+            footer.classList.remove('justify-content-center', 'justify-content-start', 'align-items-center');
+            footer.style.justifyContent = 'flex-end';
             footer.style.alignItems = 'center';
-            footer.style.textAlign = 'center';
             footer.style.display = 'flex';
-            footer.style.gap = '1rem';
+            footer.style.gap = '0.75rem';
+            footer.style.padding = '1rem 1.5rem';
+            footer.style.borderTop = '1px solid #dee2e6';
+            footer.style.backgroundColor = '#ffffff';
+            footer.style.borderRadius = '0 0 8px 8px';
             
-            // Remove any conflicting classes
-            footer.classList.remove('justify-content-end', 'justify-content-start', 'text-end', 'text-start');
+            // Remove center alignment classes if present
+            footer.classList.remove('justify-content-center', 'text-center');
         });
     }
     
     // Initialize all enhancements
     function initializeModalButtonEnhancements() {
-        forceCenterAlignment();
+        enforceStandardAlignment();
         addButtonClickFeedback();
         enhanceSubmissionButtons();
         addKeyboardNavigation();
@@ -222,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         manageButtonStates();
         enhanceErrorHandling();
         
-        console.log('Modal button enhancements initialized');
+        console.log('Modal button enhancements initialized with standard layout');
     }
     
     // Run initialization
@@ -236,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (node.nodeType === 1 && (node.classList.contains('modal') || node.querySelector('.modal'))) {
                         setTimeout(() => {
                             initializeModalButtonEnhancements();
-                            forceCenterAlignment();
+                            enforceStandardAlignment();
                         }, 100);
                     }
                 });
@@ -249,9 +253,9 @@ document.addEventListener('DOMContentLoaded', function() {
         subtree: true
     });
     
-    // Also fix alignment when modals are shown
+    // Also enforce standard alignment when modals are shown
     document.addEventListener('shown.bs.modal', function(e) {
-        setTimeout(forceCenterAlignment, 50);
+        setTimeout(enforceStandardAlignment, 50);
     });
 });
 

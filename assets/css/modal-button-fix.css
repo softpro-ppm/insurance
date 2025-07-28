@@ -1,94 +1,98 @@
-/* Enhanced Modal Button Fixes for All Modals */
+/* Enhanced Modal Button Fixes for All Modals - Standard Layout */
 
-/* Modal Footer Enhancements - Perfect Center Alignment */
+/* Modal Footer Enhancements - Standard Right Alignment */
 .modal-footer {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 1070 !important;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    background: #ffffff !important;
     border-top: 1px solid #dee2e6 !important;
-    padding: 1.25rem 2rem !important;
+    padding: 1rem 1.5rem !important;
     border-radius: 0 0 15px 15px !important;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
     margin-top: auto !important;
     
-    /* Perfect center alignment */
+    /* Standard right alignment */
     display: flex !important;
-    justify-content: center !important;
+    justify-content: flex-end !important;
     align-items: center !important;
-    gap: 1rem !important;
+    gap: 0.75rem !important;
     flex-wrap: wrap !important;
-    text-align: center !important;
 }
 
-/* Override any external alignment styles */
+/* Override any external alignment styles for standard layout */
 .modal-footer.text-end,
 .modal-footer.text-start,
 .modal-footer.text-left,
-.modal-footer.text-right {
-    text-align: center !important;
-    justify-content: center !important;
+.modal-footer.text-right,
+.modal-footer.justify-content-center {
+    justify-content: flex-end !important;
 }
 
-/* Button Styling and Positioning */
+/* Button Styling and Positioning - Standard Layout */
 .modal-footer .btn {
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    padding: 0.75rem 2rem !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease !important;
-    margin: 0 0.5rem !important;
-    min-width: 120px !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    transition: all 0.2s ease !important;
+    margin: 0 !important;
+    min-width: 80px !important;
     position: relative !important;
     z-index: 1071 !important;
     pointer-events: all !important;
     cursor: pointer !important;
+    border: 1px solid transparent !important;
 }
 
-/* Primary Button Styling */
+/* Primary Button Styling - Standard Bootstrap */
 .modal-footer .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border: none !important;
-    color: white !important;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 .modal-footer .btn-primary:hover {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
-/* Secondary Button Styling */
+/* Secondary Button Styling - Standard Bootstrap */
 .modal-footer .btn-secondary {
-    background: #6c757d !important;
-    border: 1px solid #6c757d !important;
-    color: white !important;
-    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2) !important;
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 .modal-footer .btn-secondary:hover {
-    background: #5a6268 !important;
-    border-color: #545b62 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3) !important;
+    background-color: #5c636a !important;
+    border-color: #565e64 !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
-/* Button Focus States */
+/* Button Focus States - Standard */
 .modal-footer .btn:focus {
     outline: none !important;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
 }
 
-/* Button Active States */
+.modal-footer .btn-secondary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25) !important;
+}
+
+/* Button Active States - Standard */
 .modal-footer .btn:active {
-    transform: translateY(0) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+    transform: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
 }
 
-/* Button Disabled State */
+/* Button Disabled State - Standard */
 .modal-footer .btn:disabled {
-    opacity: 0.6 !important;
+    opacity: 0.65 !important;
     cursor: not-allowed !important;
     transform: none !important;
     box-shadow: none !important;
@@ -104,54 +108,49 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Button Container Flexbox - Simplified Center Alignment */
+/* Button Container Flexbox - Standard Right Alignment */
 .modal-footer {
     display: flex !important;
-    justify-content: center !important;
+    justify-content: flex-end !important;
     align-items: center !important;
-    gap: 1rem !important;
-    padding: 1.25rem 2rem !important;
+    gap: 0.75rem !important;
+    padding: 1rem 1.5rem !important;
     flex-wrap: wrap !important;
 }
 
-/* Center buttons horizontally - Remove any margin auto conflicts */
+/* Standard button spacing */
 .modal-footer .btn {
-    margin-left: 0.5rem !important;
-    margin-right: 0.5rem !important;
+    margin: 0 !important;
 }
 
-/* Ensure button group is also centered */
+/* Ensure button group follows standard alignment */
 .modal-footer .btn-group,
 .modal-footer .d-flex {
-    justify-content: center !important;
+    justify-content: flex-end !important;
     align-items: center !important;
-    gap: 1rem !important;
-    margin: 0 auto !important;
+    gap: 0.75rem !important;
 }
 
-/* Responsive Button Styling */
+/* Responsive Button Styling - Standard */
 @media (max-width: 576px) {
     .modal-footer {
         padding: 1rem !important;
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-        justify-content: center !important;
-        align-items: center !important;
+        justify-content: stretch !important;
+        flex-direction: row !important;
+        gap: 0.5rem !important;
     }
     
     .modal-footer .btn {
-        width: 100% !important;
-        margin: 0 !important;
+        flex: 1 !important;
         min-width: auto !important;
-        max-width: 300px !important;
     }
 }
 
 @media (min-width: 577px) and (max-width: 768px) {
     .modal-footer .btn {
-        min-width: 100px !important;
-        padding: 0.6rem 1.5rem !important;
-        font-size: 0.95rem !important;
+        min-width: 70px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-size: 0.875rem !important;
     }
 }
 
@@ -163,7 +162,37 @@
     z-index: 1072 !important;
 }
 
-/* Modal Content Spacing to Account for Sticky Footer */
+/* Standard Modal Content Layout */
+.modal-dialog {
+    max-width: 700px !important;
+    width: 90% !important;
+    margin: 1rem auto !important;
+}
+
+.modal-content {
+    border-radius: 8px !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.modal-header {
+    padding: 1rem 1.5rem !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background-color: #f8f9fa !important;
+}
+
+.modal-body {
+    padding: 1.5rem !important;
+}
+
+.modal-title {
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    color: #212529 !important;
+}
+
+/* Standard Modal Dialog Spacing */
 .modal-dialog-scrollable .modal-content {
     display: flex !important;
     flex-direction: column !important;
@@ -173,53 +202,50 @@
 .modal-dialog-scrollable .modal-body {
     flex: 1 1 auto !important;
     overflow-y: auto !important;
-    padding-bottom: 2rem !important;
+    padding: 1.5rem !important;
 }
 
-/* Enhanced Visual Feedback */
-.modal-footer .btn-primary:hover i,
-.modal-footer .btn-secondary:hover i {
-    transform: scale(1.1) !important;
-    transition: transform 0.2s ease !important;
-}
-
-/* Fix for button text alignment */
+/* Remove Enhanced Visual Feedback for Standard Look */
+/* Simplified icon styling */
 .modal-footer .btn i {
     vertical-align: middle !important;
-    margin-right: 0.5rem !important;
+    margin-right: 0.25rem !important;
+    font-size: 0.875rem !important;
 }
 
-/* Button group spacing */
+/* Standard button group spacing */
 .modal-footer .btn-group .btn {
     margin: 0 !important;
 }
 
-/* Success button variant for edit modals */
+/* Standard success button variant */
 .modal-footer .btn-success {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
-    border: none !important;
-    color: white !important;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 .modal-footer .btn-success:hover {
-    background: linear-gradient(135deg, #218838 0%, #1ea080 100%) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4) !important;
+    background-color: #157347 !important;
+    border-color: #146c43 !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
-/* Danger button variant for delete actions */
+/* Standard danger button variant */
 .modal-footer .btn-danger {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
-    border: none !important;
-    color: white !important;
-    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3) !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
 }
 
 .modal-footer .btn-danger:hover {
-    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4) !important;
+    background-color: #bb2d3b !important;
+    border-color: #b02a37 !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* Modal Footer z-index and Priority Overrides */
@@ -231,25 +257,32 @@
     z-index: 1071 !important;
 }
 
-/* Additional Center Alignment Overrides */
+/* Standard Layout Override Styles */
 .modal .modal-footer,
 div.modal-footer,
 .modal-content .modal-footer {
     display: flex !important;
-    justify-content: center !important;
+    justify-content: flex-end !important;
     align-items: center !important;
-    text-align: center !important;
+    padding: 1rem 1.5rem !important;
+    border-top: 1px solid #dee2e6 !important;
+    background-color: #ffffff !important;
 }
 
-/* Override Bootstrap default justify-content */
-.modal-footer.justify-content-end,
+/* Override any custom alignment to maintain standard layout */
+.modal-footer.justify-content-center,
 .modal-footer.justify-content-start,
 .modal-footer.justify-content-between,
-.modal-footer.d-flex.justify-content-end {
-    justify-content: center !important;
+.modal-footer.d-flex.justify-content-center {
+    justify-content: flex-end !important;
 }
 
-/* Ensure consistent button spacing */
+/* Standard button spacing */
 .modal-footer .btn + .btn {
-    margin-left: 1rem !important;
+    margin-left: 0.75rem !important;
+}
+
+/* Clean up any border radius overrides */
+.modal-footer {
+    border-radius: 0 0 8px 8px !important;
 }
