@@ -215,17 +215,20 @@
                 $('#datatable').DataTable().destroy();
             }
             
-            // Initialize DataTable with enhanced features - matching global.js configuration
+            // Initialize DataTable with enhanced features and fixed layout
             var table = $('#datatable').DataTable({
                 "order": [], // No initial sorting to maintain our ORDER BY DESC from SQL
                 "pageLength": 30, // Default to 30 as requested (10, 30, 50, 100, All)
                 "lengthMenu": [[10, 30, 50, 100, -1], [10, 30, 50, 100, "All"]],
-                "responsive": true,
+                "responsive": false, // Disable responsive to prevent layout issues
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
+                "autoWidth": false, // Disable auto width
                 "stateSave": true,
+                "scrollX": true, // Enable horizontal scrolling for better mobile experience
+                "scrollCollapse": true,
+                "fixedColumns": true,
                 "dom": 'Bfrtip',
                 "buttons": [
                     {
@@ -265,13 +268,60 @@
                         "targets": 0, // First column (S.NO.)
                         "searchable": false,
                         "orderable": false,
-                        "className": "text-center"
+                        "className": "text-center",
+                        "width": "60px"
+                    },
+                    {
+                        "targets": 1, // Vehicle Number
+                        "width": "120px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 2, // Name
+                        "width": "150px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 3, // Phone
+                        "width": "120px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 4, // Vehicle Type
+                        "width": "100px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 5, // Policy Type
+                        "width": "100px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 6, // Insurance Company
+                        "width": "150px",
+                        "className": "text-nowrap"
+                    },
+                    {
+                        "targets": 7, // Premium
+                        "width": "100px",
+                        "className": "text-end"
+                    },
+                    {
+                        "targets": 8, // Policy Start Date
+                        "width": "120px",
+                        "className": "text-center text-nowrap"
+                    },
+                    {
+                        "targets": 9, // Policy End Date
+                        "width": "120px",
+                        "className": "text-center text-nowrap"
                     },
                     {
                         "targets": -1, // Last column (Actions)
                         "searchable": false,
                         "orderable": false,
-                        "className": "text-center action-buttons"
+                        "className": "text-center action-buttons",
+                        "width": "130px"
                     }
                 ],
                 "drawCallback": function(settings) {
@@ -289,6 +339,24 @@
                     tooltipTriggerList.map(function(tooltipTriggerEl) {
                         return new bootstrap.Tooltip(tooltipTriggerEl);
                     });
+                    
+                    // Fix any table layout issues after redraw
+                    setTimeout(function() {
+                        table.columns.adjust().draw(false);
+                    }, 100);
+                },
+                "initComplete": function(settings, json) {
+                    console.log('DataTable initialized successfully');
+                    
+                    // Ensure proper table layout
+                    var table = this.api();
+                    table.columns.adjust();
+                    
+                    // Fix any rendering issues
+                    setTimeout(function() {
+                        $('#datatable').removeClass('dataTable').addClass('dataTable');
+                        table.columns.adjust().draw(false);
+                    }, 200);
                 },
                 "language": {
                     "search": "Search policies:",
