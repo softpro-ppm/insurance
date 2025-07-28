@@ -48,6 +48,17 @@
     max-height: calc(100vh - 3.5rem);
 }
 
+/* Fix for view policy modal - ensure full data visibility */
+#renewalpolicyview .modal-content {
+    max-height: calc(100vh - 2rem) !important;
+}
+
+#renewalpolicyview .modal-body {
+    max-height: calc(100vh - 150px) !important;
+    overflow-y: auto !important;
+    padding: 1.5rem !important;
+}
+
 /* Optimize form layouts for medium size */
 .modal-body .row {
     margin-bottom: 1rem;
@@ -66,6 +77,23 @@
 .modal-dialog-scrollable .modal-body {
     overflow-y: auto;
     max-height: calc(100vh - 200px);
+}
+
+/* Enhanced scrollable settings for view policy modal */
+#renewalpolicyview.modal-dialog-scrollable .modal-body,
+#renewalpolicyview .modal-dialog-scrollable .modal-body {
+    max-height: calc(100vh - 120px) !important;
+    overflow-y: auto !important;
+    padding: 1rem !important;
+}
+
+/* Footer positioning for view policy */
+#renewalpolicyview .modal-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #ffffff !important;
+    z-index: 1071 !important;
+    border-top: 1px solid #dee2e6 !important;
 }
 
 /* Enhanced visual consistency */
@@ -90,4 +118,61 @@
     font-size: 0.9rem;
     font-weight: 500;
     margin-bottom: 0.5rem;
+}
+
+/* Custom scrollbar for view policy modal */
+#renewalpolicyview .modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Ensure all cards and content are visible */
+#renewalpolicyview .card {
+    margin-bottom: 1rem !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 8px !important;
+}
+
+#renewalpolicyview .card-body {
+    padding: 1rem !important;
+}
+
+#renewalpolicyview .info-value {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+}
+
+/* Fix for view policy modal content spacing */
+#renewalpolicyview .row {
+    margin: 0 !important;
+}
+
+#renewalpolicyview .col-md-6,
+#renewalpolicyview .col-md-4 {
+    padding: 0.5rem !important;
+}
+
+/* Ensure modal doesn't get cut off */
+#renewalpolicyview .modal-dialog {
+    margin: 0.5rem auto !important;
+}
+
+@media (min-width: 576px) {
+    #renewalpolicyview .modal-dialog {
+        margin: 1rem auto !important;
+    }
 }

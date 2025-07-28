@@ -32,6 +32,8 @@
 	<link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
 	<!-- Critical Modal Fix - Emergency Override -->
 	<link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
+	<!-- View Policy Modal Complete Data Display Fix -->
+	<link href="assets/css/view-policy-modal-fix.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -333,5 +335,7 @@
     <script src="assets/js/modal-button-fix.js"></script>
     <!-- Critical Modal Fix - Emergency Override -->
     <script src="assets/js/modal-fix-critical.js"></script>
+    <!-- View Policy Modal Complete Data Display Fix -->
+    <script src="assets/js/view-policy-modal-fix.js"></script>
 </body>
 </html>

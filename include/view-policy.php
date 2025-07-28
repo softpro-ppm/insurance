@@ -2,8 +2,39 @@
 	include 'session.php';
 	include 'config.php';
 
-	$sql = mysqli_query($con, "select * from policy where id='".$_POST['id']."'");
-	$r=mysqli_fetch_array($sql);
+	// Validate input
+	if (!isset($_POST['id']) || empty($_POST['id'])) {
+		echo '<div class="modal-header bg-danger text-white">
+				<h5 class="modal-title">Error</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-danger">Invalid policy ID provided.</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>';
+		exit;
+	}
+
+	$policy_id = mysqli_real_escape_string($con, $_POST['id']);
+	$sql = mysqli_query($con, "select * from policy where id='".$policy_id."'");
+	
+	if (!$sql || mysqli_num_rows($sql) == 0) {
+		echo '<div class="modal-header bg-warning text-dark">
+				<h5 class="modal-title">Policy Not Found</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-warning">The requested policy could not be found in the database.</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>';
+		exit;
+	}
+	
+	$r = mysqli_fetch_array($sql);
 
 	if($r['fc_expiry_date'] !=''){
 		$fc_expiry_date = date('d-m-Y', strtotime($r['fc_expiry_date']));
@@ -17,8 +48,7 @@
 		$permit_expiry_date = '';
 	}
 
-	$data = 
-		'<div class="modal-header bg-gradient-primary text-white border-0">
+	$data = '<div class="modal-header bg-gradient-primary text-white border-0">
             <h5 class="modal-title d-flex align-items-center" id="transaction-detailModalLabel">
                 <i class="bx bx-file-blank me-2"></i>
                 <span>Policy Details - <strong>'.$r['vehicle_number'].'</strong></span>
@@ -26,6 +56,46 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+            
+            <!-- Data Completeness Summary -->
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="bx bx-data me-2"></i>Data Completeness Overview</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="badge bg-primary p-2">
+                                <i class="bx bx-id-card"></i><br>
+                                <small>Policy ID: #'.$r['id'].'</small>
+                            </div>
+                        </div>';
+                        
+        // Financial completeness badge
+        $financial_complete = (!empty($r['payout']) && !empty($r['customer_paid']));
+        $data .= '<div class="col-md-3 text-center">
+                            <div class="badge '.($financial_complete ? 'bg-success' : 'bg-warning').' p-2">
+                                <i class="bx bx-money"></i><br>
+                                <small>'.($financial_complete ? 'Complete Financial' : 'Basic Financial').'</small>
+                            </div>
+                        </div>';
+                        
+        // Comments badge
+        $data .= '<div class="col-md-3 text-center">
+                            <div class="badge '.(!empty($r['comments']) ? 'bg-success' : 'bg-secondary').' p-2">
+                                <i class="bx bx-comment"></i><br>
+                                <small>'.(!empty($r['comments']) ? 'Has Comments' : 'No Comments').'</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="badge bg-info p-2">
+                                <i class="bx bx-time"></i><br>
+                                <small>'.date('M Y', strtotime($r['created_date'])).'</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Customer & Vehicle Info Card -->
             <div class="card border-0 shadow-sm mb-4">
@@ -140,7 +210,7 @@
                         </div>';
                         
         // Show new financial fields if available
-        if (isset($r['payout']) && $r['payout'] > 0) {
+        if (isset($r['payout']) && $r['payout'] !== null) {
             $data .= '<div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Payout:</label>
@@ -148,7 +218,7 @@
                             </div>
                         </div>';
         }
-        if (isset($r['customer_paid']) && $r['customer_paid'] > 0) {
+        if (isset($r['customer_paid']) && $r['customer_paid'] !== null) {
             $data .= '<div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Customer Paid:</label>
@@ -156,11 +226,21 @@
                             </div>
                         </div>';
         }
-        if (isset($r['discount']) && $r['discount'] > 0) {
+        if (isset($r['discount']) && $r['discount'] !== null) {
             $data .= '<div class="col-md-4 mb-3">
                             <div class="info-item">
                                 <label class="info-label">Discount:</label>
                                 <div class="info-value">₹'.number_format($r['discount'], 2).'</div>
+                            </div>
+                        </div>';
+        }
+        
+        // Show calculated revenue if available
+        if (isset($r['calculated_revenue']) && $r['calculated_revenue'] !== null) {
+            $data .= '<div class="col-md-4 mb-3">
+                            <div class="info-item">
+                                <label class="info-label">Calculated Revenue:</label>
+                                <div class="info-value text-info">₹'.number_format($r['calculated_revenue'], 2).'</div>
                             </div>
                         </div>';
         }
@@ -237,16 +317,28 @@
                 </div>
             </div>';
             
-        // Comments section if exists
+        // Show policy comments if available (inline comments field)
+        if (!empty($r['comments'])) {
+            $data .= '<div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="bx bx-comment-detail me-2"></i>Policy Comments</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info mb-0">'.htmlspecialchars($r['comments']).'</div>
+                        </div>
+                    </div>';
+        }
+            
+        // Comments section if exists (from separate comments table)
         $comments_sql = mysqli_query($con, "select * from comments where policy_id='".$r['id']."'");
         if (mysqli_num_rows($comments_sql) > 0) {
             $data .= '<div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-secondary text-white">
-                            <h6 class="mb-0"><i class="bx bx-comment me-2"></i>Comments</h6>
+                            <h6 class="mb-0"><i class="bx bx-comment me-2"></i>Additional Comments</h6>
                         </div>
                         <div class="card-body">';
             while ($comment_row = mysqli_fetch_array($comments_sql)) {
-                $data .= '<div class="alert alert-light border">'.$comment_row['comments'].'</div>';
+                $data .= '<div class="alert alert-light border">'.htmlspecialchars($comment_row['comments']).'</div>';
             }
             $data .= '</div>
                     </div>';
@@ -261,13 +353,40 @@
                         <div class="card-body">
                             <div class="info-item">
                                 <label class="info-label">Chassis Number:</label>
-                                <div class="info-value">'.$r['chassiss'].'</div>
+                                <div class="info-value">'.htmlspecialchars($r['chassiss']).'</div>
                             </div>
                         </div>
                     </div>';
         }
         
-        $data .= '</div>
+        // Show creation date and last update if available
+        $data .= '<div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="bx bx-time me-2"></i>Record Information</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">';
+        
+        if (!empty($r['created_date'])) {
+            $data .= '<div class="col-md-6 mb-3">
+                        <div class="info-item">
+                            <label class="info-label">Created Date:</label>
+                            <div class="info-value">'.date('d-m-Y H:i', strtotime($r['created_date'])).'</div>
+                        </div>
+                    </div>';
+        }
+        
+        $data .= '<div class="col-md-6 mb-3">
+                    <div class="info-item">
+                        <label class="info-label">Policy ID:</label>
+                        <div class="info-value badge bg-secondary">#'.$r['id'].'</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        </div>
         <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
             <button type="button" class="btn btn-primary btn-lg" onclick="openEditFromView('.$r['id'].')">
                 <i class="bx bx-edit me-2"></i>Edit Policy
