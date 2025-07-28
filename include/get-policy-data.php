@@ -6,19 +6,26 @@ include 'config.php';
 // Set JSON header
 header('Content-Type: application/json');
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors in JSON response
+
 // Check if user is logged in
 if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
-    echo json_encode(['success' => false, 'message' => 'Not authenticated']);
+    echo json_encode(['success' => false, 'message' => 'Not authenticated', 'debug' => 'Session check failed']);
     exit;
 }
 
 // Check if policy ID is provided
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    echo json_encode(['success' => false, 'message' => 'Policy ID is required']);
+    echo json_encode(['success' => false, 'message' => 'Policy ID is required', 'debug' => 'No ID provided']);
     exit;
 }
 
 $policy_id = intval($_GET['id']);
+
+// Debug log
+error_log("Fetching policy data for ID: " . $policy_id);
 
 try {
     // Prepare and execute query to fetch policy data
@@ -82,12 +89,13 @@ try {
         
         echo json_encode(['success' => true, 'policy' => $policy], JSON_NUMERIC_CHECK);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Policy not found']);
+        echo json_encode(['success' => false, 'message' => 'Policy not found', 'debug' => 'No rows returned']);
     }
     
     $stmt->close();
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    error_log("Policy data fetch error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage(), 'debug' => $e->getTraceAsString()]);
 }
 
 $con->close();
