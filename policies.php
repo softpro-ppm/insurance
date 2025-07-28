@@ -215,7 +215,7 @@
                 $('#datatable').DataTable().destroy();
             }
             
-            // Initialize DataTable with enhanced features and fixed layout
+            // Initialize DataTable with enhanced features and anti-bounce configuration
             var table = $('#datatable').DataTable({
                 "order": [], // No initial sorting to maintain our ORDER BY DESC from SQL
                 "pageLength": 30, // Default to 30 as requested (10, 30, 50, 100, All)
@@ -228,7 +228,9 @@
                 "stateSave": true,
                 "scrollX": true, // Enable horizontal scrolling for better mobile experience
                 "scrollCollapse": true,
-                "fixedColumns": true,
+                "fixedColumns": false, // Disable fixed columns to prevent bouncing
+                "processing": false, // Disable processing indicator to prevent bouncing
+                "deferRender": true, // Improve performance and reduce bouncing
                 "dom": 'Bfrtip',
                 "buttons": [
                     {
@@ -325,6 +327,9 @@
                     }
                 ],
                 "drawCallback": function(settings) {
+                    // Prevent bouncing by disabling animations during redraw
+                    $('#datatable').addClass('no-animate');
+                    
                     // Recalculate GLOBAL serial numbers on every redraw (search, sort, pagination)
                     var api = this.api();
                     var pageInfo = api.page.info();
@@ -334,29 +339,39 @@
                         cell.innerHTML = startIndex + i + 1;
                     });
                     
-                    // Re-initialize tooltips for action buttons
+                    // Re-initialize tooltips for action buttons (without animation)
                     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
                     tooltipTriggerList.map(function(tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                        return new bootstrap.Tooltip(tooltipTriggerEl, {
+                            animation: false // Disable tooltip animations
+                        });
                     });
                     
-                    // Fix any table layout issues after redraw
+                    // Re-enable animations after a brief delay
                     setTimeout(function() {
-                        table.columns.adjust().draw(false);
-                    }, 100);
+                        $('#datatable').removeClass('no-animate');
+                    }, 50);
                 },
                 "initComplete": function(settings, json) {
                     console.log('DataTable initialized successfully');
+                    
+                    // Disable animations during initialization
+                    $('#datatable').addClass('no-animate');
                     
                     // Ensure proper table layout
                     var table = this.api();
                     table.columns.adjust();
                     
-                    // Fix any rendering issues
+                    // Fix any rendering issues and stabilize the table
                     setTimeout(function() {
                         $('#datatable').removeClass('dataTable').addClass('dataTable');
-                        table.columns.adjust().draw(false);
-                    }, 200);
+                        table.columns.adjust();
+                        
+                        // Re-enable animations after table is stable
+                        setTimeout(function() {
+                            $('#datatable').removeClass('no-animate');
+                        }, 200);
+                    }, 100);
                 },
                 "language": {
                     "search": "Search policies:",

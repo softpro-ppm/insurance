@@ -1,14 +1,18 @@
-/* Policies Table Display Fix - Enhanced */
+/* Policies Table Display Fix - Enhanced + Anti-Bounce */
 .table {
     border-collapse: separate;
     border-spacing: 0;
+    table-layout: fixed; /* Fixed layout to prevent bouncing */
+    width: 100%;
 }
 
-.table td {
+.table td, .table th {
     vertical-align: middle;
     padding: 0.75rem 0.5rem;
     border: 1px solid #dee2e6;
     position: relative;
+    transition: none !important; /* Disable all transitions to prevent bouncing */
+    animation: none !important; /* Disable all animations */
 }
 
 /* Specific column widths and handling */
@@ -167,9 +171,10 @@
     }
 }
 
-/* DataTable wrapper improvements */
+/* DataTable wrapper improvements - Anti-Bounce */
 .dataTables_wrapper {
     padding: 0;
+    position: relative;
 }
 
 .dataTables_wrapper .dataTables_length,
@@ -184,6 +189,36 @@
 
 .dataTables_wrapper .dataTables_paginate {
     padding-top: 0.75rem;
+}
+
+/* Disable all DataTables animations and transitions */
+.dataTables_wrapper .dataTable {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper .dataTables_processing {
+    position: absolute !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    z-index: 999 !important;
+}
+
+/* Prevent bouncing during sort/filter operations */
+.dataTables_wrapper .sorting,
+.dataTables_wrapper .sorting_asc,
+.dataTables_wrapper .sorting_desc {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper tbody tr {
+    transition: none !important;
+    animation: none !important;
+}
+
+.dataTables_wrapper tbody td {
+    transition: none !important;
+    animation: none !important;
 }
 
 /* Action buttons hover effects */
@@ -279,4 +314,35 @@
 
 .table tbody tr:last-child td {
     border-bottom: 1px solid #dee2e6;
+}
+
+/* Anti-bounce animation disable class */
+.no-animate,
+.no-animate * {
+    transition: none !important;
+    animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+}
+
+/* Disable hover effects during no-animate state */
+.no-animate .action-buttons .btn:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure stable table layout */
+.table-responsive .no-animate {
+    overflow: hidden;
+}
+
+/* Disable DataTables animations globally */
+.dataTables_wrapper .dataTable.no-animate tbody tr {
+    transition: none !important;
+}
+
+.dataTables_wrapper .dataTable.no-animate tbody td {
+    transition: none !important;
 }
