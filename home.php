@@ -127,7 +127,7 @@
                 <div class="container-fluid">
                     <div class="row text-end" >
                         <div class="col-xl-12 " >
-                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-toggle="modal" data-target="#addPolicyModal">
+                            <button type="button" style="float: right;margin-bottom: 15px;" class="btn btn-primary" data-toggle="modal" data-target="#addPolicyModal" onclick="testAddPolicyModal()">
                                 <i class="bx bx-plus-circle"></i> Add New Policy
                             </button>
                         </div>
@@ -576,6 +576,43 @@
     <script src="assets/js/edit-policy-modal-fixed.js"></script>
     <!-- Modern functionality scripts -->
     <script src="assets/js/global-search.js"></script>
+    
+    <!-- Add Policy Modal Debug Script -->
+    <script>
+        $(document).ready(function() {
+            console.log('=== ADD POLICY MODAL DEBUG ===');
+            console.log('jQuery loaded:', typeof $ !== 'undefined');
+            console.log('Bootstrap modal plugin:', typeof $.fn.modal !== 'undefined');
+            
+            // Check if modal exists after DOM is ready
+            setTimeout(function() {
+                const modal = document.getElementById('addPolicyModal');
+                console.log('Modal exists after DOM ready:', modal ? 'Yes' : 'No');
+                
+                if (modal) {
+                    console.log('Modal HTML structure present');
+                    
+                    // Manually bind click event as fallback
+                    $('[data-target="#addPolicyModal"]').off('click.manualModal').on('click.manualModal', function(e) {
+                        e.preventDefault();
+                        console.log('Manual click handler triggered');
+                        
+                        try {
+                            $('#addPolicyModal').modal('show');
+                        } catch (error) {
+                            console.error('Modal show failed:', error);
+                            // Manual fallback
+                            testAddPolicyModal();
+                        }
+                    });
+                    
+                    console.log('Manual click handler attached');
+                } else {
+                    console.error('Modal not found, include files may not be loading');
+                }
+            }, 500);
+        });
+    </script>
     
     
     <!--Modern Analytics Chart Script-->
@@ -1314,6 +1351,103 @@
         console.log('- window.testViewPolicy(policyId)');
         console.log('- window.testDashboard()');
         console.log('- window.testLibraries()');
+        console.log('- window.testAddPolicyModal()');
+        
+        // Add Policy Modal Test Function
+        function testAddPolicyModal() {
+            console.log('=== TESTING ADD POLICY MODAL ===');
+            
+            // Check if modal exists
+            const modal = document.getElementById('addPolicyModal');
+            console.log('Modal element found:', modal ? 'Yes' : 'No');
+            
+            if (modal) {
+                console.log('Modal classes:', modal.className);
+                console.log('Modal style display:', modal.style.display);
+                
+                // Check if jQuery is available
+                if (typeof $ !== 'undefined') {
+                    console.log('jQuery available, testing modal function...');
+                    console.log('jQuery version:', $.fn.jquery);
+                    console.log('Modal plugin available:', typeof $.fn.modal);
+                    
+                    // Try to show modal using jQuery
+                    try {
+                        $('#addPolicyModal').modal('show');
+                        console.log('Modal show command executed successfully');
+                        
+                        // Check if modal is visible after 1 second
+                        setTimeout(() => {
+                            const isVisible = $('#addPolicyModal').hasClass('show');
+                            console.log('Modal visible after show:', isVisible);
+                            if (!isVisible) {
+                                console.log('Modal not showing, checking for errors...');
+                                console.log('Bootstrap CSS loaded:', $().modal ? 'Yes' : 'No');
+                                
+                                // Try manual display
+                                console.log('Trying manual modal display...');
+                                modal.style.display = 'block';
+                                modal.classList.add('show');
+                                document.body.classList.add('modal-open');
+                                
+                                // Add backdrop
+                                const backdrop = document.createElement('div');
+                                backdrop.className = 'modal-backdrop fade show';
+                                backdrop.id = 'manual-backdrop';
+                                document.body.appendChild(backdrop);
+                            }
+                        }, 1000);
+                        
+                    } catch (error) {
+                        console.error('Error showing modal:', error);
+                        // Manual fallback
+                        console.log('Using manual fallback...');
+                        modal.style.display = 'block';
+                        modal.classList.add('show');
+                        document.body.classList.add('modal-open');
+                    }
+                } else {
+                    console.error('jQuery not available!');
+                }
+            } else {
+                console.error('Modal #addPolicyModal not found in DOM!');
+                
+                // List all modals
+                const allModals = document.querySelectorAll('.modal');
+                console.log('Found modals:', Array.from(allModals).map(m => m.id));
+                
+                // Check if include files are loading
+                console.log('Checking for include content...');
+                const scripts = document.querySelectorAll('script');
+                console.log('Number of script tags:', scripts.length);
+            }
+            
+            // Also test the button
+            const button = document.querySelector('[data-target="#addPolicyModal"]');
+            console.log('Button found:', button ? 'Yes' : 'No');
+            if (button) {
+                console.log('Button data-toggle:', button.getAttribute('data-toggle'));
+                console.log('Button data-target:', button.getAttribute('data-target'));
+            }
+        }
+        
+        window.testAddPolicyModal = testAddPolicyModal;
+        
+        // Manual close function
+        window.closeAddPolicyModal = function() {
+            const modal = document.getElementById('addPolicyModal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                document.body.classList.remove('modal-open');
+                
+                // Remove manual backdrop
+                const backdrop = document.getElementById('manual-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }
+        };
     </script>
 </body>
 
