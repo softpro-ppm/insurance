@@ -48,7 +48,7 @@
 		$permit_expiry_date = '';
 	}
 
-	$data = '<div class="modal-header bg-gradient-primary text-white border-0">
+	$data = '<div class="modal-header bg-primary text-white">
             <h5 class="modal-title d-flex align-items-center" id="transaction-detailModalLabel">
                 <i class="bx bx-file-blank me-2"></i>
                 <span>Policy Details - <strong>'.$r['vehicle_number'].'</strong></span>
@@ -381,12 +381,12 @@
     </div>
         
         </div>
-        <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
-            <button type="button" class="btn btn-primary btn-lg" onclick="openEditFromView('.$r['id'].')">
-                <i class="bx bx-edit me-2"></i>Edit Policy
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <i class="bx bx-x me-1"></i>Close
             </button>
-            <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                <i class="bx bx-x me-2"></i>Close
+            <button type="button" class="btn btn-primary" onclick="openEditFromView('.$r['id'].')">
+                <i class="bx bx-edit me-1"></i>Edit Policy
             </button>
         </div>
 
@@ -421,9 +421,6 @@
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
             border: 1px solid #e9ecef;
-        }
-        .bg-gradient-primary {
-            background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%) !important;
         }
         .card {
             transition: transform 0.2s ease;
