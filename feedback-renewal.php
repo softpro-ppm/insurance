@@ -18,6 +18,8 @@
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 	<!-- Modal Fix for Bootstrap 5 Compatibility -->
 	<link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced Modal Fix for Interaction Issues -->
+	<link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -483,5 +485,7 @@
     
     <!-- Modal Fix JavaScript for Bootstrap 5 -->
     <script src="assets/js/modal-fix.js"></script>
+    <!-- Enhanced Modal Fix JavaScript for Interaction Issues -->
+    <script src="assets/js/modal-fix-enhanced.js"></script>
 </body>
 </html>

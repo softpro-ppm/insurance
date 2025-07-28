@@ -11,12 +11,12 @@
 	<link rel="shortcut icon" href="assets/logo.PNG">
 	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-	<!-- Modal Fix for Bootstrap 5 Compatibility -->
-	<link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body data-sidebar="dark">
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- Modal Fix for Bootstrap 5 Compatibility -->
+    <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Fix for Interaction Issues -->
+    <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+</head><body data-sidebar="dark">
 	<div id="layout-wrapper">
 		<header id="page-topbar">
             <?php require 'include/header.php'; ?>
@@ -166,5 +166,7 @@
 	
 	<!-- Modal Fix JavaScript for Bootstrap 5 -->
 	<script src="assets/js/modal-fix.js"></script>
+	<!-- Enhanced Modal Fix JavaScript for Interaction Issues -->
+	<script src="assets/js/modal-fix-enhanced.js"></script>
 </body>
 </html>

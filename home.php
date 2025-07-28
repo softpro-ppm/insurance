@@ -18,6 +18,8 @@
     
     <!-- Modal Fix for Bootstrap 5 Compatibility -->
     <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Fix for Interaction Issues -->
+    <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -1086,6 +1088,8 @@
     
     <!-- Modal Fix JavaScript for Bootstrap 5 -->
     <script src="assets/js/modal-fix.js"></script>
+    <!-- Enhanced Modal Fix JavaScript -->
+    <script src="assets/js/modal-fix-enhanced.js"></script>
 </body>
 
 </html>
