@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>rrr bbb Dashboard | Softpro</title>
+    <title>Dashboard | Softpro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="assets/logo.PNG">
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -22,6 +22,8 @@
     <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
     <!-- Enhanced Modal Layout System -->
     <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Medium Size Modal Enhancement -->
+    <link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
     <!-- Critical Modal Fix - Emergency Override -->
     <link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
     

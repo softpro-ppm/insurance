@@ -33,14 +33,21 @@
     opacity: 0.5 !important;
 }
 
-/* Fix modal dialog positioning and interaction */
+/* Fix modal dialog positioning and interaction - Medium Size Focus */
 .modal-dialog {
     position: relative !important;
     width: auto !important;
     margin: 0.5rem !important;
     pointer-events: all !important;
     z-index: 1060 !important;
-    max-width: none !important;
+    max-width: 700px !important; /* Medium size max width */
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 700px !important;
+        margin: 1.75rem auto !important;
+    }
 }
 
 .modal-dialog-centered {

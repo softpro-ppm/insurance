@@ -1,0 +1,93 @@
+/* Medium Size Modal Enhancement CSS */
+
+/* Ensure all modals use consistent medium sizing */
+.modal-dialog {
+    max-width: 700px !important;
+    width: 90% !important;
+    margin: 1rem auto !important;
+}
+
+/* Responsive medium sizing */
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 700px !important;
+        width: 85% !important;
+        margin: 1.75rem auto !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 80% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-dialog {
+        width: 70% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-dialog {
+        width: 60% !important;
+        max-width: 700px !important;
+    }
+}
+
+/* Override any large or extra large modal classes */
+.modal-dialog.modal-lg,
+.modal-dialog.modal-xl {
+    max-width: 700px !important;
+    width: 70% !important;
+}
+
+/* Ensure proper content sizing */
+.modal-content {
+    min-height: 300px;
+    max-height: calc(100vh - 3.5rem);
+}
+
+/* Optimize form layouts for medium size */
+.modal-body .row {
+    margin-bottom: 1rem;
+}
+
+.modal-body .form-group {
+    margin-bottom: 1rem;
+}
+
+/* Better button spacing */
+.modal-footer .btn {
+    margin: 0 0.25rem;
+}
+
+/* Scrollable modal optimization */
+.modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+
+/* Enhanced visual consistency */
+.modal-header {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Form control sizing for medium modals */
+.modal .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+.modal .form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}

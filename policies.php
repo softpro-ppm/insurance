@@ -26,6 +26,8 @@
 	<link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
 	<!-- Enhanced Modal Layout System -->
 	<link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+	<!-- Medium Size Modal Enhancement -->
+	<link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
 	<!-- Critical Modal Fix - Emergency Override -->
 	<link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
 </head>
@@ -146,7 +148,7 @@
 				</div>
 			</div>
 			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                     <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
