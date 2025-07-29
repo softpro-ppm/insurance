@@ -30,7 +30,7 @@ $columns = [
 
 try {
     // Base query
-    $baseQuery = "FROM policies p";
+    $baseQuery = "FROM policy p";
     
     // WHERE clause for search
     $whereClause = "WHERE 1=1";
@@ -88,7 +88,7 @@ try {
         p.aadhar_card,
         p.pan_card,
         p.remarks,
-        p.created_at
+        p.policy_issue_date
         {$baseQuery} 
         {$whereClause} 
         {$orderClause}";

@@ -82,22 +82,22 @@ function addPolicy() {
     ];
     
     // Insert into database
-    $sql = "INSERT INTO policies (
+    $sql = "INSERT INTO policy (
         vehicle_number, vehicle_type, engine_number, chassis_number,
         name, phone, email, address,
         policy_type, insurance_company, premium,
         policy_start_date, policy_end_date, policy_number,
-        aadhar_card, pan_card, remarks, created_by, created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        aadhar_card, pan_card, remarks, policy_issue_date
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        'ssssssssssdsssssssi',
+        'ssssssssssdsssss',
         $data['vehicle_number'], $data['vehicle_type'], $data['engine_number'], $data['chassis_number'],
         $data['name'], $data['phone'], $data['email'], $data['address'],
         $data['policy_type'], $data['insurance_company'], $data['premium'],
         $data['policy_start_date'], $data['policy_end_date'], $data['policy_number'],
-        $data['aadhar_card'], $data['pan_card'], $data['remarks'], $data['created_by']
+        $data['aadhar_card'], $data['pan_card'], $data['remarks'], date('Y-m-d')
     );
     
     if ($stmt->execute()) {
@@ -160,22 +160,22 @@ function editPolicy() {
     ];
     
     // Update database
-    $sql = "UPDATE policies SET 
+    $sql = "UPDATE policy SET 
         vehicle_number = ?, vehicle_type = ?, engine_number = ?, chassis_number = ?,
         name = ?, phone = ?, email = ?, address = ?,
         policy_type = ?, insurance_company = ?, premium = ?,
         policy_start_date = ?, policy_end_date = ?, policy_number = ?,
-        aadhar_card = ?, pan_card = ?, remarks = ?, updated_at = ?
+        aadhar_card = ?, pan_card = ?, remarks = ?
         WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        'ssssssssssdsssssssi',
+        'ssssssssssdssssssi',
         $data['vehicle_number'], $data['vehicle_type'], $data['engine_number'], $data['chassis_number'],
         $data['name'], $data['phone'], $data['email'], $data['address'],
         $data['policy_type'], $data['insurance_company'], $data['premium'],
         $data['policy_start_date'], $data['policy_end_date'], $data['policy_number'],
-        $data['aadhar_card'], $data['pan_card'], $data['remarks'], $data['updated_at'],
+        $data['aadhar_card'], $data['pan_card'], $data['remarks'],
         $policyId
     );
     
@@ -204,7 +204,7 @@ function deletePolicy() {
     }
     
     // Delete from database first
-    $sql = "DELETE FROM policies WHERE id = ?";
+    $sql = "DELETE FROM policy WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $policyId);
     
@@ -276,7 +276,7 @@ function getPolicyDocuments() {
 function getPolicyById($policyId) {
     global $conn;
     
-    $sql = "SELECT * FROM policies WHERE id = ?";
+    $sql = "SELECT * FROM policy WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $policyId);
     $stmt->execute();

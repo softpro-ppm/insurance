@@ -19,9 +19,9 @@ $sql = "SELECT
     policy_end_date,
     policy_number,
     remarks,
-    created_at
-FROM policies 
-ORDER BY policy_start_date DESC";
+    policy_issue_date
+FROM policy 
+ORDER BY policy_issue_date DESC";
 
 $result = $conn->query($sql);
 
@@ -65,7 +65,7 @@ if ($result->num_rows > 0) {
         // Format dates
         $row['policy_start_date'] = date('d-m-Y', strtotime($row['policy_start_date']));
         $row['policy_end_date'] = date('d-m-Y', strtotime($row['policy_end_date']));
-        $row['created_at'] = date('d-m-Y H:i:s', strtotime($row['created_at']));
+        $row['policy_issue_date'] = date('d-m-Y H:i:s', strtotime($row['policy_issue_date']));
         
         fputcsv($output, array_values($row));
     }
