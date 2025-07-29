@@ -833,12 +833,12 @@
         // Renew Policy Function
         function renewPolicy(policyId) {
             // This will be implemented for renewal functionality
-            alert('Renew policy: ' + policyId);
+            console.log('Renew policy:', policyId);
         }
     </script>
 
     <?php include 'include/add-policy-modal.php'; ?>
-    <div id="editpolicydata"></div>
+    <?php include 'include/edit-policy-modal.php'; ?>
 
 </body>
 </html>
