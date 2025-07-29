@@ -1,11 +1,14 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
+session_start();
+require_once '../connection.php';
 
-include '../include/config.php';
-include '../include/session.php';
+header('Content-Type: application/json');
+
+if (!isset($_SESSION['username'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit;
+}
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
