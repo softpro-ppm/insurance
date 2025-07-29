@@ -176,6 +176,16 @@
             padding: 4px 8px;
         }
         
+        #layout-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 margin-left: 0;
