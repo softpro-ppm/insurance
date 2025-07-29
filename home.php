@@ -1,4 +1,9 @@
 <?php 
+    // Redirect to the modern Bootstrap 5 version
+    header('Location: home-modern.php');
+    exit();
+?>
+<?php 
     include 'include/session.php';
     include 'include/config.php'; 
 ?>
