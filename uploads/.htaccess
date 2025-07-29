@@ -1,0 +1,27 @@
+# Security settings for uploads directory
+Options -Indexes
+Options -ExecCGI
+
+# Deny access to PHP files
+<Files "*.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Allow only specific file types
+<FilesMatch "\.(jpg|jpeg|png|pdf)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Deny all other file types
+<FilesMatch ".*">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Override for allowed extensions
+<FilesMatch "\.(jpg|jpeg|png|pdf)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>

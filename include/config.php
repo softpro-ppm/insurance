@@ -18,6 +18,9 @@
 	// Set charset for security
 	$con->set_charset("utf8");
 
+	// Modern connection variable for new Bootstrap 5 components
+	$conn = $con; // Alias for consistency
+
 	// Include security classes
 	require_once 'secure-db.php';
 	require_once 'input-validator.php';
