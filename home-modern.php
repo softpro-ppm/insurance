@@ -214,7 +214,7 @@
                     <div class="dashboard-header">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h3 class="mb-2">Insurance Management Dashboard   ttt</h3>
+                                <h3 class="mb-2">Insurance Management Dashboard</h3>
                                 <p class="mb-0 opacity-75">Welcome back! Here's what's happening with your insurance policies today.</p>
                             </div>
                             <div class="col-md-4 text-end">
@@ -439,7 +439,7 @@
                                             <tr>
                                                 <td><?=$sn?></td>
                                                 <td>
-                                                    <a href="javascript:void(0);" class="text-primary fw-bold" onclick="viewpolicy(this)" data-id="<?=$renewalr['id']?>">
+                                                    <a href="javascript:void(0);" class="text-primary fw-bold" onclick="viewpolicy(<?=$renewalr['id']?>)">
                                                         <?=$renewalr['vehicle_number']?>
                                                     </a>
                                                 </td>
@@ -453,7 +453,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-outline-primary btn-action" onclick="viewpolicy(this)" data-id="<?=$renewalr['id']?>" title="View Policy">
+                                                        <button type="button" class="btn btn-outline-primary btn-action" onclick="viewpolicy(<?=$renewalr['id']?>)" title="View Policy">
                                                             <i class="fas fa-eye"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-outline-warning btn-action" onclick="loadPolicyForEdit(<?=$renewalr['id']?>)" title="Edit Policy">
@@ -623,7 +623,7 @@
             // Year filter change
             $('#year').on('change', function() {
                 if ($(this).val()) {
-                    window.location.href = 'home.php?year=' + $(this).val();
+                    window.location.href = 'home-modern.php?year=' + $(this).val();
                 }
             });
         });
@@ -744,9 +744,7 @@
         new ApexCharts(document.querySelector("#policy_type_chart"), policyTypeOptions).render();
 
         // View Policy Function
-        function viewpolicy(identifier) {
-            var id = $(identifier).data("id");
-            
+        function viewpolicy(id) {
             $('#viewpolicydata').html(`
                 <div class="modal-header bg-primary text-white border-0">
                     <h5 class="modal-title">
@@ -811,19 +809,26 @@
 
         // Load Policy for Edit Function
         function loadPolicyForEdit(policyId) {
-            // This will be implemented when the edit modal is included
-            console.log('Edit policy:', policyId);
+            $('#editPolicyModal').modal('show');
+            $.ajax({
+                url: 'include/get-policy-data.php',
+                type: 'post',
+                data: {id: policyId},
+                success: function(response){
+                    $('#editpolicydata').html(response);
+                }
+            });
         }
 
         // Renew Policy Function
         function renewPolicy(policyId) {
             // This will be implemented for renewal functionality
-            console.log('Renew policy:', policyId);
+            alert('Renew policy: ' + policyId);
         }
     </script>
 
     <?php include 'include/add-policy-modal.php'; ?>
-    <?php include 'include/edit-policy-modal.php'; ?>
+    <div id="editpolicydata"></div>
 
 </body>
 </html>
