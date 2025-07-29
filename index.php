@@ -3,18 +3,17 @@
         echo "<script>window.location.href = 'home.php';</script>";
     }
 ?>
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <title>Softpro - Login</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/logo.PNG">
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
     <link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
-    <script type='text/javascript' src=''></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -166,7 +165,7 @@
 <body  class='snippet-body'>
     <div class="wrapper">
         <div class="logo">
-            <img src="assets/logo.PNG" alt="">
+            <img src="assets/logo.PNG" alt="Softpro Logo">
         </div>
         <form class="p-3 mt-3" autocomplete="off" action="javascript:void(0);" >
             <div class="form-field d-flex align-items-center"> <span class="far fa-user"></span> 
@@ -180,10 +179,7 @@
         </form>
     </div>
     <script src="assets/libs/jquery/jquery.min.js"></script>
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js'></script>
-    <script type='text/javascript' src=''></script>
-    <script type='text/javascript' src=''></script>
-    <script type='text/Javascript'></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#login').on('click' , function() {
