@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Policy Data API</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Test Policy Data API</h1>
+    
+    <button onclick="testAPI()">Test Policy ID 1243</button>
+    <button onclick="testAPI2()">Test Policy ID 1</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+    function testAPI(policyId = 1243) {
+        $('#result').html('Loading...');
+        
+        $.ajax({
+            url: "include/get-policy-data-ultra-clean.php",
+            type: "POST",
+            data: { policy_id: policyId },
+            dataType: 'json',
+            success: function(response) {
+                console.log("Success:", response);
+                $('#result').html('<h3>Success!</h3><pre>' + JSON.stringify(response, null, 2) + '</pre>');
+            },
+            error: function(xhr, status, error) {
+                console.log("Error:", xhr.responseText);
+                $('#result').html('<h3>Error!</h3><p>Status: ' + status + '</p><p>Error: ' + error + '</p><p>Response: ' + xhr.responseText + '</p>');
+            }
+        });
+    }
+    
+    function testAPI2() {
+        testAPI(1);
+    }
+    </script>
+</body>
+</html>

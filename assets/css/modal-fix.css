@@ -1,0 +1,86 @@
+/* Modal Fix for Bootstrap 5 Compatibility */
+/* Ensures proper z-index and interaction for modals */
+
+/* Fix for modal z-index issues */
+.modal {
+    z-index: 1050 !important;
+}
+
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+/* Fix for modal dialog interaction */
+.modal-dialog {
+    pointer-events: all !important;
+    z-index: 1051 !important;
+}
+
+/* Ensure modal content is clickable */
+.modal-content {
+    pointer-events: all !important;
+    position: relative !important;
+    z-index: 1052 !important;
+}
+
+/* Fix any overlay issues */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+    transform: translate(0, -50px) !important;
+}
+
+.modal.show .modal-dialog {
+    transform: none !important;
+}
+
+/* Override any conflicting z-index from bs-example-modal */
+.bs-example-modal {
+    z-index: 1055 !important;
+}
+
+/* Ensure form elements in modals are interactive */
+.modal .form-control,
+.modal .btn,
+.modal .form-select,
+.modal .form-check-input {
+    pointer-events: all !important;
+}
+
+/* Fix for dropdown menus in modals */
+.modal .dropdown-menu {
+    z-index: 1060 !important;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden !important;
+}
+
+/* Fix for modal header and footer interactions */
+.modal-header,
+.modal-body,
+.modal-footer {
+    pointer-events: all !important;
+}
+
+/* Ensure close button is clickable */
+.modal .btn-close {
+    pointer-events: all !important;
+    z-index: 1060 !important;
+}
+
+/* Fix for any DataTables interactions in modals */
+.modal .dataTables_wrapper {
+    pointer-events: all !important;
+}
+
+.modal .dataTables_wrapper .form-control {
+    pointer-events: all !important;
+}
+
+/* Fix for date pickers and other widgets in modals */
+.modal .bootstrap-timepicker-widget,
+.modal .datepicker,
+.modal .select2-dropdown {
+    z-index: 1065 !important;
+}

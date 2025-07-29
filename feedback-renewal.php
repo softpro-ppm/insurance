@@ -9,15 +9,28 @@
 	<title>Follow UP | Softpro</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="assets/logo.PNG">
-	<link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-	<link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+	<link href="assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="assets/libs/%40chenfengyuan/datepicker/datepicker.min.css">
 	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+<<<<<<< HEAD
 	<!-- Custom color scheme for professional appearance -->
 	<link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
+=======
+	<!-- Modal Fix for Bootstrap 5 Compatibility -->
+	<link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced Modal Fix for Interaction Issues -->
+	<link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+	<!-- Enhanced Modal Layout System -->
+	<link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+	<!-- Medium Size Modal Enhancement -->
+	<link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
+	<!-- Modal Button Fix -->
+	<link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 </head>
 
 <body data-sidebar="dark">
@@ -285,7 +298,7 @@
                 </div>
                 
 			<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true" id="renewalpolicyview" >
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                     <div class="modal-content border-0 shadow-lg" id="viewpolicydata" ></div>
                 </div>
             </div>
@@ -317,9 +330,9 @@
     <script src="assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script src="assets/libs/%40chenfengyuan/datepicker/datepicker.min.js"></script>
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+	<script src="assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
 	<script src="assets/libs/jszip/jszip.min.js"></script>
 	<script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
 	<script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
@@ -327,7 +340,7 @@
 	<script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
 	<script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 	<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+	<script src="assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
     <script src="assets/js/app.js"></script>
 	<script type="text/javascript">
         $('.js-datepicker').datepicker({
@@ -480,5 +493,14 @@
             });
         });
     </script>
+    
+    <!-- Modal Fix JavaScript for Bootstrap 5 -->
+    <script src="assets/js/modal-fix.js"></script>
+    <!-- Enhanced Modal Fix JavaScript for Interaction Issues -->
+    <script src="assets/js/modal-fix-enhanced.js"></script>
+    <!-- Enhanced Modal Layout System -->
+    <script src="assets/js/modal-layout-enhanced.js"></script>
+    <!-- Modal Button Fix JavaScript -->
+    <script src="assets/js/modal-button-fix.js"></script>
 </body>
 </html>

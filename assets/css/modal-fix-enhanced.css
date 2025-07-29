@@ -1,0 +1,257 @@
+/* Additional Bootstrap 5 Modal Fixes */
+/* Enhanced CSS to fix all modal interaction issues */
+
+/* Force proper modal structure and remove any blocking elements */
+.modal {
+    z-index: 1055 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    outline: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1040 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #000 !important;
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5 !important;
+}
+
+/* Fix modal dialog positioning and interaction - Medium Size Focus */
+.modal-dialog {
+    position: relative !important;
+    width: auto !important;
+    margin: 0.5rem !important;
+    pointer-events: all !important;
+    z-index: 1060 !important;
+    max-width: 700px !important; /* Medium size max width */
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 700px !important;
+        margin: 1.75rem auto !important;
+    }
+}
+
+.modal-dialog-centered {
+    display: flex !important;
+    align-items: center !important;
+    min-height: calc(100% - 1rem) !important;
+}
+
+.modal-content {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    pointer-events: all !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 0.3rem !important;
+    outline: 0 !important;
+    z-index: 1065 !important;
+}
+
+/* Ensure all form elements are clickable */
+.modal input,
+.modal select,
+.modal textarea,
+.modal button,
+.modal .btn,
+.modal .form-control,
+.modal .form-select,
+.modal .form-check-input,
+.modal .dropdown-toggle {
+    pointer-events: all !important;
+    position: relative !important;
+    z-index: 1070 !important;
+}
+
+/* Fix for dropdown menus in modals */
+.modal .dropdown-menu {
+    z-index: 1080 !important;
+    position: absolute !important;
+    pointer-events: all !important;
+}
+
+/* Fix for modal close button */
+.modal .btn-close {
+    position: relative !important;
+    z-index: 1075 !important;
+    pointer-events: all !important;
+    cursor: pointer !important;
+}
+
+/* Remove any conflicting positioning */
+.modal-header,
+.modal-body,
+.modal-footer {
+    position: relative !important;
+    pointer-events: all !important;
+    z-index: 1070 !important;
+}
+
+/* Fix for any overlay issues */
+.modal-overlay,
+.overlay,
+.backdrop-overlay {
+    display: none !important;
+}
+
+/* Ensure proper scrolling for large modals */
+.modal-dialog-scrollable {
+    max-height: calc(100% - 1rem) !important;
+}
+
+.modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 1rem) !important;
+    overflow: hidden !important;
+}
+
+.modal-dialog-scrollable .modal-body {
+    overflow-y: auto !important;
+}
+
+/* Fix for any DataTables elements in modals */
+.modal .dataTables_wrapper,
+.modal .dataTables_wrapper * {
+    pointer-events: all !important;
+}
+
+/* Fix for any card elements in modals */
+.modal .card,
+.modal .card * {
+    pointer-events: all !important;
+}
+
+/* Fix for custom outline cards */
+.modal .custom-outline-card {
+    pointer-events: all !important;
+}
+
+/* Remove any transform issues */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+    transform: translate(0, -50px) !important;
+}
+
+.modal.show .modal-dialog {
+    transform: none !important;
+}
+
+/* Force proper display for modal elements */
+.modal.show .modal-dialog,
+.modal.show .modal-content,
+.modal.show .modal-header,
+.modal.show .modal-body,
+.modal.show .modal-footer {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Fix for any absolute positioning issues */
+.modal .position-absolute {
+    pointer-events: all !important;
+}
+
+/* Ensure proper cursor for interactive elements */
+.modal button,
+.modal .btn,
+.modal input,
+.modal select,
+.modal textarea,
+.modal .form-control,
+.modal .form-select {
+    cursor: pointer !important;
+}
+
+.modal input[type="text"],
+.modal input[type="email"],
+.modal input[type="number"],
+.modal input[type="tel"],
+.modal textarea {
+    cursor: text !important;
+}
+
+/* Fix for any grid/flexbox issues */
+.modal .row,
+.modal .col-md-4,
+.modal .col-md-6,
+.modal .col-md-12 {
+    pointer-events: all !important;
+}
+
+/* Override any conflicting z-index from other elements */
+body[data-sidebar="dark"] .modal,
+.layout-wrapper .modal,
+.main-content .modal {
+    z-index: 1055 !important;
+}
+
+/* Ensure body scroll lock when modal is open */
+body.modal-open {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}
+
+/* Fix for modal animation */
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal.show .modal-dialog {
+    animation: modalFadeIn 0.3s ease-out !important;
+}
+
+/* Emergency override for all modal elements */
+.modal * {
+    pointer-events: all !important;
+}
+
+/* Specific fixes for the project's modal structure */
+#addPolicyModal,
+#editPolicyModal,
+#renewalpolicyview {
+    z-index: 1055 !important;
+}
+
+#addPolicyModal .modal-dialog,
+#editPolicyModal .modal-dialog,
+#renewalpolicyview .modal-dialog {
+    z-index: 1060 !important;
+}
+
+/* Fix for any remaining interaction issues */
+.modal-content * {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+.modal button,
+.modal .btn {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}

@@ -1,5 +1,6 @@
 <!-- Professional Add Policy Modal - Bootstrap 4 Compatible -->
 <div class="modal fade" id="addPolicyModal" tabindex="-1" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
+<<<<<<< HEAD
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary text-white">
@@ -14,6 +15,18 @@
             
             <div class="modal-body p-0">
                 <form id="addPolicyForm" action="include/add-policies-fixed.php" method="post" enctype="multipart/form-data">
+=======
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPolicyModalLabel">
+                    <i class="bx bx-plus-circle me-2"></i>Add New Policy
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPolicyForm" action="include/add-policies-fixed.php" method="post" enctype="multipart/form-data" autocomplete="off">
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
                     
                     <!-- Progress Bar -->
                     <div class="px-4 py-3 bg-light border-bottom">
@@ -328,6 +341,18 @@
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_end_date" id="modal_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Policy Issue Date</label>
+                                    <input type="date" name="policy_issue_date" id="modal_policy_issue_date" class="form-control" title="Leave blank to use start date">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" id="modal_fc_expiry_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" id="modal_permit_expiry_date" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -367,6 +392,53 @@
                                     <label class="form-label">RC Files</label>
                                     <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Chassis Number</label>
+                                    <input type="text" name="chassiss" id="modal_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Upload Section -->
+                    <div class="card border mb-4 custom-outline-card">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3 text-warning"><i class="bx bx-file-blank me-2"></i>Document Verification</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Aadhar Card Image <span class="text-danger">*</span></label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="aadhar_card" id="aadhar_card" class="form-control" accept=".jpg,.jpeg,.png" required>
+                                        <label for="aadhar_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload Aadhar Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="invalid-feedback">Please upload a valid Aadhar card image</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">PAN Card Image <span class="text-danger">*</span></label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="pan_card" id="pan_card" class="form-control" accept=".jpg,.jpeg,.png" required>
+                                        <label for="pan_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload PAN Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="invalid-feedback">Please upload a valid PAN card image</div>
+                                </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
@@ -377,12 +449,21 @@
 
                 </form>
             </div>
+<<<<<<< HEAD
             <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
                 <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">
                     <i class="bx bx-x mr-2"></i>Cancel
                 </button>
                 <button type="submit" form="addPolicyForm" class="btn btn-primary btn-lg">
                     <i class="bx bx-check mr-2"></i>Add Policy
+=======
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i> Cancel
+                </button>
+                <button type="submit" form="addPolicyForm" class="btn btn-primary">
+                    <i class="bx bx-check"></i> Add Policy
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
                 </button>
             </div>
         </div>
@@ -548,6 +629,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('modal_customer_paid').addEventListener('input', calculateFinancials);
     document.getElementById('modal_policy_start_date').addEventListener('change', calculatePolicyEndDate);
     
+<<<<<<< HEAD
+=======
+    // Auto-populate policy issue date when start date changes (if not manually set)
+    document.getElementById('modal_policy_start_date').addEventListener('change', function() {
+        const issueDateInput = document.getElementById('modal_policy_issue_date');
+        if (!issueDateInput.value) {
+            issueDateInput.value = this.value;
+        }
+    });
+
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
     // Phone number validation
     document.querySelector('input[name="phone"]').addEventListener('input', function(e) {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -561,6 +653,14 @@ document.addEventListener('DOMContentLoaded', function() {
         this.value = this.value.toUpperCase();
     });
     
+<<<<<<< HEAD
+=======
+    // Chassis number formatting
+    document.getElementById('modal_chassiss').addEventListener('input', function(e) {
+        this.value = this.value.toUpperCase();
+    });
+
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
     // Form validation and submission
     document.getElementById('addPolicyForm').addEventListener('submit', function(e) {
         // Update calculations before submission

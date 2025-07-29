@@ -1,0 +1,251 @@
+/* View Policy Modal - Complete Data Display Fix */
+
+/* Enhanced height and scrolling for view policy modal */
+#renewalpolicyview .modal-dialog {
+    max-width: 800px !important;
+    width: 95% !important;
+    margin: 0.5rem auto !important;
+}
+
+@media (min-width: 768px) {
+    #renewalpolicyview .modal-dialog {
+        width: 90% !important;
+        margin: 1rem auto !important;
+    }
+}
+
+@media (min-width: 992px) {
+    #renewalpolicyview .modal-dialog {
+        width: 80% !important;
+        max-width: 900px !important;
+    }
+}
+
+/* Modal content sizing for complete data visibility */
+#renewalpolicyview .modal-content {
+    max-height: calc(100vh - 1rem) !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#renewalpolicyview .modal-header {
+    flex-shrink: 0 !important;
+    padding: 1rem 1.5rem !important;
+    border-bottom: 2px solid #e9ecef !important;
+}
+
+#renewalpolicyview .modal-body {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 150px) !important;
+    padding: 1rem !important;
+}
+
+#renewalpolicyview .modal-footer {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #ffffff !important;
+    border-top: 2px solid #e9ecef !important;
+    z-index: 1071 !important;
+    padding: 1rem 1.5rem !important;
+}
+
+/* Enhanced scrollbar styling */
+#renewalpolicyview .modal-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+}
+
+#renewalpolicyview .modal-body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #0056b3, #004085);
+}
+
+/* Card styling improvements for better data visibility */
+#renewalpolicyview .card {
+    margin-bottom: 1.5rem !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    transition: all 0.3s ease !important;
+}
+
+#renewalpolicyview .card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+#renewalpolicyview .card-header {
+    padding: 0.75rem 1rem !important;
+    font-weight: 600 !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+#renewalpolicyview .card-body {
+    padding: 1rem !important;
+}
+
+/* Info item styling for better readability */
+#renewalpolicyview .info-item {
+    margin-bottom: 1rem !important;
+}
+
+#renewalpolicyview .info-label {
+    font-weight: 600 !important;
+    color: #495057 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 0.25rem !important;
+    display: block !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+#renewalpolicyview .info-value {
+    font-weight: 500 !important;
+    color: #212529 !important;
+    background: #f8f9fa !important;
+    padding: 0.75rem !important;
+    border-radius: 6px !important;
+    border: 1px solid #e9ecef !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+}
+
+/* Special styling for different value types */
+#renewalpolicyview .info-value.text-primary {
+    background: #e7f3ff !important;
+    border-color: #b8daff !important;
+    color: #0056b3 !important;
+}
+
+#renewalpolicyview .info-value.text-success {
+    background: #d4edda !important;
+    border-color: #c3e6cb !important;
+    color: #155724 !important;
+}
+
+#renewalpolicyview .info-value.text-info {
+    background: #d1ecf1 !important;
+    border-color: #bee5eb !important;
+    color: #0c5460 !important;
+}
+
+/* Badge styling improvements */
+#renewalpolicyview .badge {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 6px !important;
+}
+
+/* Row and column spacing optimization */
+#renewalpolicyview .row {
+    margin: 0 !important;
+}
+
+#renewalpolicyview .col-md-6,
+#renewalpolicyview .col-md-4 {
+    padding: 0.5rem !important;
+}
+
+/* Button styling in modal content */
+#renewalpolicyview .btn {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0.25rem !important;
+    transition: all 0.2s ease !important;
+}
+
+#renewalpolicyview .btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Alert styling improvements */
+#renewalpolicyview .alert {
+    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+    margin-bottom: 0.5rem !important;
+    word-wrap: break-word !important;
+    line-height: 1.5 !important;
+}
+
+/* Document download section improvements */
+#renewalpolicyview .btn-sm {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.8rem !important;
+    margin: 0.2rem !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    #renewalpolicyview .modal-dialog {
+        width: 98% !important;
+        margin: 0.25rem auto !important;
+    }
+    
+    #renewalpolicyview .modal-body {
+        padding: 0.75rem !important;
+        max-height: calc(100vh - 120px) !important;
+    }
+    
+    #renewalpolicyview .col-md-6,
+    #renewalpolicyview .col-md-4 {
+        padding: 0.25rem !important;
+    }
+    
+    #renewalpolicyview .info-value {
+        padding: 0.5rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    #renewalpolicyview .card-body {
+        padding: 0.75rem !important;
+    }
+}
+
+/* Ensure no content gets cut off */
+#renewalpolicyview .modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 1rem) !important;
+}
+
+#renewalpolicyview .modal-dialog-scrollable .modal-body {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 150px) !important;
+}
+
+/* Loading animation for modal content */
+#renewalpolicyview .modal-body.loading {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 200px !important;
+}
+
+#renewalpolicyview .modal-body.loading::after {
+    content: "Loading policy data..." !important;
+    font-size: 1rem !important;
+    color: #6c757d !important;
+}
+
+/* Ensure proper z-index for modal elements */
+#renewalpolicyview {
+    z-index: 1055 !important;
+}
+
+#renewalpolicyview .modal-backdrop {
+    z-index: 1050 !important;
+}

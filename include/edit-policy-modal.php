@@ -1,16 +1,26 @@
 <!-- Enhanced Edit Policy Modal -->
 <div class="modal fade" id="editPolicyModal" tabindex="-1" aria-labelledby="editPolicyModalLabel" aria-hidden="true">
+<<<<<<< HEAD
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-primary text-white border-0">
+=======
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
                 <h5 class="modal-title" id="editPolicyModalLabel">
                     <i class="bx bx-edit mr-2"></i>Edit Policy
                 </h5>
+<<<<<<< HEAD
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+=======
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
                 <form id="editPolicyForm" action="include/edit-policies.php" method="post" enctype="multipart/form-data" autocomplete="off">
                     <input type="hidden" name="policy_id" id="edit_policy_id">
                     
@@ -106,6 +116,18 @@
                                     <label class="form-label">Policy End Date <span class="text-danger">*</span></label>
                                     <input type="date" name="policy_end_date" id="edit_policy_end_date" class="form-control" required readonly title="Auto-calculated (Start Date + 1 Year - 1 Day)">
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Policy Issue Date</label>
+                                    <input type="date" name="policy_issue_date" id="edit_policy_issue_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">FC Expiry Date</label>
+                                    <input type="date" name="fc_expiry_date" id="edit_fc_expiry_date" class="form-control">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Permit Expiry Date</label>
+                                    <input type="date" name="permit_expiry_date" id="edit_permit_expiry_date" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,6 +167,53 @@
                                     <input type="file" name="rc[]" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     <div id="existing_rc_files" class="mt-2"></div>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Chassis Number</label>
+                                    <input type="text" name="chassiss" id="edit_chassiss" class="form-control uppercase" placeholder="Enter chassis number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Upload Section -->
+                    <div class="card border mb-4 custom-outline-card">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3 text-warning"><i class="bx bx-file-blank me-2"></i>Document Verification</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Aadhar Card Image</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="aadhar_card" id="edit_aadhar_card" class="form-control" accept=".jpg,.jpeg,.png">
+                                        <label for="edit_aadhar_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload Aadhar Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div id="existing_aadhar_files" class="mt-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">PAN Card Image</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" name="pan_card" id="edit_pan_card" class="form-control" accept=".jpg,.jpeg,.png">
+                                        <label for="edit_pan_card" class="file-input-label">
+                                            <div class="file-input-icon">
+                                                <i class="bx bx-cloud-upload"></i>
+                                            </div>
+                                            <div>
+                                                <strong>Click to upload PAN Card</strong><br>
+                                                <small class="text-muted">Or drag and drop file here</small><br>
+                                                <small class="text-muted">Supported: JPEG, PNG (Max 2MB)</small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div id="existing_pan_files" class="mt-2"></div>
+                                </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label">Comments</label>
                                     <textarea name="comments" id="edit_comments" class="form-control" rows="2" placeholder="Additional comments or notes"></textarea>
@@ -159,12 +228,21 @@
 
                 </form>
             </div>
+<<<<<<< HEAD
             <div class="modal-footer border-0" style="background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);">
                 <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">
                     <i class="bx bx-x mr-2"></i>Cancel
                 </button>
                 <button type="submit" form="editPolicyForm" class="btn btn-primary btn-lg">
                     <i class="bx bx-save mr-2"></i>Update Policy
+=======
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i> Cancel
+                </button>
+                <button type="submit" form="editPolicyForm" class="btn btn-primary">
+                    <i class="bx bx-save"></i> Update Policy
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
                 </button>
             </div>
         </div>
@@ -406,6 +484,13 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = this.value.toUpperCase();
         });
     }
+    
+    // Chassis number formatting for edit modal
+    if (document.getElementById('edit_chassiss')) {
+        document.getElementById('edit_chassiss').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
+    }
 
     // Form validation and submission for edit modal
     if (document.getElementById('editPolicyForm')) {
@@ -466,30 +551,83 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to load policy data into edit modal (globally accessible)
 function loadPolicyForEdit(policyId) {
+    console.log('Loading policy for edit, ID:', policyId);
+    
+    // Show loading state
+    const modal = document.getElementById('editPolicyModal');
+    if (!modal) {
+        console.error('Edit policy modal not found');
+        alert('Edit modal not found. Please refresh the page.');
+        return;
+    }
+    
+    // Clear existing form data
+    const form = document.getElementById('editPolicyForm');
+    if (form) {
+        form.reset();
+    }
+    
     fetch(`include/get-policy-data.php?id=${policyId}`)
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Received data:', data);
+            
             if (data.success) {
                 const policy = data.policy;
+                console.log('Policy data:', policy);
                 
-                // Populate form fields
-                document.getElementById('edit_policy_id').value = policy.id;
-                document.getElementById('edit_vehicle_number').value = policy.vehicle_number;
-                document.getElementById('edit_phone').value = policy.phone;
-                document.getElementById('edit_name').value = policy.name;
-                document.getElementById('edit_vehicle_type').value = policy.vehicle_type;
-                document.getElementById('edit_insurance_company').value = policy.insurance_company;
-                document.getElementById('edit_policy_type').value = policy.policy_type;
-                document.getElementById('edit_policy_start_date').value = policy.policy_start_date;
-                document.getElementById('edit_policy_end_date').value = policy.policy_end_date;
-                document.getElementById('edit_premium').value = policy.premium;
-                document.getElementById('edit_comments').value = policy.comments;
+                // Populate form fields with error checking
+                const fields = [
+                    { id: 'edit_policy_id', value: policy.id },
+                    { id: 'edit_vehicle_number', value: policy.vehicle_number || '' },
+                    { id: 'edit_phone', value: policy.phone || '' },
+                    { id: 'edit_name', value: policy.name || '' },
+                    { id: 'edit_vehicle_type', value: policy.vehicle_type || '' },
+                    { id: 'edit_insurance_company', value: policy.insurance_company || '' },
+                    { id: 'edit_policy_type', value: policy.policy_type || '' },
+                    { id: 'edit_policy_start_date', value: policy.policy_start_date || '' },
+                    { id: 'edit_policy_end_date', value: policy.policy_end_date || '' },
+                    { id: 'edit_premium', value: policy.premium || '' },
+                    { id: 'edit_comments', value: policy.comments || '' }
+                ];
                 
-                // Populate new financial fields (if available)
-                if (policy.payout !== null) document.getElementById('edit_payout').value = policy.payout;
-                if (policy.customer_paid !== null) document.getElementById('edit_customer_paid').value = policy.customer_paid;
-                if (policy.discount !== null) document.getElementById('edit_discount').value = policy.discount;
-                if (policy.calculated_revenue !== null) document.getElementById('edit_calculated_revenue').value = policy.calculated_revenue;
+                // Optional fields
+                const optionalFields = [
+                    { id: 'edit_policy_issue_date', value: policy.policy_issue_date || '' },
+                    { id: 'edit_fc_expiry_date', value: policy.fc_expiry_date || '' },
+                    { id: 'edit_permit_expiry_date', value: policy.permit_expiry_date || '' },
+                    { id: 'edit_chassiss', value: policy.chassiss || '' },
+                    { id: 'edit_payout', value: policy.payout || '' },
+                    { id: 'edit_customer_paid', value: policy.customer_paid || '' },
+                    { id: 'edit_discount', value: policy.discount || '' },
+                    { id: 'edit_calculated_revenue', value: policy.calculated_revenue || '' }
+                ];
+                
+                // Populate required fields
+                fields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element) {
+                        element.value = field.value;
+                        console.log(`Set ${field.id} = ${field.value}`);
+                    } else {
+                        console.warn(`Element not found: ${field.id}`);
+                    }
+                });
+                
+                // Populate optional fields
+                optionalFields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element && field.value) {
+                        element.value = field.value;
+                        console.log(`Set ${field.id} = ${field.value}`);
+                    }
+                });
                 
                 // Load existing files
                 loadExistingFiles(policyId);
@@ -499,15 +637,18 @@ function loadPolicyForEdit(policyId) {
                 window.dispatchEvent(new CustomEvent('editModalLoaded'));
                 
                 // Show modal
-                const modal = new bootstrap.Modal(document.getElementById('editPolicyModal'));
-                modal.show();
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+                
+                console.log('Modal shown successfully');
             } else {
+                console.error('Server error:', data.message);
                 alert('Error loading policy data: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading policy data');
+            console.error('Fetch error:', error);
+            alert('Error loading policy data: ' + error.message);
         });
 }
 
@@ -559,5 +700,169 @@ function loadExistingFiles(policyId) {
             document.getElementById('existing_policy_files').innerHTML = '<small class="text-danger">Error loading files</small>';
             document.getElementById('existing_rc_files').innerHTML = '<small class="text-danger">Error loading files</small>';
         });
+    
+    // Load existing documents (Aadhar and PAN cards)
+    fetch(`include/get-policy-documents.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `policy_id=${policyId}`
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear previous document previews
+                const aadharPreview = document.getElementById('edit_aadhar_preview');
+                const panPreview = document.getElementById('edit_pan_preview');
+                
+                if (aadharPreview) aadharPreview.innerHTML = '';
+                if (panPreview) panPreview.innerHTML = '';
+                
+                // Display existing Aadhar card
+                if (data.documents.aadhar_card) {
+                    const aadharDoc = data.documents.aadhar_card;
+                    const aadharHtml = `
+                        <div class="existing-document-preview">
+                            <img src="../${aadharDoc.file_path}" alt="Existing Aadhar Card" class="document-preview-img">
+                            <div class="existing-document-info">
+                                <small class="text-muted">Current Aadhar Card</small><br>
+                                <small class="text-primary">${aadharDoc.file_name}</small>
+                            </div>
+                        </div>
+                    `;
+                    if (aadharPreview) aadharPreview.innerHTML = aadharHtml;
+                }
+                
+                // Display existing PAN card
+                if (data.documents.pan_card) {
+                    const panDoc = data.documents.pan_card;
+                    const panHtml = `
+                        <div class="existing-document-preview">
+                            <img src="../${panDoc.file_path}" alt="Existing PAN Card" class="document-preview-img">
+                            <div class="existing-document-info">
+                                <small class="text-muted">Current PAN Card</small><br>
+                                <small class="text-primary">${panDoc.file_name}</small>
+                            </div>
+                        </div>
+                    `;
+                    if (panPreview) panPreview.innerHTML = panHtml;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading documents:', error);
+        });
 }
 </script>
+
+<script>
+// Make sure the function is globally accessible
+window.loadPolicyForEdit = function(policyId) {
+    console.log('Loading policy for edit, ID:', policyId);
+    
+    // Show loading state
+    const modal = document.getElementById('editPolicyModal');
+    if (!modal) {
+        console.error('Edit policy modal not found');
+        alert('Edit modal not found. Please refresh the page.');
+        return;
+    }
+    
+    // Clear existing form data
+    const form = document.getElementById('editPolicyForm');
+    if (form) {
+        form.reset();
+    }
+    
+    fetch(`include/get-policy-data.php?id=${policyId}`)
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data);
+            
+            if (data.success) {
+                const policy = data.policy;
+                console.log('Policy data:', policy);
+                
+                // Populate form fields with error checking
+                const fields = [
+                    { id: 'edit_policy_id', value: policy.id },
+                    { id: 'edit_vehicle_number', value: policy.vehicle_number || '' },
+                    { id: 'edit_phone', value: policy.phone || '' },
+                    { id: 'edit_name', value: policy.name || '' },
+                    { id: 'edit_vehicle_type', value: policy.vehicle_type || '' },
+                    { id: 'edit_insurance_company', value: policy.insurance_company || '' },
+                    { id: 'edit_policy_type', value: policy.policy_type || '' },
+                    { id: 'edit_policy_start_date', value: policy.policy_start_date || '' },
+                    { id: 'edit_policy_end_date', value: policy.policy_end_date || '' },
+                    { id: 'edit_premium', value: policy.premium || '' },
+                    { id: 'edit_comments', value: policy.comments || '' }
+                ];
+                
+                // Optional fields
+                const optionalFields = [
+                    { id: 'edit_policy_issue_date', value: policy.policy_issue_date || '' },
+                    { id: 'edit_fc_expiry_date', value: policy.fc_expiry_date || '' },
+                    { id: 'edit_permit_expiry_date', value: policy.permit_expiry_date || '' },
+                    { id: 'edit_chassiss', value: policy.chassiss || '' },
+                    { id: 'edit_payout', value: policy.payout || '' },
+                    { id: 'edit_customer_paid', value: policy.customer_paid || '' },
+                    { id: 'edit_discount', value: policy.discount || '' },
+                    { id: 'edit_calculated_revenue', value: policy.calculated_revenue || '' }
+                ];
+                
+                // Populate required fields
+                fields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element) {
+                        element.value = field.value;
+                        console.log(`Set ${field.id} = ${field.value}`);
+                    } else {
+                        console.warn(`Element not found: ${field.id}`);
+                    }
+                });
+                
+                // Populate optional fields
+                optionalFields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element && field.value) {
+                        element.value = field.value;
+                        console.log(`Set ${field.id} = ${field.value}`);
+                    }
+                });
+                
+                // Load existing files
+                if (typeof loadExistingFiles === 'function') {
+                    loadExistingFiles(policyId);
+                }
+                
+                // Trigger calculations (need to call the function within DOMContentLoaded scope)
+                // So we'll dispatch a custom event
+                window.dispatchEvent(new CustomEvent('editModalLoaded'));
+                
+                // Show modal
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+                
+                console.log('Modal shown successfully');
+            } else {
+                console.error('Server error:', data.message);
+                alert('Error loading policy data: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Error loading policy data: ' + error.message);
+        });
+};
+
+// Also create a local function to ensure it works in all contexts
+function loadPolicyForEdit(policyId) {
+    window.loadPolicyForEdit(policyId);
+}

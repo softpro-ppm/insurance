@@ -11,6 +11,7 @@
 	<link rel="shortcut icon" href="assets/logo.PNG">
 	<link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 	<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<<<<<<< HEAD
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 	<!-- Autofill override styles -->
 	<link href="assets/css/autofill-override.css" rel="stylesheet" type="text/css" />
@@ -19,6 +20,20 @@
 </head>
 
 <body data-sidebar="dark">
+=======
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- Modal Fix for Bootstrap 5 Compatibility -->
+    <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Fix for Interaction Issues -->
+    <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Enhanced Modal Layout System -->
+    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
+    <!-- Medium Size Modal Enhancement -->
+    <link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
+    <!-- Modal Button Fix -->
+    <link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
+</head><body data-sidebar="dark">
+>>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
 	<div id="layout-wrapper">
 		<header id="page-topbar">
             <?php require 'include/header.php'; ?>
@@ -165,5 +180,14 @@
 	<script src="assets/libs/simplebar/simplebar.min.js"></script>
 	<script src="assets/libs/node-waves/waves.min.js"></script>
 	<script src="assets/js/app.js"></script>
+	
+	<!-- Modal Fix JavaScript for Bootstrap 5 -->
+	<script src="assets/js/modal-fix.js"></script>
+	<!-- Enhanced Modal Fix JavaScript for Interaction Issues -->
+	<script src="assets/js/modal-fix-enhanced.js"></script>
+	<!-- Enhanced Modal Layout System -->
+	<script src="assets/js/modal-layout-enhanced.js"></script>
+	<!-- Modal Button Fix JavaScript -->
+	<script src="assets/js/modal-button-fix.js"></script>
 </body>
 </html>
