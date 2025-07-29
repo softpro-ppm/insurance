@@ -13,7 +13,6 @@
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-<<<<<<< HEAD
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <!-- Modern theme -->
@@ -24,25 +23,6 @@
     <link href="assets/css/custom-colors.css" rel="stylesheet" type="text/css" />
     <!-- Modal fixes -->
     <link href="assets/css/modal-fixes.css" rel="stylesheet" type="text/css" />
-=======
-    <link href="assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/libs/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-    
-    <!-- Modal Fix for Bootstrap 5 Compatibility -->
-    <link href="assets/css/modal-fix.css" rel="stylesheet" type="text/css" />
-    <!-- Enhanced Modal Fix for Interaction Issues -->
-    <link href="assets/css/modal-fix-enhanced.css" rel="stylesheet" type="text/css" />
-    <!-- Enhanced Modal Layout System -->
-    <link href="assets/css/modal-layout-enhanced.css" rel="stylesheet" type="text/css" />
-    <!-- Medium Size Modal Enhancement -->
-    <link href="assets/css/modal-medium-size.css" rel="stylesheet" type="text/css" />
-    <!-- Modal Button Fix -->
-    <link href="assets/css/modal-button-fix.css" rel="stylesheet" type="text/css" />
-    <!-- Critical Modal Fix - Emergency Override -->
-    <link href="assets/css/modal-fix-critical.css" rel="stylesheet" type="text/css" />
-    <!-- Enhanced UI Components -->
-    <link href="assets/css/enhanced-ui.css" rel="stylesheet" type="text/css" />
->>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
     
     <!-- Modern Dashboard Card Styles -->
     <style>
@@ -446,19 +426,10 @@
                                                     <td class="text-center" ><?=$renewalr['vehicle_type'];?></td>
                                                     <td class="text-center" ><?=date('d-m-Y', strtotime($renewalr['policy_end_date']));?></td>
                                                     <td class="text-center" >
-<<<<<<< HEAD
                                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadPolicyForEdit(<?=$renewalr['id'];?>)" title="Edit Policy">
                                                             <i class="fas fa-pencil-alt"></i>
                                                         </button>
                                                         <!-- <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm edit" ><i class="fas fa-trash-alt" ></i></a> -->
-=======
-                                                        <button type="button" class="btn btn-outline-info btn-sm btn-action" onclick="viewPolicy(<?=$renewalr['id'];?>)" title="View Policy" data-bs-toggle="tooltip">
-                                                            <i class="bx bx-show"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-action" onclick="editPolicy(<?=$renewalr['id'];?>)" title="Edit Policy" data-bs-toggle="tooltip">
-                                                            <i class="bx bx-edit"></i>
-                                                        </button>
->>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
                                                     </td>
                                                 </tr>
                                                 <?php $sn++; } }else{ ?>
@@ -589,9 +560,9 @@
     <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
     <script src="assets/js/pages/dashboard.init.js"></script>
     <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="assets/libs/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="assets/libs/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
     <script src="assets/libs/jszip/jszip.min.js"></script>
     <script src="assets/libs/pdfmake/build/pdfmake.min.js"></script>
     <script src="assets/libs/pdfmake/build/vfs_fonts.js"></script>
@@ -599,7 +570,7 @@
     <script src="assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
     <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="assets/libs/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/js/app.js"></script>
     <!-- Edit modal functionality -->
     <script src="assets/js/edit-policy-modal-fixed.js"></script>
@@ -1274,7 +1245,6 @@
     <?php include 'include/edit-policy-modal.php'; ?>
 
     <script>
-<<<<<<< HEAD
         // Enhanced function to open edit modal with better error handling
         function loadPolicyForEdit(policyId) {
             console.log('=== HOME.PHP EDIT FUNCTION CALLED ===');
@@ -1314,144 +1284,6 @@
                 };
                 document.head.appendChild(script);
             }
-=======
-        // Function to open edit modal (Bootstrap 5 compatible)
-        function openEditModal(policyId) {
-            editPolicy(policyId);
-        }
-
-        function viewPolicy(policyId) {
-            console.log("View policy function called for ID:", policyId);
-            
-            if (!policyId) {
-                showToaster('Error: Policy ID is missing', 'error');
-                return;
-            }
-            
-            // Show loading state
-            showLoadingOverlay('#renewalpolicyview .modal-content');
-            
-            // Open modal first
-            const modal = new bootstrap.Modal(document.getElementById('renewalpolicyview'));
-            modal.show();
-            
-            $.ajax({
-                url: "include/view-policy.php",
-                type: "POST",
-                data: { id: policyId },
-                beforeSend: function() {
-                    console.log("Loading policy view data for ID:", policyId);
-                },
-                success: function(data) {
-                    console.log("Policy view data loaded successfully");
-                    hideLoadingOverlay('#renewalpolicyview .modal-content');
-                    $('#viewpolicydata').html(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    hideLoadingOverlay('#renewalpolicyview .modal-content');
-                    showToaster("Error loading policy data: " + error, 'error');
-                }
-            });
-        }
-
-        function editPolicy(policyId) {
-            console.log("Edit policy function called for ID:", policyId);
-            
-            if (!policyId) {
-                showToaster('Error: Policy ID is missing', 'error');
-                return;
-            }
-            
-            // Use the global.js function
-            if (window.PolicyManagement && window.PolicyManagement.editPolicy) {
-                window.PolicyManagement.editPolicy(policyId);
-            } else {
-                // Fallback to direct function call
-                loadPolicyForEdit(policyId);
-            }
-        }
-
-        // Enhanced toaster function
-        function showToaster(message, type = 'info') {
-            console.log('Showing toaster:', { message, type });
-            
-            // Remove existing toasts
-            $('.toast').remove();
-            
-            // Map type to Bootstrap classes
-            const typeClasses = {
-                'success': 'bg-success text-white',
-                'error': 'bg-danger text-white',
-                'warning': 'bg-warning text-dark',
-                'info': 'bg-info text-white'
-            };
-            
-            const typeIcons = {
-                'success': 'bx-check-circle',
-                'error': 'bx-error',
-                'warning': 'bx-error-circle',
-                'info': 'bx-info-circle'
-            };
-            
-            const bgClass = typeClasses[type] || typeClasses.info;
-            const icon = typeIcons[type] || typeIcons.info;
-            
-            // Create toast element
-            const toastHtml = `
-                <div class="toast align-items-center ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="bx ${icon} me-2"></i>${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            `;
-            
-            // Find or create toast container
-            let $container = $('.toast-container');
-            if (!$container.length) {
-                $container = $('<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1070;"></div>');
-                $('body').append($container);
-            }
-            
-            // Add toast to container
-            const $toast = $(toastHtml);
-            $container.append($toast);
-            
-            // Initialize and show toast
-            const toast = new bootstrap.Toast($toast[0], {
-                autohide: true,
-                delay: type === 'error' ? 8000 : 5000
-            });
-            
-            toast.show();
-            
-            // Remove toast element after it's hidden
-            $toast[0].addEventListener('hidden.bs.toast', function() {
-                $(this).remove();
-            });
-        }
-
-        // Enhanced loading overlay functions
-        function showLoadingOverlay(selector) {
-            const loadingHtml = `
-                <div class="loading-overlay">
-                    <div class="loading-spinner">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div class="mt-2">Loading...</div>
-                    </div>
-                </div>
-            `;
-            $(selector).css('position', 'relative').append(loadingHtml);
-        }
-
-        function hideLoadingOverlay(selector) {
-            $(selector + ' .loading-overlay').remove();
->>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
         }
         
         // Add debug functions for home.php
@@ -1695,17 +1527,6 @@
             }
         };
     </script>
-    
-    <!-- Modal Fix JavaScript for Bootstrap 5 -->
-    <script src="assets/js/modal-fix.js"></script>
-    <!-- Enhanced Modal Fix JavaScript -->
-    <script src="assets/js/modal-fix-enhanced.js"></script>
-    <!-- Enhanced Modal Layout System -->
-    <script src="assets/js/modal-layout-enhanced.js"></script>
-    <!-- Modal Button Fix JavaScript -->
-    <script src="assets/js/modal-button-fix.js"></script>
-    <!-- Critical Modal Fix - Emergency Override -->
-    <script src="assets/js/modal-fix-critical.js"></script>
 </body>
 
 </html>

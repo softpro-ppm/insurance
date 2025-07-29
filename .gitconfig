@@ -1,8 +1,0 @@
-[pull]
-    rebase = false
-[push]
-    default = simple
-[core]
-    autocrlf = true
-[merge]
-    tool = vimdiff

@@ -19,11 +19,7 @@
 
 	echo "DEBUG: Policy found - " . $r['vehicle_number'] . "<br>";
 
-<<<<<<< HEAD
 	$data = '<div class="modal-header bg-primary text-white border-0">
-=======
-	$data = '<div class="modal-header bg-primary text-white">
->>>>>>> 1f7b50d32c5c8f031a319939d390a458ad4b1e45
             <h5 class="modal-title">Policy Details - <strong>'.$r['vehicle_number'].'</strong></h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
@@ -34,9 +30,7 @@
             <p>Premium: '.$r['premium'].'</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                <i class="bx bx-x me-1"></i>Close
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>';
 
 	echo $data;

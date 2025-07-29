@@ -14,11 +14,11 @@
 	$policy_start_date = $_POST['policy_start_date'];
 	$policy_end_date = $_POST['policy_end_date'];
 	
-	// Handle optional fields that are now collected from frontend
-	$chassiss = !empty($_POST['chassiss']) ? mysqli_real_escape_string($con, trim($_POST['chassiss'])) : '';
-	$policy_issue_date = !empty($_POST['policy_issue_date']) ? $_POST['policy_issue_date'] : $policy_start_date;
-	$fc_expiry_date = !empty($_POST['fc_expiry_date']) ? $_POST['fc_expiry_date'] : null;
-	$permit_expiry_date = !empty($_POST['permit_expiry_date']) ? $_POST['permit_expiry_date'] : null;
+	// Removed fields - set defaults for backward compatibility
+	$chassiss = ''; // No longer collected from frontend
+	$policy_issue_date = $policy_start_date; // Use start date as issue date
+	$fc_expiry_date = null; // No longer collected from frontend
+	$permit_expiry_date = null; // No longer collected from frontend
 	
 	$premium = !empty($_POST['premium']) ? floatval($_POST['premium']) : 0;
 	
@@ -218,74 +218,6 @@
 					values".implode(',',$rcs);
 			
 			mysqli_query($con,$docx_sql);
-		}
-
-		// Handle Aadhar Card uploads
-		if(isset($_FILES['aadhar_card']) && !empty($_FILES['aadhar_card']['name'])){
-			$aadhar_file = $_FILES['aadhar_card'];
-			
-			// Validate file type and size
-			$allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
-			$max_size = 2 * 1024 * 1024; // 2MB
-			
-			if(in_array($aadhar_file['type'], $allowed_types) && $aadhar_file['size'] <= $max_size){
-				$file_extension = pathinfo($aadhar_file['name'], PATHINFO_EXTENSION);
-				$aadhar_filename = 'aadhar_' . $policy_id . '_' . time() . '.' . $file_extension;
-				$aadhar_upload_dir = "../assets/uploads/aadhar/";
-				
-				// Create directory if it doesn't exist
-				if(!is_dir($aadhar_upload_dir)){
-					mkdir($aadhar_upload_dir, 0755, true);
-				}
-				
-				$aadhar_uploaded_file = $aadhar_upload_dir . $aadhar_filename;
-				
-				if(move_uploaded_file($aadhar_file['tmp_name'], $aadhar_uploaded_file)){
-					// Store in database
-					$aadhar_sql = "INSERT INTO policy_documents (policy_id, document_type, file_name, file_path, created_at) 
-								  VALUES ('$policy_id', 'aadhar_card', '$aadhar_filename', 'assets/uploads/aadhar/$aadhar_filename', NOW())";
-					mysqli_query($con, $aadhar_sql);
-					error_log("✅ Aadhar card uploaded successfully: $aadhar_filename");
-				} else {
-					error_log("❌ Failed to upload Aadhar card");
-				}
-			} else {
-				error_log("❌ Aadhar card validation failed - invalid type or size");
-			}
-		}
-
-		// Handle PAN Card uploads
-		if(isset($_FILES['pan_card']) && !empty($_FILES['pan_card']['name'])){
-			$pan_file = $_FILES['pan_card'];
-			
-			// Validate file type and size
-			$allowed_types = array('image/jpeg', 'image/jpg', 'image/png');
-			$max_size = 2 * 1024 * 1024; // 2MB
-			
-			if(in_array($pan_file['type'], $allowed_types) && $pan_file['size'] <= $max_size){
-				$file_extension = pathinfo($pan_file['name'], PATHINFO_EXTENSION);
-				$pan_filename = 'pan_' . $policy_id . '_' . time() . '.' . $file_extension;
-				$pan_upload_dir = "../assets/uploads/pan/";
-				
-				// Create directory if it doesn't exist
-				if(!is_dir($pan_upload_dir)){
-					mkdir($pan_upload_dir, 0755, true);
-				}
-				
-				$pan_uploaded_file = $pan_upload_dir . $pan_filename;
-				
-				if(move_uploaded_file($pan_file['tmp_name'], $pan_uploaded_file)){
-					// Store in database
-					$pan_sql = "INSERT INTO policy_documents (policy_id, document_type, file_name, file_path, created_at) 
-							   VALUES ('$policy_id', 'pan_card', '$pan_filename', 'assets/uploads/pan/$pan_filename', NOW())";
-					mysqli_query($con, $pan_sql);
-					error_log("✅ PAN card uploaded successfully: $pan_filename");
-				} else {
-					error_log("❌ Failed to upload PAN card");
-				}
-			} else {
-				error_log("❌ PAN card validation failed - invalid type or size");
-			}
 		}
 
 		// Handle comments

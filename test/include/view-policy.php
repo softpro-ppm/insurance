@@ -38,91 +38,91 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">1</h6>
+                                    <h6 class="m-0 text-right">1</h6>
                                 </td>
                                 <td>VEHICLE NUMBER </td>
                                 <td>: '.$r['vehicle_number'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">2</h6>
+                                    <h6 class="m-0 text-right">2</h6>
                                 </td>
                                 <td>NAME</td>
                                 <td>: '.$r['name'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">3</h6>
+                                    <h6 class="m-0 text-right">3</h6>
                                 </td>
                                 <td>PHONE NUMBER</td>
                                 <td>: '.$r['phone'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">4</h6>
+                                    <h6 class="m-0 text-right">4</h6>
                                 </td>
                                 <td>VEHICLE TYPE</td>
                                 <td>: '.$r['vehicle_type'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">5</h6>
+                                    <h6 class="m-0 text-right">5</h6>
                                 </td>
                                 <td>POLICY TYPE</td>
                                 <td>: '.$r['policy_type'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">6</h6>
+                                    <h6 class="m-0 text-right">6</h6>
                                 </td>
                                 <td>PREMIUM</td>
                                 <td>: '.$r['premium'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">7</h6>
+                                    <h6 class="m-0 text-right">7</h6>
                                 </td>
                                 <td>REVENUE</td>
                                 <td>: '.$r['revenue'].'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">8</h6>
+                                    <h6 class="m-0 text-right">8</h6>
                                 </td>
                                 <td>POLICY ISSUE DATE</td>
                                 <td>: '.date('d-m-Y',strtotime($r['policy_issue_date'])).'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">9</h6>
+                                    <h6 class="m-0 text-right">9</h6>
                                 </td>
                                 <td>POLICY START DATE</td>
                                 <td>: '.date('d-m-Y', strtotime($r['policy_start_date'])).'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">10</h6>
+                                    <h6 class="m-0 text-right">10</h6>
                                 </td>
                                 <td>POLICY END DATE</td>
                                 <td>: '.date('d-m-Y', strtotime($r['policy_end_date'])).'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">11</h6>
+                                    <h6 class="m-0 text-right">11</h6>
                                 </td>
                                 <td>FC EXPIRY DATE</td>
                                 <td>: '.$fc_expiry_date.'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">12</h6>
+                                    <h6 class="m-0 text-right">12</h6>
                                 </td>
                                 <td>PERMIT EXPIRY DATE</td>
                                 <td>: '.$permit_expiry_date.'</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">13</h6>
+                                    <h6 class="m-0 text-right">13</h6>
                                 </td>
                                 <td>DOCUMENT</td>
                                 <td>';
@@ -135,7 +135,7 @@
                             
                             <tr>
                                 <td>
-                                    <h6 class="m-0 text-end">14</h6>
+                                    <h6 class="m-0 text-right">14</h6>
                                 </td>
                                 <td>RC Copy</td>
                                 <td>';
