@@ -214,7 +214,7 @@
                     <div class="dashboard-header">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h3 class="mb-2">Insurance Management Dashboard</h3>
+                                <h3 class="mb-2">Insurance Management Dashboard   ttt</h3>
                                 <p class="mb-0 opacity-75">Welcome back! Here's what's happening with your insurance policies today.</p>
                             </div>
                             <div class="col-md-4 text-end">
